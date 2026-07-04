@@ -1,0 +1,23 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t" style="border-color: var(--color-border);">
+  <div class="section-wide flex flex-col items-center gap-4 py-10 text-center">
+    <div class="flex items-center gap-5 text-sm text-[color:var(--color-text-muted)]">
+      <a href="https://github.com/yugonglian2333" target="_blank" rel="noopener noreferrer" class="link-quiet">GitHub</a>
+      <span style="color: var(--color-text-subtle);">·</span>
+      <a href="https://x.com/" target="_blank" rel="noopener noreferrer" class="link-quiet" aria-label="X / Twitter 占位">X</a>
+      <span style="color: var(--color-text-subtle);">·</span>
+      <a href="mailto:hello@example.com" class="link-quiet">Email</a>
+      <span style="color: var(--color-text-subtle);">·</span>
+      <a href="/rss.xml" class="link-quiet">RSS</a>
+    </div>
+    <p class="font-mono text-xs" style="color: var(--color-text-subtle);">
+      Pray at the altar of building.
+    </p>
+    <p class="text-xs" style="color: var(--color-text-subtle);">
+      © {year} RenOS · Built with Astro + Tailwind
+    </p>
+  </div>
+</footer>

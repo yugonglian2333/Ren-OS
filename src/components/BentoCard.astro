@@ -1,0 +1,24 @@
+---
+interface Props {
+  /** 卡片在网格中跨越的列数（桌面） */
+  class?: string;
+  /** 是否可交互（hover 上浮） */
+  interactive?: boolean;
+  /** 卡片标题（用于无障碍） */
+  label?: string;
+}
+
+const { class: className = "", interactive = false, label } = Astro.props;
+---
+
+<div
+  class:list={[
+    "bento-card",
+    interactive && "bento-card-interactive",
+    "p-5",
+    className,
+  ]}
+  data-label={label}
+>
+  <slot />
+</div>

@@ -1,0 +1,37 @@
+---
+interface Props {
+  title: string;
+  date: Date;
+  slug: string;
+  description?: string;
+  category?: string;
+}
+
+const { title, date, slug, description = "", category } = Astro.props;
+const dateStr = date.toLocaleDateString("zh-CN", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+---
+
+<a href={`/blog/${slug}`} class="group flex items-baseline justify-between gap-4 py-3 transition-colors" style="border-bottom: 1px solid var(--color-border);">
+  <div class="min-w-0 flex-1">
+    <div class="flex items-baseline gap-2">
+      {category && (
+        <span class="shrink-0 text-[10px] font-mono uppercase tracking-wider" style="color: var(--color-accent);">
+          {category}
+        </span>
+      )}
+      <span class="text-[15px] font-medium text-[color:var(--color-text)] group-hover:text-[color:var(--color-accent)] transition-colors">
+        {title}
+      </span>
+    </div>
+    {description && (
+      <p class="mt-0.5 text-sm" style="color: var(--color-text-muted);">{description}</p>
+    )}
+  </div>
+  <time class="shrink-0 font-mono text-xs" style="color: var(--color-text-subtle);">
+    {dateStr}
+  </time>
+</a>

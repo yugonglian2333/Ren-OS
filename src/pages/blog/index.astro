@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import SectionTitle from "../../components/SectionTitle.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const categories = ["AI 周记", "TIL", "项目复盘"] as const;
+const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat);
+---
+
+<BaseLayout title="Blog — RenOS" description="AI 周记 · TIL · 项目复盘。不追热度，只记我看过的、想过的、用过的。">
+  <section class="section">
+    <SectionTitle eyebrow="01" title="Writing" />
+    <p class="mb-8 text-sm" style="color: var(--color-text-muted);" data-fade>
+      AI 周记 · TIL · 项目复盘。不追热度，只记我看过的、想过的、用过的。
+    </p>
+
+    {posts.length === 0 ? (
+      <div class="bento-card p-8" data-fade style="border-style: dashed;">
+        <p class="text-[15px]" style="color: var(--color-text-muted);">
+          第一篇还在路上。骨架已搭好（AI 周记 / TIL / 项目复盘），随手往
+          <code class="font-mono text-xs" style="color: var(--color-accent);">src/content/blog/</code>
+          丢一个 mdx 就能上线。
+        </p>
+        <p class="mt-3 text-sm" style="color: var(--color-text-subtle);">
+          建议第一篇写：《WayLog 的 Agent 提案式编辑——让 AI 只能提议，不能擅动》。
+        </p>
+      </div>
+    ) : (
+      categories.map((cat) => {
+        const list = byCategory(cat);
+        if (list.length === 0) return null;
+        return (
+          <div class="mb-10" data-fade>
+            <h2 class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">
+              {cat}
+            </h2>
+            <div>
+              {list.map((post) => (
+                <a
+                  href={`/blog/${post.slug}`}
+                  class="group flex items-baseline justify-between gap-4 py-3 transition-colors"
+                  style="border-bottom: 1px solid var(--color-border);"
+                >
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-baseline gap-2">
+                      <span class="shrink-0 text-[10px] font-mono uppercase tracking-wider" style="color: var(--color-accent);">
+                        {post.data.category}
+                      </span>
+                      <span class="text-[15px] font-medium group-hover:text-[color:var(--color-accent)] transition-colors">
+                        {post.data.title}
+                      </span>
+                    </div>
+                    <p class="mt-0.5 text-sm" style="color: var(--color-text-muted);">{post.data.description}</p>
+                  </div>
+                  <time class="shrink-0 font-mono text-xs" style="color: var(--color-text-subtle);">
+                    {post.data.pubDate.toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" })}
+                  </time>
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })
+    )}
+  </section>
+</BaseLayout>

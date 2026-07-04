@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const nowItems = [
+  {
+    label: "在做",
+    title: "Agent 提案式编辑",
+    desc: "一路记 WayLog 的 Agent 闭环——结构化 AgentProposal、预览→确认→授权→本地写入→云同步。",
+  },
+  {
+    label: "在跟",
+    title: "AI 前沿动态",
+    desc: "新模型、新 agent 框架、新研究。看到值得的会写进 AI 周记。",
+  },
+  {
+    label: "在读",
+    title: "[占位] 本周在读",
+    desc: "后续会随手往这里填本周在看的论文 / 文章 / 项目。",
+  },
+];
+
+const updated = "2026-07-04";
+---
+
+<BaseLayout title="Now — RenOS" description="RenOS 现在在做什么、在跟什么、在读什么。">
+  <section class="section">
+    <div data-fade>
+      <div class="flex items-center gap-2">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style="background: var(--color-accent);"></span>
+          <span class="relative inline-flex h-2.5 w-2.5 rounded-full" style="background: var(--color-accent);"></span>
+        </span>
+        <span class="font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">Now</span>
+      </div>
+      <h1 class="mt-3 text-3xl font-bold tracking-tight">此刻</h1>
+      <p class="mt-2 text-sm" style="color: var(--color-text-subtle);">
+        最后更新：{updated} · 灵感来自 niftylettuce / Paco 的 Now 页
+      </p>
+    </div>
+
+    <div class="mt-8 flex flex-col gap-3" data-fade>
+      {nowItems.map((item) => (
+        <div class="bento-card p-5">
+          <div class="font-mono text-xs uppercase tracking-wider" style="color: var(--color-accent);">{item.label}</div>
+          <h3 class="mt-1.5 text-lg font-semibold">{item.title}</h3>
+          <p class="mt-1.5 text-sm leading-relaxed" style="color: var(--color-text-muted);">{item.desc}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="mt-10 text-sm" style="color: var(--color-text-muted);" data-fade>
+      想看更碎的？去 <a href="/blog" class="link-quiet">Blog</a> 翻 AI 周记和 TIL。
+    </p>
+  </section>
+</BaseLayout>

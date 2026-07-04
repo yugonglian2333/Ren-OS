@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const principles = [
+  { k: "造", v: "造能用的工具，不追热度。一路记 WayLog 是当前的长期投入。" },
+  { k: "跟", v: "持续跟踪 AI 前沿，但只记我真的看过、想过、用过的。" },
+  { k: "记", v: "TIL、AI 周记、项目复盘——把所学落成文字，对抗遗忘和被信息冲走。" },
+  { k: "屯", v: "BTC holder。相信长期主义和数字稀缺，少操作多拿着。" },
+];
+---
+
+<BaseLayout title="About — RenOS" description="RenOS：造工具、跟前沿、记所学、屯 BTC。">
+  <section class="section">
+    <div data-fade>
+      <h1 class="text-3xl font-bold tracking-tight">关于 RenOS</h1>
+      <p class="mt-4 text-[15px] leading-relaxed" style="color: var(--color-text-muted);">
+        在圈内混的名字叫 RenOS。白天造工具、晚上跟 AI 前沿、随手记所学，
+        顺手屯点 BTC。
+      </p>
+    </div>
+
+    <!-- 一句话定位 -->
+    <div class="bento-card mt-8 p-6 sm:p-8" data-fade
+         style="background: linear-gradient(135deg, var(--color-bg-elevated) 0%, color-mix(in oklab, var(--color-accent) 10%, var(--color-bg-elevated)) 100%);">
+      <p class="text-xl font-medium leading-relaxed tracking-tight sm:text-2xl">
+        AI builder <span style="color: var(--color-accent);">&amp;</span> BTC holder.
+      </p>
+      <p class="mt-3 text-sm" style="color: var(--color-text-muted);">
+        在造旅行助手一路记 WayLog，做 Agent 提案式编辑闭环——让 AI 只能提议，不能擅动。
+      </p>
+    </div>
+
+    <!-- 四个原则 -->
+    <div class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2" data-fade>
+      {principles.map((p) => (
+        <div class="bento-card p-5">
+          <div class="flex items-baseline gap-3">
+            <span class="font-mono text-2xl font-bold" style="color: var(--color-accent);">{p.k}</span>
+            <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">{p.v}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- 联系 -->
+    <div class="mt-12" data-fade>
+      <h2 class="mb-3 text-lg font-semibold">找到我</h2>
+      <p class="text-sm" style="color: var(--color-text-muted);">
+        社交账号占位中，欢迎先在 <a href="https://github.com/yugonglian2333" target="_blank" rel="noopener noreferrer" class="link-quiet">GitHub</a> 找我，
+        或邮件 <a href="mailto:hello@example.com" class="link-quiet">hello@example.com</a>（占位）。
+      </p>
+    </div>
+  </section>
+</BaseLayout>

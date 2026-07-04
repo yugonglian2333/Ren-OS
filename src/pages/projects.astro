@@ -1,0 +1,99 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+
+const waylogTags = [
+  "React Native 0.81",
+  "React 19",
+  "Expo SDK 54",
+  "Expo Router 6",
+  "Supabase",
+  "Postgres + RLS",
+  "Edge Functions",
+  "Next.js 16",
+  "pnpm workspace",
+  "Biome",
+  "Sentry",
+  "TypeScript",
+];
+
+const waylogPoints = [
+  "旅行控制台 + 旅行手记：旅行 CRUD、按天行程、地点收藏与搜索、预算记账、多币种、清单备忘",
+  "本地优先同步：AsyncStorage 先落盘、标记 dirty、后台同步 Supabase，支持失败重试与冲突提示",
+  "Agent 提案式编辑闭环：Agent 只生成结构化 AgentProposal，经预览 → 用户确认/授权 → 运行时校验 → 本地写入 → 云同步；低风险自动执行必须用户显式授权",
+  "认证矩阵：邮箱 / 手机号 / Apple / 微信，Supabase Auth + 阿里云短信",
+  "工程化：pnpm workspace 多端（App / admin-web / os-web）、Biome、Sentry 诊断、node:test、完整 PRD/UX/架构/数据契约文档体系",
+];
+
+const waylogLinks = [
+  { label: "GitHub", href: "https://github.com/yugonglian2333/WayLog" },
+  { label: "README", href: "https://github.com/yugonglian2333/WayLog#readme" },
+];
+---
+
+<BaseLayout title="Projects — RenOS" description="一路记 WayLog：旅行控制台 + Agent 提案式编辑。">
+  <section class="section">
+    <SectionTitle eyebrow="01" title="Projects" />
+
+    <!-- 旗舰项目卡 -->
+    <article class="bento-card mt-6 p-6 sm:p-8" data-fade>
+      <div class="flex flex-col gap-6">
+        <header>
+          <div class="flex items-center gap-2">
+            <span class="rounded-full px-2.5 py-0.5 text-xs font-medium" style="background: var(--color-accent-soft); color: var(--color-accent-contrast);">Flagship</span>
+            <span class="font-mono text-xs" style="color: var(--color-text-subtle);">2026 · ongoing</span>
+          </div>
+          <h1 class="mt-3 text-3xl font-bold tracking-tight">一路记 WayLog</h1>
+          <p class="mt-3 max-w-2xl text-[15px] leading-relaxed" style="color: var(--color-text-muted);">
+            个人旅行助手 App。把旅行计划、每日行程、地点收藏、预算记录、重要备忘和 Agent
+            辅助编辑收拢成一个旅行控制台 + 旅行手记。
+          </p>
+        </header>
+
+        <!-- 要点 -->
+        <ul class="flex flex-col gap-3">
+          {waylogPoints.map((p) => (
+            <li class="flex items-start gap-3 text-[14px] leading-relaxed" style="color: var(--color-text-muted);">
+              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background: var(--color-accent);"></span>
+              <span>{p}</span>
+            </li>
+          ))}
+        </ul>
+
+        <!-- 技术栈 -->
+        <div>
+          <div class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">Stack</div>
+          <div class="flex flex-wrap gap-1.5">
+            {waylogTags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+        </div>
+
+        <!-- 链接 -->
+        <div class="flex flex-wrap gap-3">
+          {waylogLinks.map((l) => (
+            <a
+              href={l.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 rounded-[var(--radius-button)] border px-4 py-2 text-sm font-medium transition-colors hover:text-[color:var(--color-accent)]"
+              style="border-color: var(--color-border);"
+            >
+              {l.label} ↗
+            </a>
+          ))}
+        </div>
+      </div>
+    </article>
+
+    <!-- 空位 -->
+    <div class="mt-8 flex flex-col gap-3" data-fade>
+      <div class="bento-card flex items-center justify-between p-5" style="border-style: dashed;">
+        <div>
+          <div class="text-[15px] font-medium" style="color: var(--color-text-subtle);">更多在造中…</div>
+          <p class="mt-0.5 text-sm" style="color: var(--color-text-subtle);">下一个项目还在草稿箱。</p>
+        </div>
+        <span class="font-mono text-xs" style="color: var(--color-text-subtle);">soon</span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

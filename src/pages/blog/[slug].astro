@@ -1,0 +1,128 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const { title, description, pubDate, category } = post.data;
+
+const dateStr = pubDate.toLocaleDateString("zh-CN", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout title={`${title} — RenOS`} description={description}>
+  <article class="section">
+    <!-- 文章头部 -->
+    <header data-fade>
+      <div class="flex items-center gap-3 text-xs" style="color: var(--color-text-subtle);">
+        <span class="font-mono uppercase tracking-wider" style="color: var(--color-accent);">{category}</span>
+        <span>·</span>
+        <time class="font-mono">{dateStr}</time>
+      </div>
+      <h1 class="mt-3 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">{title}</h1>
+      {description && (
+        <p class="mt-3 text-[15px] leading-relaxed" style="color: var(--color-text-muted);">{description}</p>
+      )}
+    </header>
+
+    <!-- 正文 -->
+    <div class="prose-renos mt-10" data-fade>
+      <Content />
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="mt-16 flex items-center justify-between border-t pt-6" style="border-color: var(--color-border);">
+      <a href="/blog" class="link-quiet text-sm">← 回文章列表</a>
+      <a href="/" class="link-quiet text-sm">回到首页</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style is:global>
+  .prose-renos {
+    color: var(--color-text);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .prose-renos :global(h2) {
+    margin-top: 2em;
+    margin-bottom: 0.6em;
+    font-size: 1.4em;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .prose-renos :global(h3) {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.15em;
+    font-weight: 600;
+  }
+  .prose-renos :global(p) {
+    margin: 0.9em 0;
+  }
+  .prose-renos :global(a) {
+    color: var(--color-accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-accent) 30%, transparent);
+  }
+  .prose-renos :global(a:hover) {
+    border-bottom-color: var(--color-accent);
+  }
+  .prose-renos :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: color-mix(in oklab, var(--color-text) 8%, transparent);
+  }
+  .prose-renos :global(pre) {
+    margin: 1.2em 0;
+    padding: 1em 1.2em;
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--color-text) 5%, var(--color-bg-elevated));
+    border: 1px solid var(--color-border);
+    overflow-x: auto;
+    font-size: 0.85em;
+  }
+  .prose-renos :global(pre code) {
+    padding: 0;
+    background: transparent;
+  }
+  .prose-renos :global(blockquote) {
+    margin: 1.2em 0;
+    padding: 0.4em 1.2em;
+    border-left: 3px solid var(--color-accent);
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+  .prose-renos :global(ul), .prose-renos :global(ol) {
+    margin: 0.9em 0;
+    padding-left: 1.5em;
+  }
+  .prose-renos :global(li) {
+    margin: 0.4em 0;
+  }
+  .prose-renos :global(li::marker) {
+    color: var(--color-text-subtle);
+  }
+  .prose-renos :global(hr) {
+    margin: 2em 0;
+    border: none;
+    border-top: 1px solid var(--color-border);
+  }
+</style>

@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+/* ============================================================
+   RenOS 设计系统 Token
+   Bento 卡片墙 + 单栏稳重内容区
+   ============================================================ */
+
+@theme {
+  /* 字体 */
+  --font-sans: "Inter", "Noto Sans SC", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  /* 配色 —— 浅色（默认） */
+  --color-bg: #fafafa;
+  --color-bg-elevated: #ffffff;
+  --color-border: #ededed;
+  --color-text: #0a0a0a;
+  --color-text-muted: #6b6b6b;
+  --color-text-subtle: #9a9a9a;
+
+  /* 强调色：BTC 橙 —— 仅用于链接/强调点缀，不滥用 */
+  --color-accent: #f7931a;
+  --color-accent-soft: #fde9c8;
+  --color-accent-contrast: #1a1208;
+
+  /* 圆角 */
+  --radius-card: 18px;
+  --radius-button: 10px;
+
+  /* 间距（section / 卡片） */
+  --spacing-section: 88px;
+  --spacing-card-gap: 16px;
+}
+
+/* 深色模式：html.dark 切换 token */
+.dark {
+  --color-bg: #0a0a0a;
+  --color-bg-elevated: #141414;
+  --color-border: #232323;
+  --color-text: #f5f5f5;
+  --color-text-muted: #a1a1a1;
+  --color-text-subtle: #6b6b6b;
+  --color-accent: #f7931a;
+  --color-accent-soft: #2a1c0a;
+  --color-accent-contrast: #fff7ec;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+}
+.dark {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  background: var(--color-bg);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+/* ============================================================
+   工具类 / 复用样式
+   ============================================================ */
+
+@layer components {
+  /* Bento 卡片基底 */
+  .bento-card {
+    @apply relative overflow-hidden rounded-[var(--radius-card)] border;
+    background: var(--color-bg-elevated);
+    border-color: var(--color-border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+      border-color 0.2s ease, background-color 0.2s ease;
+  }
+  /* 可交互卡片：hover 上浮 + 强调边框（复用 .bento-card，不依赖 @apply 自定义类） */
+  .bento-card.bento-card-interactive:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.18);
+    border-color: color-mix(in oklab, var(--color-accent) 40%, var(--color-border));
+  }
+
+  /* 链接：低调 + 橙色悬停 */
+  .link-quiet {
+    color: var(--color-text);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, currentColor 18%, transparent);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .link-quiet:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+
+  /* Tag / 技术栈 pill */
+  .tag {
+    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs;
+    color: var(--color-text-muted);
+    border-color: var(--color-border);
+    background: transparent;
+  }
+
+  /* Section 容器 */
+  .section {
+    @apply mx-auto w-full max-w-3xl px-5;
+  }
+  .section-wide {
+    @apply mx-auto w-full max-w-5xl px-5;
+  }
+}
+
+/* ============================================================
+   滚动入场动效（轻量，不引动画库）
+   ============================================================ */
+
+[data-fade] {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+[data-fade].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-fade] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .bento-card-interactive:hover {
+    transform: none;
+  }
+}
