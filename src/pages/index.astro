@@ -28,7 +28,7 @@ const latest = posts.slice(0, 4);
           </div>
 
           <h1 class="mt-6 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
-            AI builder<br /><span style="color: var(--color-accent);">&amp; BTC holder</span>
+            AI 造物者<br /><span style="color: var(--color-accent);">&amp; BTC 长期主义者</span>
           </h1>
 
           <p class="mt-4 max-w-md text-[15px] leading-relaxed" style="color: var(--color-text-muted);">
@@ -55,7 +55,7 @@ const latest = posts.slice(0, 4);
               <span class="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style="background: var(--color-accent);"></span>
               <span class="relative inline-flex h-2 w-2 rounded-full" style="background: var(--color-accent);"></span>
             </span>
-            <span class="font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">Now</span>
+            <span class="font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">此刻</span>
           </div>
           <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">
             正在做 <span class="font-medium" style="color: var(--color-text);">Agent 开发</span>，关注 AI 前沿动态。
@@ -67,7 +67,7 @@ const latest = posts.slice(0, 4);
       <!-- ③ 旗舰项目卡 -->
       <a href="/projects" class="bento-card bento-card-interactive group flex flex-col justify-between p-5" data-fade style="transition-delay: 120ms;">
         <div>
-          <div class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">Flagship</div>
+          <div class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">旗舰项目</div>
           <h3 class="text-[17px] font-semibold group-hover:text-[color:var(--color-accent)] transition-colors">一路记 WayLog</h3>
           <p class="mt-1.5 text-sm" style="color: var(--color-text-muted);">旅行控制台 + Agent 提案式编辑</p>
         </div>
@@ -81,7 +81,7 @@ const latest = posts.slice(0, 4);
       <!-- ④ 最新文章卡 -->
       <a href="/blog" class="bento-card bento-card-interactive group flex flex-col justify-between p-5" data-fade style="transition-delay: 180ms;">
         <div>
-          <div class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">Latest Writing</div>
+          <div class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">最新文章</div>
           <h3 class="text-[17px] font-semibold group-hover:text-[color:var(--color-accent)] transition-colors">{latest[0]?.data.title ?? "AI 周记 #1"}</h3>
           <p class="mt-1.5 text-sm" style="color: var(--color-text-muted);">{latest[0]?.data.description ?? "占位待填"}</p>
         </div>
@@ -99,9 +99,6 @@ const latest = posts.slice(0, 4);
         </div>
         <span class="mt-4 text-xs group-hover:text-[color:var(--color-accent)]" style="color: var(--color-text-subtle);">查看源码 ↗</span>
       </a>
-
-      <!-- ⑥ 社交卡 -->
-      <div class="bento-card flex items-center justify-around gap-2 p-5" data-fade style="transition-delay: 300ms;">
         <a href="https://github.com/yugonglian2333" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] transition-colors hover:text-[color:var(--color-accent)]">
           <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.97.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.67.8.55 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5z"/></svg>
         </a>

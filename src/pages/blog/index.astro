@@ -11,7 +11,7 @@ const categories = ["AI 周记", "TIL", "项目复盘"] as const;
 const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat);
 ---
 
-<BaseLayout title="Blog — RenOS" description="AI 周记 · TIL · 项目复盘。不追热度，只记我看过的、想过的、用过的。">
+<BaseLayout title="文章 — RenOS" description="AI 周记 · TIL · 项目复盘。不追热度，只记我看过的、想过的、用过的。">
   <section class="section">
     <SectionTitle eyebrow="01" title="Writing" />
     <p class="mb-8 text-sm" style="color: var(--color-text-muted);" data-fade>
