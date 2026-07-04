@@ -8,7 +8,7 @@ interface Props {
 const {
   title = "RenOS — AI 造物者 & BTC 长期主义者",
   description = "RenOS：在造旅行助手一路记 WayLog，做 Agent 提案式编辑；持续跟踪 AI 前沿，写下所见所学。",
-  image = "/og-default.png",
+  image = "/og-default.jpg",
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -19,7 +19,9 @@ const socialImage = new URL(image, Astro.url).href;
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
 
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/jpeg" href="/ren-avatar.jpg" />
+<link rel="apple-touch-icon" href="/ren-avatar.jpg" />
+<link rel="mask-icon" href="/favicon.svg" color="#f7931a" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <link rel="canonical" href={canonicalURL} />
@@ -37,7 +39,7 @@ const socialImage = new URL(image, Astro.url).href;
 <meta property="og:image" content={socialImage} />
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:card" content="summary" />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={socialImage} />
