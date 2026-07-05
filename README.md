@@ -32,12 +32,12 @@ pnpm preview     # 预览 build 产物
 title: "文章标题"
 description: "一句话摘要"
 pubDate: 2026-07-04
-category: "AI 周记"   # AI 周记 / TIL / 项目复盘
+category: "AI 周记"   # AI 周记 / TIL / 学习笔记 / 项目复盘
 draft: false          # true 则不发布
 ---
 ```
 
-三个栏目：**AI 周记**（每周一篇，记本周看到的新东西 + 短判断）/ **TIL**（Today I Learned 碎片笔记）/ **项目复盘**（做完某个功能写"为什么这么设计"）。
+四个栏目：**AI 周记**（每周一篇，记本周看到的新东西 + 短判断）/ **TIL**（Today I Learned 碎片笔记）/ **学习笔记**（成体系的学习总结与教程）/ **项目复盘**（做完某个功能写"为什么这么设计"）。
 
 ## 部署到 Vercel
 

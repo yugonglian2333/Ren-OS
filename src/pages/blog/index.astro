@@ -7,7 +7,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const categories = ["AI 周记", "TIL", "项目复盘"] as const;
+const categories = ["AI 周记", "TIL", "学习笔记", "项目复盘"] as const;
 const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat);
 ---
 
