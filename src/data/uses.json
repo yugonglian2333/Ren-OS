@@ -7,8 +7,28 @@
     },
     {
       "name": "台式机 9700x + 5070ti",
-      "note": "重型开发 + 本地跑模型",
-      "emoji": "P"
+      "note": "R7 9700X + RTX 5070 Ti / B850-A 吹雪 / 48G DDR5 6000 / 2T TiPlus7100 + 4T 蓝盘 / 1000W / 360 水冷",
+      "emoji": "PC"
+    },
+    {
+      "name": "Nintendo Switch",
+      "note": "掌机 / 旅行路上的游戏时间",
+      "emoji": "NS"
+    },
+    {
+      "name": "Apple Watch",
+      "note": "运动记录，顺手看通知",
+      "emoji": "AW"
+    },
+    {
+      "name": "iPhone Air",
+      "note": "日常主力手机",
+      "emoji": "IP"
+    },
+    {
+      "name": "AirPods Pro 3",
+      "note": "通勤降噪，随手听歌",
+      "emoji": "APP"
     }
   ],
   "devAndAiTools": [
@@ -35,9 +55,24 @@
       "url": ""
     },
     {
+      "name": "geek",
+      "note": "卸载清理 / 系统维护",
+      "url": ""
+    },
+    {
+      "name": "Snipaste",
+      "note": "截图贴图 / 标注",
+      "url": ""
+    },
+    {
       "name": "Figma",
       "note": "设计 / 原型",
       "url": "https://figma.com"
+    },
+    {
+      "name": "Infinity",
+      "note": "灵感收集 / 无限画布",
+      "url": ""
     },
     {
       "name": "Obsidian",
@@ -58,28 +93,6 @@
       "name": "Notion",
       "note": "项目文档 / 轻量数据库",
       "url": "https://notion.so"
-    }
-  ],
-  "fontStack": [
-    {
-      "name": "Inter",
-      "note": "UI 无衬线正文",
-      "url": "https://rsms.me/inter"
-    },
-    {
-      "name": "Source Serif 4",
-      "note": "标题衬线",
-      "url": "https://fonts.google.com/specimen/Source+Serif+4"
-    },
-    {
-      "name": "JetBrains Mono",
-      "note": "代码 / 等宽",
-      "url": "https://www.jetbrains.com/lp/mono"
-    },
-    {
-      "name": "Source Sans 3",
-      "note": "文章正文（Typora Vue 主题）",
-      "url": "https://fonts.google.com/specimen/Source+Sans+3"
     }
   ]
 }
