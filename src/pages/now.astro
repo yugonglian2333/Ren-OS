@@ -1,25 +1,68 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const nowItems = [
+const updated = "2026-07-05";
+
+// /now 页理念（Derek Sivers）：告诉一年没见的朋友你最近在干嘛。
+// 不是 todo 清单，是大图景。每条聚焦"正在投入的事"，而非"做完了的事"。
+
+const sections = [
   {
-    label: "在做",
-    title: "Agent 提案式编辑",
-    desc: "一路记 WayLog 的 Agent 闭环——结构化 AgentProposal、预览→确认→授权→本地写入→云同步。",
+    label: "正在投入",
+    items: [
+      {
+        title: "一路记 WayLog · Agent 提案式编辑",
+        desc: "把 Agent 接进旅行编辑闭环——结构化 AgentProposal、预览→确认→授权→本地写入→云同步。让 AI 只能提议，不能擅动。",
+        link: { label: "看项目", href: "/projects" },
+      },
+    ],
   },
   {
-    label: "在跟",
-    title: "AI 前沿动态",
-    desc: "新模型、新 agent 框架、新研究。看到值得的会写进 AI 周记。",
+    label: "在跟 / 在学",
+    items: [
+      {
+        title: "AI 前沿动态",
+        desc: "新模型、新 agent 框架、新研究。看到值得的会写进 AI 周记，不追热度。",
+        link: { label: "读周记", href: "/blog" },
+      },
+      {
+        title: "[占位] 在学的体系",
+        desc: "比如某门课、某本书、某个源码精读。后续随手往这里填。",
+        link: null,
+      },
+    ],
   },
   {
-    label: "在读",
-    title: "[占位] 本周在读",
-    desc: "后续会随手往这里填本周在看的论文 / 文章 / 项目。",
+    label: "在读 / 在听",
+    items: [
+      {
+        title: "[占位] 本周在读",
+        desc: "论文 / 文章 / 书。后续会随手往这里填本周在看的。",
+        link: null,
+      },
+    ],
+  },
+  {
+    label: "生活 & 其他",
+    items: [
+      {
+        title: "BTC holder",
+        desc: "长期持有，少操作多拿着。这是人格符号，也是信仰。",
+        link: null,
+      },
+    ],
+  },
+  {
+    label: "暂停 / 不接",
+    items: [
+      {
+        title: "暂不接外包",
+        desc: "精力集中在 WayLog 和自己的写作上。感谢理解。",
+        link: null,
+      },
+    ],
   },
 ];
-
-const updated = "2026-07-04";
 ---
 
 <BaseLayout title="此刻 — RenOS" description="RenOS 现在在做什么、在跟什么、在读什么。">
@@ -30,26 +73,45 @@ const updated = "2026-07-04";
           <span class="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style="background: var(--color-accent);"></span>
           <span class="relative inline-flex h-2.5 w-2.5 rounded-full" style="background: var(--color-accent);"></span>
         </span>
-        <span class="font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">此刻</span>
+        <span class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">此刻</span>
       </div>
-      <h1 class="mt-3 text-3xl font-bold tracking-tight">此刻</h1>
-      <p class="mt-2 text-sm" style="color: var(--color-text-subtle);">
-        最后更新：{updated} · 灵感来自 niftylettuce / Paco 的 Now 页
-      </p>
+      <div class="mt-6 border-l-4 pl-5" style="border-color: var(--color-accent);" data-fade>
+        <p class="font-serif text-base leading-relaxed sm:text-lg">
+          告诉一年没见的朋友，我最近在干嘛。
+        </p>
+        <p class="mt-1 font-mono text-xs" style="color: var(--color-text-subtle);">最后更新：{updated}</p>
+      </div>
     </div>
 
-    <div class="mt-8 flex flex-col gap-3" data-fade>
-      {nowItems.map((item) => (
-        <div class="bento-card p-5">
-          <div class="font-mono text-xs uppercase tracking-wider" style="color: var(--color-accent);">{item.label}</div>
-          <h3 class="mt-1.5 text-lg font-semibold">{item.title}</h3>
-          <p class="mt-1.5 text-sm leading-relaxed" style="color: var(--color-text-muted);">{item.desc}</p>
+    <div class="mt-14 flex flex-col gap-12" data-fade>
+      {sections.map((section) => (
+        <div>
+          <div class="mb-5 flex items-center gap-3">
+            <h2 class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">{section.label}</h2>
+            <div class="h-px flex-1" style="background: var(--color-border);"></div>
+          </div>
+          <div class="flex flex-col gap-6">
+            {section.items.map((item) => (
+              <div>
+                <h3 class="text-[15px] font-semibold leading-snug" class:list={[item.title.startsWith("[占位]") && "opacity-60"]}>{item.title}</h3>
+                <p class="mt-1.5 text-sm leading-relaxed" style="color: var(--color-text-muted);" class:list={[item.title.startsWith("[占位]") && "opacity-60"]}>{item.desc}</p>
+                {item.link && (
+                  <a href={item.link.href} class="mt-2 inline-flex items-center gap-1 text-xs font-mono transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-subtle);">
+                    {item.link.label} →
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </div>
 
-    <p class="mt-10 text-sm" style="color: var(--color-text-muted);" data-fade>
+    <hr class="my-14 border-0" style="height: 1px; background: var(--color-border);" data-fade />
+
+    <p class="text-sm" style="color: var(--color-text-muted);" data-fade>
       想看更碎的？去 <a href="/blog" class="link-quiet">文章</a> 翻 AI 周记和 TIL。
+      想了解背景？看 <a href="/about" class="link-quiet">关于</a>。
     </p>
   </section>
 </BaseLayout>

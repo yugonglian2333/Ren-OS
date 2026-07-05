@@ -1,8 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
-import SectionTitle from "../components/SectionTitle.astro";
-import PostCard from "../components/PostCard.astro";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -11,155 +9,123 @@ const latest = posts.slice(0, 4);
 ---
 
 <BaseLayout>
-  <!-- ============================================================
-       Bento Hero —— 6 块卡片墙
-       ============================================================ -->
-  <section class="section-wide">
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-      <!-- ① 主卡：身份 -->
-      <div class="bento-card col-span-2 row-span-2 p-6 sm:p-8" style="background: linear-gradient(135deg, var(--color-bg-elevated) 0%, color-mix(in oklab, var(--color-accent) 8%, var(--color-bg-elevated)) 100%);" data-fade>
-        <div class="flex h-full flex-col">
-          <div class="flex items-center gap-3">
-            <img src="/ren-avatar.jpg" alt="Ren" width="48" height="48" class="h-12 w-12 rounded-2xl object-cover" />
-            <div>
-              <div class="text-lg font-semibold tracking-tight">RenOS</div>
-              <div class="font-mono text-xs" style="color: var(--color-text-subtle);">@yugonglian2333</div>
-            </div>
-          </div>
-
-          <h1 class="mt-6 font-mono text-2xl font-semibold leading-tight tracking-tight sm:text-[28px]">
-            Agent dev
-            <span style="color: var(--color-accent);">&amp;</span> GISer
-          </h1>
-
-          <p class="mt-4 max-w-md text-[15px] leading-relaxed" style="color: var(--color-text-muted);">
-            在造旅行助手 <a href="/projects" class="link-quiet">一路记 WayLog</a>，做
-            Agent 提案式编辑；持续跟踪 AI 前沿，写下所见所学。
-          </p>
-
-          <div class="mt-auto flex flex-wrap gap-2 pt-6">
-            <a href="/projects" class="inline-flex items-center gap-1.5 rounded-[var(--radius-button)] px-4 py-2 text-sm font-medium transition-colors" style="background: var(--color-text); color: var(--color-bg);">
-              看项目 →
-            </a>
-            <a href="/blog" class="inline-flex items-center gap-1.5 rounded-[var(--radius-button)] border px-4 py-2 text-sm font-medium transition-colors hover:text-[color:var(--color-accent)]" style="border-color: var(--color-border);">
-              读文章
-            </a>
-          </div>
+  <section class="section">
+    <!-- ===== Hero ===== -->
+    <div data-fade>
+      <div class="flex items-center gap-4">
+        <img src="/ren-avatar.jpg" alt="Ren" width="48" height="48" class="h-12 w-12 rounded-full object-cover" />
+        <div>
+          <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">RenOS</p>
+          <p class="font-mono text-[11px]" style="color: var(--color-text-subtle);">@yugonglian2333</p>
         </div>
       </div>
 
-      <!-- ② Now 卡 -->
-      <a href="/now" class="bento-card bento-card-interactive group flex flex-col justify-between p-5" data-fade style="transition-delay: 60ms;">
-        <div>
-          <div class="mb-2 flex items-center gap-2">
-            <span class="relative flex h-2 w-2">
-              <span class="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style="background: var(--color-accent);"></span>
-              <span class="relative inline-flex h-2 w-2 rounded-full" style="background: var(--color-accent);"></span>
-            </span>
-            <span class="font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">此刻</span>
-          </div>
-          <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">
-            正在做 <span class="font-medium" style="color: var(--color-text);">Agent 开发</span>，关注 AI 前沿动态。
-          </p>
-        </div>
-        <span class="mt-4 text-xs group-hover:text-[color:var(--color-accent)]" style="color: var(--color-text-subtle);">本周在读 →</span>
-      </a>
+      <h1 class="mt-10 font-serif text-[32px] font-medium leading-[1.15] tracking-tight sm:text-[42px]">
+        Agent dev <span style="color: var(--color-accent);">&amp;</span> GISer
+      </h1>
 
-      <!-- ③ 旗舰项目卡 -->
-      <a href="/projects" class="bento-card bento-card-interactive group flex flex-col justify-between p-5" data-fade style="transition-delay: 120ms;">
-        <div>
-          <div class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">旗舰项目</div>
-          <h3 class="text-[17px] font-semibold group-hover:text-[color:var(--color-accent)] transition-colors">一路记 WayLog</h3>
-          <p class="mt-1.5 text-sm" style="color: var(--color-text-muted);">旅行控制台 + Agent 提案式编辑</p>
-        </div>
-        <div class="mt-4 flex flex-wrap gap-1.5">
-          <span class="tag">RN</span>
-          <span class="tag">Expo</span>
-          <span class="tag">Supabase</span>
-        </div>
-      </a>
+      <p class="mt-5 max-w-xl text-[15px] leading-relaxed sm:text-base" style="color: var(--color-text-muted);">
+        化名取自《女神异闻录 5》主角雨宫莲——代号 Joker，心之怪盗团首领，
+        沉默寡言却能在关键时刻掀翻棋盘。取「莲」的日语发音 Ren，加上 OS，
+        就是 RenOS。现在在造旅行助手 <a href="/projects" class="link-quiet">一路记 WayLog</a>，
+        也写 AI 周记，记录这个时代值得记住的东西。
+      </p>
 
-      <!-- ④ 最新文章卡 -->
-      <a href="/blog" class="bento-card bento-card-interactive group flex flex-col justify-between p-5" data-fade style="transition-delay: 180ms;">
-        <div>
-          <div class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">最新文章</div>
-          <h3 class="text-[17px] font-semibold group-hover:text-[color:var(--color-accent)] transition-colors">{latest[0]?.data.title ?? "AI 周记 #1"}</h3>
-          <p class="mt-1.5 text-sm" style="color: var(--color-text-muted);">{latest[0]?.data.description ?? "占位待填"}</p>
-        </div>
-        <span class="mt-4 text-xs group-hover:text-[color:var(--color-accent)]" style="color: var(--color-text-subtle);">读全文 →</span>
-      </a>
+      <div class="mt-5 flex flex-wrap gap-1.5">
+        <span class="tag">AI builder</span>
+        <span class="tag">BTC holder</span>
+        <span class="tag">INTJ</span>
+        <span class="tag">00 后</span>
+      </div>
 
-      <!-- ⑤ GitHub 卡 -->
-      <a href="https://github.com/yugonglian2333/WayLog" target="_blank" rel="noopener noreferrer" class="bento-card bento-card-interactive group flex flex-col justify-between p-5" data-fade style="transition-delay: 240ms;">
-        <div>
-          <div class="mb-2 flex items-center gap-2">
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.97.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.67.8.55 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5z"/></svg>
-            <span class="font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">GitHub</span>
-          </div>
-          <div class="font-mono text-sm" style="color: var(--color-text);">yugonglian2333<span style="color: var(--color-text-subtle);">/</span>WayLog</div>
-        </div>
-        <span class="mt-4 text-xs group-hover:text-[color:var(--color-accent)]" style="color: var(--color-text-subtle);">查看源码 ↗</span>
-      </a>
-
-      <!-- ⑥ 社交卡 -->
-      <div class="bento-card flex items-center justify-around gap-2 p-5" data-fade style="transition-delay: 300ms;">
-        <a href="https://github.com/yugonglian2333" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] transition-colors hover:text-[color:var(--color-accent)]">
+      <!-- 社交行 -->
+      <div class="mt-8 flex items-center gap-5" style="color: var(--color-text-subtle);">
+        <a href="https://github.com/yugonglian2333" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-[color:var(--color-accent)]" aria-label="GitHub">
           <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.97.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.67.8.55 4.57-1.52 7.86-5.83 7.86-10.91C23.5 5.65 18.35.5 12 .5z"/></svg>
         </a>
-        <a href="https://x.com/yugonglian12" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter" class="flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] transition-colors hover:text-[color:var(--color-accent)]">
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <a href="https://x.com/yugonglian12" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-[color:var(--color-accent)]" aria-label="X / Twitter">
+          <svg class="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </a>
-        <a href="mailto:1070881879@qq.com" aria-label="邮箱" class="flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] transition-colors hover:text-[color:var(--color-accent)]">
-          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+        <a href="https://space.bilibili.com/10033138" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-[color:var(--color-accent)]" aria-label="Bilibili">
+          <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.561 3.76v7.36c-.037 1.51-.557 2.765-1.561 3.765-1.004 1-2.263 1.52-3.773 1.56H5.333c-1.51-.04-2.769-.56-3.773-1.56C.556 20.112.036 18.857 0 18.348v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.263-1.52 3.773-1.574h.774l-1.174-1.12a1.187 1.187 0 0 1-.373-.867c0-.347.124-.64.373-.88l.027-.027c.24-.24.533-.36.88-.36.347 0 .64.12.88.36L9.6 4.653h4.8l2.347-2.347c.24-.24.533-.36.88-.36.347 0 .64.12.88.36.24.24.36.533.36.88 0 .347-.12.64-.36.88l-1.174 1.12-.32.587zM7.467 8.107c-.373 0-.673.12-.9.36-.227.24-.34.533-.34.88 0 .347.113.64.34.88.227.24.527.36.9.36s.673-.12.9-.36c.227-.24.34-.533.34-.88 0-.347-.113-.64-.34-.88a1.228 1.228 0 0 0-.9-.36zm9.066 0c-.373 0-.673.12-.9.36-.227.24-.34.533-.34.88 0 .347.113.64.34.88.227.24.527.36.9.36s.673-.12.9-.36c.227-.24.34-.533.34-.88 0-.347-.113-.64-.34-.88a1.228 1.228 0 0 0-.9-.36zM12 20.827c1.867 0 3.453-.64 4.76-1.92 1.306-1.28 1.96-2.84 1.96-4.68 0-1.84-.654-3.4-1.96-4.68-1.307-1.28-2.893-1.92-4.76-1.92-1.867 0-3.453.64-4.76 1.92-1.306 1.28-1.96 2.84-1.96 4.68 0 1.84.654 3.4 1.96 4.68 1.307 1.28 2.893 1.92 4.76 1.92z"/></svg>
         </a>
-        <a href="/rss.xml" aria-label="RSS" class="flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] transition-colors hover:text-[color:var(--color-accent)]">
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+        <a href="https://www.xiaohongshu.com/user/profile/62ec05a0000000001f016df6" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-[color:var(--color-accent)]" aria-label="小红书">
+          <svg class="h-[16px] w-[16px]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14h-9a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5z"/></svg>
         </a>
+        <span class="h-3 w-px" style="background: var(--color-border);"></span>
+        <a href="/uses" class="font-mono text-[12px] transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-muted);">装备</a>
+        <a href="/bookmarks" class="font-mono text-[12px] transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-muted);">收藏</a>
       </div>
     </div>
-  </section>
 
-  <!-- ============================================================
-       下方单栏：最新文章 + 项目入口
-       ============================================================ -->
-  <section class="section mt-20" data-fade>
-    <SectionTitle eyebrow="01" title="最新文章" href="/blog" />
-    {latest.length > 0 ? (
-      <div>
-        {latest.map((post) => (
-          <PostCard
-            title={post.data.title}
-            date={post.data.pubDate}
-            slug={post.slug}
-            description={post.data.description}
-            category={post.data.category}
-          />
-        ))}
+    <!-- ===== 分隔 ===== -->
+    <hr class="my-16 border-0" style="height: 1px; background: var(--color-border);" data-fade />
+
+    <!-- ===== 旗舰项目 ===== -->
+    <div data-fade>
+      <div class="flex items-center justify-between">
+        <p class="font-mono text-xs uppercase tracking-[0.12em]" style="color: var(--color-text-subtle);">旗舰项目</p>
+        <a href="/projects" class="font-mono text-[11px] transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-subtle);">全部 →</a>
       </div>
-    ) : (
-      <p style="color: var(--color-text-muted);">第一篇还在路上——先去 <a href="/blog" class="link-quiet">文章</a> 占个位。</p>
-    )}
-  </section>
+      <h2 class="mt-3 font-serif text-2xl font-medium leading-tight tracking-tight">
+        <a href="/projects" class="transition-colors hover:text-[color:var(--color-accent)]">一路记 WayLog</a>
+      </h2>
+      <p class="mt-2 text-sm" style="color: var(--color-text-muted);">
+        旅行控制台 + Agent 提案式编辑。让 AI 只能提议，不能擅动。
+      </p>
+      <div class="mt-4 flex flex-wrap gap-1.5">
+        <span class="tag">RN</span>
+        <span class="tag">Expo</span>
+        <span class="tag">Supabase</span>
+      </div>
+    </div>
 
-  <section class="section mt-16" data-fade>
-    <SectionTitle eyebrow="02" title="在造的东西" href="/projects" />
-    <div>
-      <a href="/projects" class="group flex items-baseline justify-between gap-4 py-3 transition-colors" style="border-bottom: 1px solid var(--color-border);">
-        <div class="min-w-0 flex-1">
-          <div class="flex items-baseline gap-2">
-            <span class="shrink-0 text-[10px] font-mono uppercase tracking-wider" style="color: var(--color-accent);">旗舰</span>
-            <span class="text-[15px] font-medium group-hover:text-[color:var(--color-accent)] transition-colors">一路记 WayLog</span>
-          </div>
-          <p class="mt-0.5 text-sm" style="color: var(--color-text-muted);">个人旅行助手 App：旅行控制台 + Agent 提案式编辑闭环</p>
-        </div>
-        <span class="shrink-0 text-xs group-hover:text-[color:var(--color-accent)]" style="color: var(--color-text-subtle);">→</span>
-      </a>
-      <a href="/projects" class="group flex items-baseline justify-between gap-4 py-3 transition-colors" style="border-bottom: 1px solid var(--color-border);">
-        <div class="min-w-0 flex-1">
-          <div class="text-[15px] font-medium" style="color: var(--color-text-subtle);">更多在造中…</div>
-        </div>
-        <span class="shrink-0 text-xs" style="color: var(--color-text-subtle);">敬请期待</span>
-      </a>
+    <!-- ===== 分隔 ===== -->
+    <hr class="my-16 border-0" style="height: 1px; background: var(--color-border);" data-fade />
+
+    <!-- ===== 最新文章 ===== -->
+    <div data-fade>
+      <div class="flex items-center justify-between">
+        <p class="font-mono text-xs uppercase tracking-[0.12em]" style="color: var(--color-text-subtle);">最新文章</p>
+        <a href="/blog" class="font-mono text-[11px] transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-subtle);">全部 →</a>
+      </div>
+      <h2 class="mt-3 font-serif text-2xl font-medium leading-tight tracking-tight">
+        <a href={"/blog/" + (latest[0]?.slug ?? "")} class="transition-colors hover:text-[color:var(--color-accent)]">{latest[0]?.data.title ?? "AI 周记 #1"}</a>
+      </h2>
+      <p class="mt-2 text-sm" style="color: var(--color-text-muted);">
+        {latest[0]?.data.description ?? "占位待填"}
+      </p>
+      {latest[0] && (
+        <p class="mt-3 font-mono text-[11px]" style="color: var(--color-text-subtle);">
+          {new Date(latest[0].data.pubDate).toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
+          {latest[0].data.category && <span> · {latest[0].data.category}</span>}
+        </p>
+      )}
+    </div>
+
+    <!-- ===== 分隔 ===== -->
+    <hr class="my-16 border-0" style="height: 1px; background: var(--color-border);" data-fade />
+
+    <!-- ===== 此刻 · 关于 ===== -->
+    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2" data-fade>
+      <div>
+        <p class="font-mono text-xs uppercase tracking-[0.12em]" style="color: var(--color-text-subtle);">此刻</p>
+        <p class="mt-3 text-sm leading-relaxed" style="color: var(--color-text-muted);">
+          正在做 Agent 开发，关注 AI 前沿动态。
+        </p>
+        <a href="/now" class="mt-3 inline-flex items-center gap-1 font-mono text-[11px] transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-subtle);">
+          了解更多 →
+        </a>
+      </div>
+      <div>
+        <p class="font-mono text-xs uppercase tracking-[0.12em]" style="color: var(--color-text-subtle);">关于</p>
+        <p class="mt-3 text-sm leading-relaxed" style="color: var(--color-text-muted);">
+          如果你更想了解我一点
+        </p>
+        <a href="/about" class="mt-3 inline-flex items-center gap-1 font-mono text-[11px] transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-subtle);">
+          认识我 →
+        </a>
+      </div>
     </div>
   </section>
 </BaseLayout>

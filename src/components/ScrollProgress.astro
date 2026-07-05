@@ -1,0 +1,259 @@
+<!--
+  ScrollNavigator — Codex 风格阅读进度条
+  横线条数随页面长度动态变化，hover 单个横条变宽，点击跳转
+-->
+<div id="scroll-nav-wrap" role="scrollbar" aria-controls="main" tabindex="0" aria-label="阅读进度条">
+  <div id="scroll-nav-dashes" aria-hidden="true"></div>
+</div>
+
+<style is:global>
+  html.scroll-custom-visible {
+    scrollbar-width: none;
+  }
+  html.scroll-custom-visible::-webkit-scrollbar {
+    display: none;
+  }
+
+  #scroll-nav-wrap {
+    position: fixed;
+    top: 0;
+    left: 6px;
+    bottom: 0;
+    width: 20px;
+    z-index: 100;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  #scroll-nav-wrap.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #scroll-nav-dashes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 16px 0;
+    pointer-events: none;
+    width: 100%;
+  }
+
+  .scroll-dot {
+    width: 6px;
+    height: 2px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    background: color-mix(in oklab, var(--color-text-muted, #5e5d59) 22%, transparent);
+    transition: width 0.15s ease, background 0.15s ease;
+  }
+  .scroll-dot.is-active {
+    background: var(--color-accent, #c96442);
+    width: 12px;
+  }
+  .scroll-dot.is-hover {
+    width: 14px;
+    background: color-mix(in oklab, var(--color-text-muted, #5e5d59) 40%, transparent);
+  }
+  .scroll-dot.is-active.is-hover {
+    width: 16px;
+    background: var(--color-accent-hover, #d97757);
+  }
+</style>
+
+<script is:inline>
+(function () {
+  var wrap = document.getElementById("scroll-nav-wrap");
+  var container = document.getElementById("scroll-nav-dashes");
+  if (!wrap || !container) return;
+
+  var MIN_SEGMENTS = 15;
+  var MAX_SEGMENTS = 60;
+  var segments = MIN_SEGMENTS;
+  var dots = [];
+  var ticking = false;
+  var hoverIdx = -1;
+  var isVisible = false;
+
+  function buildDots(count) {
+    // 清空
+    while (container.firstChild) container.removeChild(container.firstChild);
+    dots = [];
+    for (var i = 0; i < count; i++) {
+      var dot = document.createElement("div");
+      dot.className = "scroll-dot";
+      // 继承 Astro scoped 属性
+      for (var j = 0; j < container.attributes.length; j++) {
+        var attr = container.attributes[j];
+        if (attr.name.indexOf("data-astro-cid") === 0) {
+          dot.setAttribute(attr.name, attr.value);
+        }
+      }
+      container.appendChild(dot);
+      dots.push(dot);
+    }
+    segments = count;
+  }
+
+  function calcSegments() {
+    var ms = document.documentElement.scrollHeight - window.innerHeight;
+    if (ms <= 10) return MIN_SEGMENTS;
+    // 每 80px 高度一个 dot
+    var count = Math.round(ms / 80);
+    return Math.max(MIN_SEGMENTS, Math.min(MAX_SEGMENTS, count));
+  }
+
+  function rebuildIfNeeded() {
+    var ideal = calcSegments();
+    if (ideal !== segments) {
+      buildDots(ideal);
+      return true;
+    }
+    return false;
+  }
+
+  function getScrollRatio() {
+    var ms = document.documentElement.scrollHeight - window.innerHeight;
+    if (ms <= 5) return 0;
+    return window.scrollY / ms;
+  }
+
+  function update() {
+    // 内容不够两屏 → 隐藏
+    var ms = document.documentElement.scrollHeight - window.innerHeight;
+    if (ms < window.innerHeight) {
+      if (isVisible) {
+        wrap.classList.remove("is-visible");
+        document.documentElement.classList.remove("scroll-custom-visible");
+        isVisible = false;
+      }
+      return;
+    }
+    if (!isVisible) {
+      wrap.classList.add("is-visible");
+      document.documentElement.classList.add("scroll-custom-visible");
+      isVisible = true;
+    }
+
+    var ratio = window.scrollY / ms;
+    var activeIdx = Math.round(ratio * (segments - 1));
+
+    for (var i = 0; i < segments; i++) {
+      var isActive = (i === activeIdx);
+      dots[i].classList.toggle("is-active", isActive);
+    }
+  }
+
+  // 鼠标悬停：高亮 hover 的 dot
+  function getDotIndex(clientY) {
+    if (dots.length === 0) return -1;
+    var first = dots[0];
+    var last = dots[dots.length - 1];
+    var top = first.getBoundingClientRect().top;
+    var bottom = last.getBoundingClientRect().bottom;
+    var h = bottom - top;
+    if (h <= 0) return -1;
+    var pct = (clientY - top) / h;
+    var idx = Math.round(pct * (segments - 1));
+    return Math.max(0, Math.min(segments - 1, idx));
+  }
+
+  function onMouseMove(e) {
+    var idx = getDotIndex(e.clientY);
+    if (idx !== hoverIdx) {
+      if (hoverIdx >= 0 && dots[hoverIdx]) dots[hoverIdx].classList.remove("is-hover");
+      hoverIdx = idx;
+      if (idx >= 0 && dots[idx]) dots[idx].classList.add("is-hover");
+    }
+  }
+
+  function onMouseLeave() {
+    if (hoverIdx >= 0 && dots[hoverIdx]) {
+      dots[hoverIdx].classList.remove("is-hover");
+    }
+    hoverIdx = -1;
+  }
+
+  function jump(clientY) {
+    var ms = document.documentElement.scrollHeight - window.innerHeight;
+    if (ms < window.innerHeight) return;
+    // 通过鼠标位置算出对应的 dot 索引，再映射到滚动位置（精准定位）
+    var idx = getDotIndex(clientY);
+    if (idx < 0) return;
+    var ratio = idx / (segments - 1);
+    window.scrollTo({ top: ratio * ms, behavior: "instant" });
+  }
+
+  function onPointer(e) {
+    e.preventDefault();
+    jump(e.clientY || (e.touches && e.touches[0].clientY));
+    function onMove(ev) {
+      ev.preventDefault();
+      jump(ev.clientY || (ev.touches && ev.touches[0].clientY));
+    }
+    function onEnd() {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onEnd);
+      document.removeEventListener("touchmove", onMove);
+      document.removeEventListener("touchend", onEnd);
+      document.body.style.userSelect = "";
+    }
+    document.addEventListener("mousemove", onMove, { passive: false });
+    document.addEventListener("mouseup", onEnd);
+    document.addEventListener("touchmove", onMove, { passive: false });
+    document.addEventListener("touchend", onEnd);
+    document.body.style.userSelect = "none";
+  }
+
+  function tick() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        var changed = rebuildIfNeeded();
+        update();
+        if (changed) {
+          // 重建后重新计算 hover
+          if (hoverIdx >= 0) {
+            var idx = getDotIndexFromLastMove();
+          }
+        }
+      });
+    }
+  }
+
+  // 重建+更新（防抖版本）
+  var rebuildTimer = null;
+  function scheduleRebuild() {
+    if (rebuildTimer) clearTimeout(rebuildTimer);
+    rebuildTimer = setTimeout(function () {
+      rebuildTimer = null;
+      rebuildIfNeeded();
+      update();
+    }, 200);
+  }
+
+  wrap.addEventListener("mousedown", onPointer);
+  wrap.addEventListener("touchstart", onPointer, { passive: false });
+  wrap.addEventListener("mousemove", onMouseMove);
+  wrap.addEventListener("mouseleave", onMouseLeave);
+  window.addEventListener("scroll", tick, { passive: true });
+  window.addEventListener("resize", scheduleRebuild, { passive: true });
+
+  // 初始化
+  function init() {
+    buildDots(calcSegments());
+    update();
+  }
+  setTimeout(init, 100);
+  setTimeout(init, 500);
+  window.addEventListener("load", init, { once: true });
+})();
+</script>

@@ -2,49 +2,70 @@
 
 /* ============================================================
    RenOS 设计系统 Token
-   Bento 卡片墙 + 单栏稳重内容区
+   Claude / Anthropic 审美：温暖编辑式 · 赤陶橙 · 羊皮纸
    ============================================================ */
 
 @theme {
-  /* 字体 */
+  /* 字体 —— UI 用无衬线，文章正文用衬线（Claude 编辑式） */
   --font-sans: "Inter", "Noto Sans SC", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Source Serif 4", "Source Serif Pro", Georgia, "Noto Serif SC",
+    ui-serif, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
     monospace;
 
-  /* 配色 —— 浅色（默认） */
-  --color-bg: #fafafa;
+  /* 配色 —— 浅色（默认）严格按 Claude / Anthropic 官网取色 */
+  --color-bg: #faf9f5;
   --color-bg-elevated: #ffffff;
-  --color-border: #ededed;
-  --color-text: #0a0a0a;
-  --color-text-muted: #6b6b6b;
-  --color-text-subtle: #9a9a9a;
+  --color-bg-surface: #ffffff;
+  --color-border: #f0eee6;
+  --color-border-strong: #e8e6dc;
+  --color-text: #141413;
+  --color-text-muted: #5e5d59;
+  --color-text-subtle: #87867f;
 
-  /* 强调色：BTC 橙 —— 仅用于链接/强调点缀，不滥用 */
-  --color-accent: #f7931a;
-  --color-accent-soft: #fde9c8;
-  --color-accent-contrast: #1a1208;
+  /* 强调色：Claude Terracotta 赤陶橙 */
+  --color-accent: #c96442;
+  --color-accent-hover: #d97757;
+  --color-accent-soft: #f0e3dc;
+  --color-accent-contrast: #ffffff;
 
-  /* 圆角 */
-  --radius-card: 18px;
-  --radius-button: 10px;
+  /* 语义色 */
+  --color-error: #b53333;
+  --color-success: #5a8a5a;
+  --color-focus: #3898ec;
 
-  /* 间距（section / 卡片） */
+  /* 圆角 —— Claude 体系偏小圆角，克制 */
+  --radius-card: 12px;
+  --radius-button: 8px;
+  --radius-sm: 6px;
+
+  /* 间距 */
   --spacing-section: 88px;
   --spacing-card-gap: 16px;
+
+  /* 质感曲线 */
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
 }
 
-/* 深色模式：html.dark 切换 token */
+/* 深色模式 —— Claude 暖调黑，不是冷灰 */
 .dark {
-  --color-bg: #0a0a0a;
-  --color-bg-elevated: #141414;
-  --color-border: #232323;
-  --color-text: #f5f5f5;
-  --color-text-muted: #a1a1a1;
-  --color-text-subtle: #6b6b6b;
-  --color-accent: #f7931a;
-  --color-accent-soft: #2a1c0a;
-  --color-accent-contrast: #fff7ec;
+  --color-bg: #1a1915;
+  --color-bg-elevated: #232220;
+  --color-bg-surface: #2a2926;
+  --color-border: #3d3c38;
+  --color-border-strong: #4a4944;
+  --color-text: #faf9f5;
+  --color-text-muted: #b0aea5;
+  --color-text-subtle: #87867f;
+  --color-accent: #d97757;
+  --color-accent-hover: #e88869;
+  --color-accent-soft: #3a2a22;
+  --color-accent-contrast: #1a1915;
 }
 
 /* ============================================================
@@ -68,12 +89,15 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
   font-feature-settings: "cv11", "ss01";
   font-synthesis-weight: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color var(--duration-slow) var(--ease-out),
+    color var(--duration-slow) var(--ease-out);
 }
 
 ::selection {
@@ -82,43 +106,83 @@ body {
 }
 
 /* ============================================================
+   可访问性：跳到正文 + 键盘焦点
+   ============================================================ */
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3.5rem;
+  z-index: 100;
+  background: var(--color-text);
+  color: var(--color-bg);
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--radius-button);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: top var(--duration-fast) var(--ease-out);
+}
+.skip-link:focus {
+  top: 1rem;
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-button);
+}
+
+/* ============================================================
    工具类 / 复用样式
    ============================================================ */
 
 @layer components {
-  /* Bento 卡片基底 */
+  /* Bento 卡片 —— Claude 式暖白底 + 极软 ring */
   .bento-card {
     @apply relative overflow-hidden rounded-[var(--radius-card)] border;
     background: var(--color-bg-elevated);
     border-color: var(--color-border);
-    transition: transform 0.2s ease, box-shadow 0.2s ease,
-      border-color 0.2s ease, background-color 0.2s ease;
+    transition: transform var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out),
+      border-color var(--duration-base) var(--ease-out),
+      background-color var(--duration-base) var(--ease-out);
   }
-  /* 可交互卡片：hover 上浮 + 强调边框（复用 .bento-card，不依赖 @apply 自定义类） */
   .bento-card.bento-card-interactive:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.18);
-    border-color: color-mix(in oklab, var(--color-accent) 40%, var(--color-border));
+    box-shadow: 0 4px 24px -8px rgba(20, 20, 19, 0.08);
+    border-color: var(--color-border-strong);
   }
 
-  /* 链接：低调 + 橙色悬停 */
+  /* 链接：Claude 式 —— 赤陶橙下划线，hover 加深 */
   .link-quiet {
     color: var(--color-text);
     text-decoration: none;
-    border-bottom: 1px solid color-mix(in oklab, currentColor 18%, transparent);
-    transition: color 0.2s ease, border-color 0.2s ease;
+    border-bottom: 1px solid color-mix(in oklab, currentColor 20%, transparent);
+    transition: color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
   }
   .link-quiet:hover {
     color: var(--color-accent);
     border-bottom-color: var(--color-accent);
   }
 
-  /* Tag / 技术栈 pill */
+  /* Tag —— Claude 式暖沙底 */
   .tag {
-    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs;
+    @apply inline-flex items-center rounded-[var(--radius-sm)] border px-2.5 py-0.5;
+    font-family: var(--font-mono);
+    font-size: 11px;
     color: var(--color-text-muted);
     border-color: var(--color-border);
-    background: transparent;
+    background: color-mix(in oklab, var(--color-text) 3%, transparent);
+    transition: border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+  .tag:hover {
+    border-color: var(--color-border-strong);
+    color: var(--color-text);
   }
 
   /* Section 容器 */
@@ -128,16 +192,24 @@ body {
   .section-wide {
     @apply mx-auto w-full max-w-5xl px-5;
   }
+
+  /* 图标基类 */
+  .icon {
+    @apply shrink-0;
+    transition: transform var(--duration-base) var(--ease-spring),
+      color var(--duration-fast) var(--ease-out);
+  }
 }
 
 /* ============================================================
-   滚动入场动效（轻量，不引动画库）
+   滚动入场动效
    ============================================================ */
 
 [data-fade] {
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
 }
 [data-fade].is-visible {
   opacity: 1;

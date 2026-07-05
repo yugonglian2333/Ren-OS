@@ -1,55 +1,129 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
 interface Props {
   title?: string;
   description?: string;
   image?: string;
+  /** 文章页专用：类型改为 article */
+  type?: "website" | "article";
+  /** 文章页专用：发布时间 */
+  publishedTime?: Date;
+  /** 文章页专用：分类 */
+  section?: string;
 }
 
 const {
   title = "RenOS — AI 造物者 & BTC 长期主义者",
   description = "RenOS：在造旅行助手一路记 WayLog，做 Agent 提案式编辑；持续跟踪 AI 前沿，写下所见所学。",
   image = "/og-default.jpg",
+  type = "website",
+  publishedTime,
+  section,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(image, Astro.url).href;
+
+// JSON-LD 结构化数据
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "RenOS",
+  url: "https://renos.top",
+  jobTitle: "AI Builder",
+  description: "AI builder & BTC holder。在造旅行助手一路记 WayLog，做 Agent 提案式编辑。",
+  sameAs: [
+    "https://github.com/yugonglian2333",
+    "https://x.com/yugonglian12",
+  ],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "RenOS",
+  url: "https://renos.top",
+  description: "AI builder & BTC holder 的个人网站",
+  author: { "@type": "Person", name: "RenOS" },
+  publisher: { "@type": "Person", name: "RenOS" },
+};
+
+const articleSchema =
+  type === "article" && publishedTime
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: title,
+        description: description,
+        image: socialImage,
+        datePublished: publishedTime.toISOString(),
+        dateModified: publishedTime.toISOString(),
+        author: { "@type": "Person", name: "RenOS", url: "https://renos.top" },
+        publisher: { "@type": "Person", name: "RenOS", url: "https://renos.top" },
+        mainEntityOfPage: { "@type": "WebPage", "@id": canonicalURL.href },
+        ...(section ? { articleSection: section } : {}),
+      }
+    : null;
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
+<meta name="robots" content="index, follow" />
 
 <link rel="icon" type="image/jpeg" href="/ren-avatar.jpg" />
 <link rel="apple-touch-icon" href="/ren-avatar.jpg" />
-<link rel="mask-icon" href="/favicon.svg" color="#f7931a" />
+<link rel="mask-icon" href="/favicon.svg" color="#c96442" />
 <link rel="sitemap" href="/sitemap-index.xml" />
-
 <link rel="canonical" href={canonicalURL} />
 
-<!-- 浏览器 tab / 搜索引擎 title -->
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+<meta name="author" content="RenOS" />
+<meta name="keywords" content="RenOS, AI builder, BTC, Agent, WayLog, 一路记, 个人博客, AI 周记, 学习笔记" />
 
 <!-- Open Graph -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={type} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={socialImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+<meta property="og:site_name" content="RenOS" />
+<meta property="og:locale" content="zh_CN" />
+
+{type === "article" && publishedTime && (
+  <>
+    <meta property="article:published_time" content={publishedTime.toISOString()} />
+    <meta property="article:author" content="RenOS" />
+    {section && <meta property="article:section" content={section} />}
+  </>
+)}
 
 <!-- Twitter / X -->
-<meta property="twitter:card" content="summary" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={socialImage} />
 <meta name="twitter:site" content="@yugonglian12" />
 <meta name="twitter:creator" content="@yugonglian12" />
 
+<!-- JSON-LD 结构化数据 -->
+<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+{articleSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+)}
+
 <!-- 字体 -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
   rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap"
 />

@@ -33,67 +33,64 @@ const waylogLinks = [
 
 <BaseLayout title="项目 — RenOS" description="一路记 WayLog：旅行控制台 + Agent 提案式编辑。">
   <section class="section">
-    <SectionTitle eyebrow="01" title="项目" />
+    <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);" data-fade>项目</p>
+    <h1 class="mt-3 font-serif text-3xl font-medium tracking-tight" data-fade>一路记 WayLog</h1>
 
-    <!-- 旗舰项目卡 -->
-    <article class="bento-card mt-6 p-6 sm:p-8" data-fade>
-      <div class="flex flex-col gap-6">
-        <header>
-          <div class="flex items-center gap-2">
-            <span class="rounded-full px-2.5 py-0.5 text-xs font-medium" style="background: var(--color-accent-soft); color: var(--color-accent-contrast);">旗舰项目</span>
-            <span class="font-mono text-xs" style="color: var(--color-text-subtle);">2026 · 进行中</span>
-          </div>
-          <h1 class="mt-3 text-3xl font-bold tracking-tight">一路记 WayLog</h1>
-          <p class="mt-3 max-w-2xl text-[15px] leading-relaxed" style="color: var(--color-text-muted);">
-            个人旅行助手 App。把旅行计划、每日行程、地点收藏、预算记录、重要备忘和 Agent
-            辅助编辑收拢成一个旅行控制台 + 旅行手记。
-          </p>
-        </header>
+    <div class="mt-2 flex items-center gap-3" data-fade>
+      <span class="rounded-[var(--radius-sm)] px-2.5 py-0.5 text-xs font-medium" style="background: var(--color-accent-soft); color: var(--color-accent);">旗舰项目</span>
+      <span class="font-mono text-xs" style="color: var(--color-text-subtle);">2026 · 进行中</span>
+    </div>
 
-        <!-- 要点 -->
-        <ul class="flex flex-col gap-3">
-          {waylogPoints.map((p) => (
-            <li class="flex items-start gap-3 text-[14px] leading-relaxed" style="color: var(--color-text-muted);">
-              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background: var(--color-accent);"></span>
-              <span>{p}</span>
-            </li>
-          ))}
-        </ul>
+    <div class="mt-8 border-l-4 pl-5" style="border-color: var(--color-accent);" data-fade>
+      <p class="font-serif text-lg font-medium leading-relaxed sm:text-xl">
+        个人旅行助手 App。把旅行计划、每日行程、地点收藏、预算记录、重要备忘和
+        Agent 辅助编辑收拢成一个旅行控制台 + 旅行手记。
+      </p>
+    </div>
 
-        <!-- 技术栈 -->
-        <div>
-          <div class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">技术栈</div>
-          <div class="flex flex-wrap gap-1.5">
-            {waylogTags.map((t) => <span class="tag">{t}</span>)}
-          </div>
-        </div>
+    <!-- 要点 -->
+    <div class="mt-10" data-fade>
+      <p class="font-mono text-xs uppercase tracking-[0.12em]" style="color: var(--color-text-subtle);">能力</p>
+      <ul class="mt-4 flex flex-col gap-4">
+        {waylogPoints.map((p) => (
+          <li class="flex items-start gap-3 text-[14px] leading-relaxed" style="color: var(--color-text-muted);">
+            <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full" style="background: var(--color-accent);"></span>
+            <span>{p}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
 
-        <!-- 链接 -->
-        <div class="flex flex-wrap gap-3">
-          {waylogLinks.map((l) => (
-            <a
-              href={l.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1.5 rounded-[var(--radius-button)] border px-4 py-2 text-sm font-medium transition-colors hover:text-[color:var(--color-accent)]"
-              style="border-color: var(--color-border);"
-            >
-              {l.label} ↗
-            </a>
-          ))}
-        </div>
+    <!-- 技术栈 -->
+    <div class="mt-10" data-fade>
+      <p class="font-mono text-xs uppercase tracking-[0.12em]" style="color: var(--color-text-subtle);">技术栈</p>
+      <div class="mt-3 flex flex-wrap gap-1.5">
+        {waylogTags.map((t) => <span class="tag">{t}</span>)}
       </div>
-    </article>
+    </div>
+
+    <!-- 链接 -->
+    <div class="mt-8 flex flex-wrap gap-3" data-fade>
+      {waylogLinks.map((l) => (
+        <a
+          href={l.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 rounded-[var(--radius-button)] border px-4 py-2 text-sm font-medium transition-colors hover:text-[color:var(--color-accent)]"
+          style="border-color: var(--color-border);"
+        >
+          {l.label} ↗
+        </a>
+      ))}
+    </div>
 
     <!-- 空位 -->
-    <div class="mt-8 flex flex-col gap-3" data-fade>
-      <div class="bento-card flex items-center justify-between p-5" style="border-style: dashed;">
-        <div>
-          <div class="text-[15px] font-medium" style="color: var(--color-text-subtle);">更多在造中…</div>
-          <p class="mt-0.5 text-sm" style="color: var(--color-text-subtle);">下一个项目还在草稿箱。</p>
-        </div>
-        <span class="font-mono text-xs" style="color: var(--color-text-subtle);">敬请期待</span>
-      </div>
+    <hr class="my-14 border-0" style="height: 1px; background: var(--color-border);" data-fade />
+
+    <div data-fade>
+      <p class="font-serif text-lg font-medium" style="color: var(--color-text-subtle);">更多在造中…</p>
+      <p class="mt-1 text-sm" style="color: var(--color-text-muted);">下一个项目还在草稿箱。</p>
+      <p class="mt-2 font-mono text-[11px]" style="color: var(--color-text-subtle);">敬请期待</p>
     </div>
   </section>
 </BaseLayout>

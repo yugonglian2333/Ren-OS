@@ -1,0 +1,92 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+
+const categories = [
+  {
+    label: "AI 资源",
+    items: [
+      { name: "Anthropic 官方博客", url: "https://www.anthropic.com/news", note: "Claude 背后的团队" },
+      { name: "OpenAI Cookbook", url: "https://cookbook.openai.com", note: "实战示例" },
+      { name: "Hugging Face", url: "https://huggingface.co", note: "模型库 + demos" },
+      { name: "Papers with Code", url: "https://paperswithcode.com", note: "论文 + 代码" },
+      { name: "AI 周刊（宝玉）", url: "https://baoyu.io", note: "中文 AI 资讯" },
+      { name: "Latent Space", url: "https://www.latent.space", note: "AI 工程播客" },
+    ],
+  },
+  {
+    label: "设计灵感",
+    items: [
+      { name: "awwwards", url: "https://www.awwwards.com", note: "网页设计奖" },
+      { name: "dribbble", url: "https://dribbble.com", note: "UI 灵感" },
+      { name: "antfu.me", url: "https://antfu.me", note: "极简个人站标杆" },
+      { name: "rauno.me", url: "https://rauno.me", note: "质感天花板" },
+      { name: "paco.me", url: "https://paco.me", note: "Linear 设计师" },
+      { name: "leerob.com", url: "https://leerob.com", note: "Cursor 的 Lee" },
+    ],
+  },
+  {
+    label: "技术学习",
+    items: [
+      { name: "Astro 文档", url: "https://docs.astro.build", note: "本站框架" },
+      { name: "Tailwind CSS", url: "https://tailwindcss.com/docs", note: "原子化 CSS" },
+      { name: "MDN Web Docs", url: "https://developer.mozilla.org", note: "Web 标准" },
+      { name: "TypeScript Handbook", url: "https://www.typescriptlang.org/docs/handbook", note: "TS 入门" },
+      { name: "Expo 文档", url: "https://docs.expo.dev", note: "React Native 开发" },
+      { name: "Supabase 文档", url: "https://supabase.com/docs", note: "后端即服务" },
+    ],
+  },
+  {
+    label: "BTC / Web3",
+    items: [
+      { name: "Bitcoin Whitepaper", url: "https://bitcoin.org/bitcoin.pdf", note: "中本聪白皮书，一切的开始" },
+      { name: "learnmeabitcoin", url: "https://learnmeabitcoin.com", note: "可视化讲透 BTC" },
+      { name: "Glassnode", url: "https://glassnode.com", note: "链上数据分析" },
+      { name: "Coindesk", url: "https://coindesk.com", note: "行业新闻" },
+      { name: "vitalik.ca", url: "https://vitalik.ca", note: "V 神博客" },
+    ],
+  },
+];
+---
+
+<BaseLayout title="收藏 — RenOS" description="RenOS 收藏的好内容：AI、设计、技术、BTC。">
+  <section class="section">
+    <div data-fade>
+      <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">收藏</p>
+      <h1 class="mt-3 font-serif text-3xl font-medium tracking-tight sm:text-4xl">/bookmarks</h1>
+      <div class="mt-6 border-l-4 pl-5" data-fade style="border-color: var(--color-accent);">
+        <p class="font-serif text-base leading-relaxed sm:text-lg">
+          跟踪 AI 前沿、攒设计灵感、学技术、屯 BTC——这些是我反复回看的好东西。
+        </p>
+        <p class="mt-1 text-sm" style="color: var(--color-text-muted);">不求全，只放真心有用的。</p>
+      </div>
+    </div>
+
+    {categories.map((cat, idx) => (
+      <div class="mt-10" data-fade>
+        <SectionTitle eyebrow={`0${idx + 1}`} title={cat.label} />
+        <div class="flex flex-col">
+          {cat.items.map((item) => (
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex items-baseline justify-between gap-4 border-b py-3 transition-colors"
+              style="border-color: var(--color-border);"
+            >
+              <div class="min-w-0 flex-1">
+                <span class="text-[14px] font-medium group-hover:text-[color:var(--color-accent)] transition-colors">{item.name}</span>
+                <span class="ml-3 text-xs" style="color: var(--color-text-subtle);">{item.note}</span>
+              </div>
+              <svg class="icon h-3 w-3 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-subtle);"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+
+    <p class="mt-12 text-xs" style="color: var(--color-text-subtle);" data-fade>
+      持续更新中。有好东西欢迎 <a href="mailto:1070881879@qq.com" class="link-quiet">推荐给我</a>。
+    </p>
+  </section>
+</BaseLayout>

@@ -1,0 +1,128 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+
+const hardware = [
+  { name: "MacBook Air M5", note: "移动办公主力，轻便续航长", emoji: "M" },
+  { name: "台式机 9700x + 5070ti", note: "重型开发 + 本地跑模型", emoji: "P" },
+];
+
+const devAndAiTools = [
+  { name: "Codex", note: "日常主力，OpenAI 编程助手", url: "https://openai.com" },
+  { name: "Claude Code", note: "终端里的 AI 结对编程", url: "https://claude.ai" },
+  { name: "VS Code", note: "备用编辑器，插件生态全", url: "https://code.visualstudio.com" },
+];
+
+const designAndLife = [
+  { name: "小米屏幕挂灯", note: "夜猫子护眼必备", url: null },
+  { name: "Figma", note: "设计 / 原型", url: "https://figma.com" },
+  { name: "Obsidian", note: "知识管理 / 笔记", url: "https://obsidian.md" },
+  { name: "Raycast", note: "Mac 启动器，替代 Spotlight", url: "https://raycast.com" },
+  { name: "1Password", note: "密码管理", url: "https://1password.com" },
+  { name: "Notion", note: "项目文档 / 轻量数据库", url: "https://notion.so" },
+];
+
+const fontStack = [
+  { name: "Inter", note: "UI 无衬线正文", url: "https://rsms.me/inter" },
+  { name: "Source Serif 4", note: "标题衬线", url: "https://fonts.google.com/specimen/Source+Serif+4" },
+  { name: "JetBrains Mono", note: "代码 / 等宽", url: "https://www.jetbrains.com/lp/mono" },
+  { name: "Source Sans 3", note: "文章正文（Typora Vue 主题）", url: "https://fonts.google.com/specimen/Source+Sans+3" },
+];
+---
+
+<BaseLayout title="装备 — RenOS" description="RenOS 用的硬件、软件、AI 工具和好物。">
+  <section class="section">
+    <div data-fade>
+      <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">装备</p>
+      <h1 class="mt-3 font-serif text-3xl font-medium tracking-tight sm:text-4xl">/uses</h1>
+      <div class="mt-6 border-l-4 pl-5" data-fade style="border-color: var(--color-accent);">
+        <p class="font-serif text-base leading-relaxed sm:text-lg">
+          我日常用的硬件、软件、AI 工具和一些觉得好用的东西。
+        </p>
+        <p class="mt-1 text-sm" style="color: var(--color-text-muted);">不是清单，是真心推荐的。</p>
+      </div>
+    </div>
+
+    <div class="mt-10" data-fade>
+      <SectionTitle eyebrow="01" title="硬件" />
+      <div class="flex flex-wrap gap-x-8 gap-y-2">
+        {hardware.map((h) => (
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-[11px] uppercase tracking-wider" style="color: var(--color-text-subtle); min-width: 48px;">{h.emoji}</span>
+            <span class="text-[14px] font-medium">{h.name}</span>
+            <span class="text-xs" style="color: var(--color-text-subtle);">· {h.note}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-10" data-fade>
+      <SectionTitle eyebrow="02" title="开发 & AI 工具" />
+      <div class="flex flex-col">
+        {devAndAiTools.map((t) => (
+          <a
+            href={t.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex items-baseline justify-between gap-4 border-b py-3 transition-colors"
+            style="border-color: var(--color-border);"
+          >
+            <div class="min-w-0 flex-1">
+              <span class="text-[14px] font-medium group-hover:text-[color:var(--color-accent)] transition-colors">{t.name}</span>
+              <span class="ml-3 text-xs" style="color: var(--color-text-subtle);">{t.note}</span>
+            </div>
+            <svg class="icon h-3 w-3 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-subtle);"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-10" data-fade>
+      <SectionTitle eyebrow="03" title="设计 / 效率 / 好物" />
+      <div class="flex flex-col">
+        {designAndLife.map((d) => (
+          <a
+            href={d.url ?? "#"}
+            target={d.url ? "_blank" : undefined}
+            rel={d.url ? "noopener noreferrer" : undefined}
+            class="group flex items-baseline justify-between gap-4 border-b py-3 transition-colors"
+            style="border-color: var(--color-border);"
+          >
+            <div class="min-w-0 flex-1">
+              <span class="text-[14px] font-medium group-hover:text-[color:var(--color-accent)] transition-colors">{d.name}</span>
+              <span class="ml-3 text-xs" style="color: var(--color-text-subtle);">{d.note}</span>
+            </div>
+            {d.url && (
+              <svg class="h-3 w-3 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-subtle);"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            )}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-10" data-fade>
+      <SectionTitle eyebrow="04" title="字体栈" />
+      <div class="flex flex-col">
+        {fontStack.map((f) => (
+          <a
+            href={f.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex items-baseline justify-between gap-4 border-b py-3 transition-colors"
+            style="border-color: var(--color-border);"
+          >
+            <div class="min-w-0 flex-1">
+              <span class="text-[14px] font-medium group-hover:text-[color:var(--color-accent)] transition-colors">{f.name}</span>
+              <span class="ml-3 text-xs" style="color: var(--color-text-subtle);">{f.note}</span>
+            </div>
+            <svg class="icon h-3 w-3 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-subtle);"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <p class="mt-12 text-xs" style="color: var(--color-text-subtle);" data-fade>
+      灵感来自 <a href="https://usesissue.vercel.app" target="_blank" rel="noopener noreferrer" class="link-quiet">uses issue</a> · <a href="https://antfu.me/use" target="_blank" rel="noopener noreferrer" class="link-quiet">antfu/uses</a>
+    </p>
+  </section>
+</BaseLayout>

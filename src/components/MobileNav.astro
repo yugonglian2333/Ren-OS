@@ -1,0 +1,215 @@
+---
+import { isActive } from "./nav";
+
+const path = Astro.url.pathname;
+
+// 按重要度分组
+const primaryNav = [
+  { href: "/projects", label: "项目" },
+  { href: "/blog", label: "文章" },
+];
+const secondaryNav = [
+  { href: "/now", label: "此刻" },
+  { href: "https://github.com/yugonglian2333", label: "GitHub", external: true },
+];
+const tertiaryNav = [
+  { href: "/about", label: "关于" },
+];
+---
+
+<div
+  id="mobile-nav-backdrop"
+  class="mobile-nav-backdrop fixed inset-0 z-[80] hidden opacity-0 transition-opacity duration-300 sm:hidden"
+  style="background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);"
+></div>
+
+<aside
+  id="mobile-nav-panel"
+  class="mobile-nav-panel fixed inset-0 z-[90] hidden flex-col sm:hidden"
+  style="background: var(--color-bg-elevated);"
+  role="dialog"
+  aria-modal="true"
+  aria-label="导航菜单"
+>
+  <div class="flex h-14 items-center justify-between px-5" style="border-bottom: 1px solid var(--color-border);">
+    <a href="/" class="mobile-nav-link inline-flex items-center gap-2 text-[15px] font-semibold tracking-tight">
+      <img src="/ren-avatar.jpg" alt="Ren" width="24" height="24" class="h-6 w-6 rounded-md object-cover" />
+      <span>RenOS</span>
+    </a>
+    <button
+      type="button"
+      id="mobile-nav-close"
+      class="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] transition-colors"
+      style="color: var(--color-text-muted);"
+      aria-label="关闭导航菜单"
+    >
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+
+  <nav class="mobile-nav-scroll flex-1 overflow-y-auto px-5 py-6" aria-label="移动端主导航">
+    <!-- 最重要的：项目 + 文章，各占一整行 -->
+    <ul class="flex flex-col">
+      {primaryNav.map((item, i) => {
+        const active = isActive(path, item.href);
+        return (
+          <li
+            class="mobile-nav-item"
+            style={`border-bottom: 1px solid var(--color-border); transition-delay: ${60 + i * 45}ms;`}
+          >
+            <a
+              href={item.href}
+              class="mobile-nav-link flex items-center justify-between py-4 text-[24px] tracking-tight transition-colors"
+              class:list={[active && "is-active"]}
+              style={`color: ${active ? "var(--color-text)" : "var(--color-text-muted)"}; font-weight: ${active ? "500" : "400"};`}
+            >
+              <span>{item.label}</span>
+              {active && (
+                <span class="inline-block h-1.5 w-1.5 rounded-full" style="background: var(--color-accent);"></span>
+              )}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+
+    <!-- 次要：此刻 + GitHub，同一行两列 -->
+    <ul class="mobile-nav-item mt-6 grid grid-cols-2 gap-3" style="transition-delay: 150ms;">
+      {secondaryNav.map((item) => {
+        const active = !item.external && isActive(path, item.href);
+        return (
+          <li>
+            <a
+              href={item.href}
+              target={item.external ? "_blank" : undefined}
+              rel={item.external ? "noopener noreferrer" : undefined}
+              class="mobile-nav-link bento-card flex flex-col items-start gap-2 p-4 transition-colors"
+              class:list={[active && "is-active"]}
+              style={`color: ${active ? "var(--color-text)" : "var(--color-text-muted)"};`}
+            >
+              <span class="text-[15px] font-medium" style={`color: ${active ? "var(--color-text)" : "var(--color-text)"};`}>{item.label}</span>
+              {item.external ? (
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-subtle);"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              ) : (
+                active && <span class="inline-block h-1.5 w-1.5 rounded-full" style="background: var(--color-accent);"></span>
+              )}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+
+    <!-- 最次要：关于 -->
+    <ul class="mobile-nav-item mt-6" style="transition-delay: 195ms;">
+      {tertiaryNav.map((item) => {
+        const active = isActive(path, item.href);
+        return (
+          <li>
+            <a
+              href={item.href}
+              class="mobile-nav-link inline-flex items-center gap-1 text-sm transition-colors"
+              class:list={[active && "is-active"]}
+              style={`color: ${active ? "var(--color-accent)" : "var(--color-text-subtle)"};`}
+            >
+              {item.label}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
+
+  <div class="px-5 py-5 font-mono text-[11px] tracking-[0.12em]" style="color: var(--color-text-subtle); border-top: 1px solid var(--color-border);">
+    造 · 跟 · 记 · 屯
+  </div>
+</aside>
+
+<style>
+  .mobile-nav-backdrop.is-open,
+  .mobile-nav-panel.is-open {
+    display: flex !important;
+  }
+  .mobile-nav-backdrop.is-open {
+    opacity: 1;
+  }
+  .mobile-nav-panel {
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.32s ease, transform 0.32s ease;
+  }
+  .mobile-nav-panel.is-open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .mobile-nav-item {
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .mobile-nav-panel.is-open .mobile-nav-item {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .mobile-nav-link:hover {
+    color: var(--color-accent) !important;
+  }
+  .mobile-nav-link.is-active {
+    color: var(--color-text);
+  }
+  #mobile-nav-close:hover {
+    color: var(--color-text);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-nav-panel,
+    .mobile-nav-item,
+    .mobile-nav-backdrop {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById("mobile-nav-toggle");
+  const closeBtn = document.getElementById("mobile-nav-close");
+  const panel = document.getElementById("mobile-nav-panel");
+  const backdrop = document.getElementById("mobile-nav-backdrop");
+  const links = panel ? panel.querySelectorAll(".mobile-nav-link") : [];
+  let lastFocused: HTMLElement | null = null;
+
+  function openMenu() {
+    if (!panel || !toggle) return;
+    lastFocused = document.activeElement as HTMLElement;
+    backdrop?.classList.add("is-open");
+    panel.classList.add("is-open");
+    toggle.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => {
+      setTimeout(() => (links[0] as HTMLElement | undefined)?.focus(), 120);
+    });
+  }
+
+  function closeMenu() {
+    if (!panel || !toggle) return;
+    backdrop?.classList.remove("is-open");
+    panel.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+    lastFocused?.focus();
+  }
+
+  toggle?.addEventListener("click", () => {
+    if (toggle.getAttribute("aria-expanded") === "true") closeMenu();
+    else openMenu();
+  });
+  closeBtn?.addEventListener("click", closeMenu);
+  backdrop?.addEventListener("click", closeMenu);
+  links.forEach((a) => a.addEventListener("click", closeMenu));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && toggle?.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+    }
+  });
+</script>

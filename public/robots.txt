@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# 允许所有爬虫完整抓取
+# Sitemap 在下方声明，帮助爬虫发现所有页面
+Sitemap: https://renos.top/sitemap-index.xml

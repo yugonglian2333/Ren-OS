@@ -2,26 +2,34 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import MobileNav from "../components/MobileNav.astro";
+import ScrollProgress from "../components/ScrollProgress.astro";
 import "../styles/global.css";
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
+  type?: "website" | "article";
+  publishedTime?: Date;
+  section?: string;
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, type, publishedTime, section } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <BaseHead title={title} description={description} image={image} />
+    <BaseHead title={title} description={description} image={image} type={type} publishedTime={publishedTime} section={section} />
   </head>
   <body class="flex min-h-screen flex-col">
+    <a href="#main" class="skip-link">跳到正文</a>
     <Header />
+    <MobileNav />
+    <ScrollProgress />
 
-    <main class="flex-1 py-10 sm:py-14">
+    <main id="main" class="flex-1 py-10 sm:py-14">
       <slot />
     </main>
 

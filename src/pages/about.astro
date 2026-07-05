@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
 
 const principles = [
   { k: "造", v: "造能用的工具，不追热度。一路记 WayLog 是当前的长期投入。" },
@@ -7,22 +8,165 @@ const principles = [
   { k: "记", v: "TIL、AI 周记、项目复盘——把所学落成文字，对抗遗忘和被信息冲走。" },
   { k: "屯", v: "BTC holder。相信长期主义和数字稀缺，少操作多拿着。" },
 ];
+
+const timeline = [
+  {
+    year: "2026 — now",
+    role: "独立开发者 · Builder",
+    what: "在造一路记 WayLog（旅行控制台 + Agent 提案式编辑），跟踪 AI 前沿写所学。",
+    link: { label: "WayLog", href: "https://github.com/yugonglian2333/WayLog" },
+  },
+  {
+    year: "[占位]",
+    role: "[角色 / 公司]",
+    what: "[一句话做了什么、解决了什么、留下什么]",
+    link: null,
+  },
+  {
+    year: "[占位]",
+    role: "[更早的一段经历]",
+    what: "[一句话]",
+    link: null,
+  },
+];
+
+const skills = [
+  {
+    group: "前端 / 客户端",
+    items: ["React Native", "React 19", "Expo SDK 54", "Expo Router", "Next.js", "Astro", "Tailwind CSS"],
+  },
+  {
+    group: "后端 / 云",
+    items: ["Supabase", "Postgres + RLS", "Edge Functions (Deno)", "Realtime", "Vercel"],
+  },
+  {
+    group: "Agent / AI",
+    items: ["AgentProposal 闭环", "OpenAI-compatible API", "Tavily / Brave 搜索", "提示工程"],
+  },
+  {
+    group: "工程化",
+    items: ["pnpm workspace", "TypeScript", "Biome", "Sentry", "node:test"],
+  },
+];
+
+const personalTags = [
+  { label: "00 后", icon: "spark" },
+  { label: "INTJ", icon: "brain" },
+  { label: "天秤座", icon: "scale" },
+  { label: "数字游民", icon: "globe" },
+  { label: "夜猫子", icon: "moon" },
+  { label: "咖啡党", icon: "coffee" },
+  { label: "跑步", icon: "run" },
+  { label: "深度电影", icon: "film" },
+  { label: "旅行", icon: "compass" },
+  { label: "ACGN", icon: "gamepad" },
+];
+
+const interests = [
+  { label: "听歌", desc: "什么都听，看心情" },
+  { label: "深度电影", desc: "烧脑的、有回味的" },
+  { label: "跑步", desc: "最爱的运动，清空大脑" },
+  { label: "旅行", desc: "去过中国很多地方" },
+];
+
+const favoriteGames = [
+  {
+    title: "女神异闻录 5 皇家版",
+    tag: "本命",
+    note: "RenOS 名字来源，Joker 是永远的精神图腾",
+    url: "https://baike.baidu.com/item/%E5%A5%B3%E7%A5%9E%E5%BC%82%E9%97%BB%E5%BD%95%205%EF%BC%9A%E7%9A%87%E5%AE%B6%E7%89%88/61930933",
+    cover: "/images/games/p5r.jpg",
+  },
+  {
+    title: "塞尔达传说：王国之泪",
+    tag: "年度",
+    note: "究极手把创造力拉满，开放世界天花板",
+    url: "https://baike.baidu.com/item/%E5%A1%9E%E5%B0%94%E8%BE%BE%E4%BC%A0%E8%AF%B4%EF%BC%9A%E7%8E%8B%E5%9B%BD%E4%B9%8B%E6%B3%AA/61984963",
+    cover: "/images/games/zelda.jpg",
+  },
+  {
+    title: "荒野大镖客：救赎 2",
+    tag: "神作",
+    note: "亚瑟的故事让我红了眼眶",
+    url: "https://baike.baidu.com/item/Red%20Dead%20Redemption%202/23651908",
+    cover: "/images/games/rdr2.jpg",
+  },
+  {
+    title: "博德之门 3",
+    tag: "年度",
+    note: "CRPG 回归，选择真正有重量",
+    url: "https://baike.baidu.com/en/item/Baldur%27s%20Gate%203/1484825",
+    cover: "/images/games/bg3.jpg",
+  },
+  {
+    title: "艾尔登法环",
+    tag: "魂类",
+    note: "交界地探索的孤独感无可替代",
+    url: "https://baike.baidu.com/item/%E8%89%BE%E5%B0%94%E7%99%BB%E6%B3%95%E7%8E%AF/61000729",
+    cover: "/images/games/elden.jpg",
+  },
+  {
+    title: "神界原罪 2",
+    tag: "硬核",
+    note: "战术回合制的巅峰",
+    url: "https://baike.baidu.com/item/%E7%A5%9E%E7%95%8C%EF%BC%9A%E5%8E%9F%E7%BD%AA2/19391411",
+    cover: "/images/games/divinity.jpg",
+  },
+];
+
+const gameCategories = [
+  { label: "RPG", games: "女神异闻录 5 / 博德之门 3 / 神界原罪 2 / 天际" },
+  { label: "开放世界", games: "塞尔达 王国之泪 / 荒野大镖客 2 / 艾尔登法环" },
+  { label: "模拟经营", games: "纪元 1800 / 城市天际线 2" },
+  { label: "沙盒", games: "泰拉瑞亚" },
+];
+
+const steamUrl = "https://steamcommunity.com/id/1070881879/";
+
+const btcStory = [
+  { q: "什么时候入坑？", a: "很早就知道 BTC，但一直没动手。Trump 币大火那波被朋友拽进坑，从此一发不可收拾。" },
+  { q: "为什么信它？", a: "了解它的本质之后，很少会有聪明人不信吧。数字稀缺 + 去中心化 + 长期主义，这三个词凑在一起很难拒绝。" },
+  { q: "持有策略", a: "少操作多拿着。不追涨杀跌，不碰合约，把 BTC 当储蓄而非投机。" },
+];
 ---
 
-<BaseLayout title="关于 — RenOS" description="RenOS：造工具、跟前沿、记所学、屯 BTC。">
+<BaseLayout title="关于 — RenOS" description="RenOS：AI builder & BTC holder。在造 WayLog，跟踪 AI 前沿，写所学。">
   <section class="section">
     <div data-fade>
-      <h1 class="text-3xl font-bold tracking-tight">关于 RenOS</h1>
-      <p class="mt-4 text-[15px] leading-relaxed" style="color: var(--color-text-muted);">
-        在圈内混的名字叫 RenOS。白天造工具、晚上跟 AI 前沿、随手记所学，
-        顺手屯点 BTC。
+      <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">关于</p>
+      <h1 class="mt-3 font-serif text-3xl font-medium tracking-tight sm:text-4xl">RenOS</h1>
+      <p class="mt-4 max-w-2xl text-[14px] leading-relaxed" style="color: var(--color-text-muted);">
+        RenOS 这个名字，来自游戏《女神异闻录 5》的主角雨宫莲（Ren Amamiya）。
+        他代号 Joker，是心之怪盗团的首领——平时沉默寡言，关键时刻能掀翻整盘棋。
+        取「莲」的发音 Ren，配上程序员最熟悉的 OS，就有了 RenOS。
+        <br /><br />
+        本人双非本 211 硕，地理信息专业出身，现在在江苏。
+        白天造工具，晚上跟 AI 前沿，顺手屯点 BTC。
       </p>
     </div>
 
-    <!-- 一句话定位 -->
-    <div class="bento-card mt-8 p-6 sm:p-8" data-fade
-         style="background: linear-gradient(135deg, var(--color-bg-elevated) 0%, color-mix(in oklab, var(--color-accent) 10%, var(--color-bg-elevated)) 100%);">
-      <p class="text-xl font-medium leading-relaxed tracking-tight sm:text-2xl font-mono">
+    <div class="mt-6 flex flex-wrap gap-1.5" data-fade>
+      {personalTags.map((t) => (
+        <span class="tag inline-flex items-center gap-1.5">
+          <svg class="icon h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-accent);">
+            {t.icon === "spark" && <><path d="M12 3v3"/><path d="M12 18v3"/><path d="M3 12h3"/><path d="M18 12h3"/><path d="M5.6 5.6l2.1 2.1"/><path d="M16.3 16.3l2.1 2.1"/><path d="M5.6 18.4l2.1-2.1"/><path d="M16.3 7.7l2.1-2.1"/></>}
+            {t.icon === "brain" && <><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></>}
+            {t.icon === "scale" && <><path d="M16 16.5a4 4 0 1 1-8 0"/><path d="M12 3v13"/><path d="M7 7h10"/><path d="M5 7l-3 6a3 3 0 0 0 6 0L5 7Z"/><path d="M19 7l-3 6a3 3 0 0 0 6 0l-3-6Z"/></>}
+            {t.icon === "globe" && <><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></>}
+            {t.icon === "moon" && <><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></>}
+            {t.icon === "coffee" && <><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a6 6 0 0 1-6 6H7a6 6 0 0 1-6-6V9a1 1 0 0 1 1-1h14Z"/><path d="M6 2v2"/><path d="M18 12h2a2 2 0 0 1 2 2v1a3 3 0 0 1-3 3h-1"/></>}
+            {t.icon === "run" && <><circle cx="13" cy="4" r="2"/><path d="M9 20l3-6-3-3 3-5"/><path d="M5 12l3-3 5 2 3 4"/><path d="M17 18l-4-2"/></>}
+            {t.icon === "film" && <><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M7 3v18"/><path d="M17 3v18"/><path d="M2 9h5"/><path d="M17 9h5"/><path d="M2 15h5"/><path d="M17 15h5"/></>}
+            {t.icon === "compass" && <><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>}
+            {t.icon === "gamepad" && <><line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.419 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.581-.685-7.258A4 4 0 0 0 17.32 5z"/></>}
+          </svg>
+          {t.label}
+        </span>
+      ))}
+    </div>
+
+    <div class="mt-8 border-l-4 pl-5" style="border-color: var(--color-accent);" data-fade>
+      <p class="font-serif text-xl font-medium leading-relaxed tracking-tight sm:text-2xl">
         Agent dev <span style="color: var(--color-accent);">&amp;</span> GISer <span style="color: var(--color-accent);">&amp;</span> BTC holder
       </p>
       <p class="mt-3 text-sm" style="color: var(--color-text-muted);">
@@ -30,25 +174,155 @@ const principles = [
       </p>
     </div>
 
-    <!-- 四个原则 -->
-    <div class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2" data-fade>
+    <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2" data-fade>
       {principles.map((p) => (
-        <div class="bento-card p-5">
-          <div class="flex items-baseline gap-3">
-            <span class="font-mono text-2xl font-bold" style="color: var(--color-accent);">{p.k}</span>
-            <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">{p.v}</p>
-          </div>
+        <div class="flex items-baseline gap-3">
+          <span class="font-serif text-2xl font-medium" style="color: var(--color-accent);">{p.k}</span>
+          <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">{p.v}</p>
         </div>
       ))}
     </div>
 
-    <!-- 联系 -->
     <div class="mt-12" data-fade>
-      <h2 class="mb-3 text-lg font-semibold">找到我</h2>
-      <p class="text-sm" style="color: var(--color-text-muted);">
-        社交账号占位中，欢迎先在 <a href="https://github.com/yugonglian2333" target="_blank" rel="noopener noreferrer" class="link-quiet">GitHub</a> 找我，
-        或邮件 <a href="mailto:1070881879@qq.com" class="link-quiet">1070881879@qq.com</a>。
+      <SectionTitle eyebrow="01" title="经历" />
+      <div class="flex flex-col">
+        {timeline.map((item) => (
+          <div class="flex gap-4 border-b py-4 sm:gap-8" style="border-color: var(--color-border);">
+            <div class="w-24 shrink-0 font-mono text-xs sm:text-sm" style="color: var(--color-text-subtle);">
+              {item.year}
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="text-[15px] font-medium">{item.role}</div>
+              <p class="mt-1 text-sm leading-relaxed" style="color: var(--color-text-muted);">
+                {item.what}
+                {item.link && (
+                  <>
+                    {" "}
+                    <a href={item.link.href} target="_blank" rel="noopener noreferrer" class="link-quiet">
+                      {item.link.label} ↗
+                    </a>
+                  </>
+                )}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-12" data-fade>
+      <SectionTitle eyebrow="02" title="技能栈" />
+      <div class="flex flex-col gap-5">
+        {skills.map((s) => (
+          <div>
+            <div class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">
+              {s.group}
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              {s.items.map((item) => <span class="tag">{item}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
+      <p class="mt-4 text-xs" style="color: var(--color-text-subtle);">
+        实战证据见 <a href="/projects" class="link-quiet">一路记 WayLog</a>，技术栈以仓库实际使用为准。
       </p>
+    </div>
+
+    <div class="mt-12" data-fade>
+      <SectionTitle eyebrow="03" title="BTC 故事" />
+      <div class="flex flex-col gap-5">
+        {btcStory.map((item) => (
+          <div class="flex items-start gap-3">
+            <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-accent);">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <path d="M12 17h.01"/>
+            </svg>
+            <div>
+              <div class="text-[14px] font-medium">{item.q}</div>
+              <p class="mt-1 text-sm leading-relaxed" style="color: var(--color-text-muted);">{item.a}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-12" data-fade>
+      <SectionTitle eyebrow="04" title="游戏" />
+      <p class="mb-5 text-sm" style="color: var(--color-text-muted);">
+        ACGN 是我的另一面，尤其游戏。涉猎广泛——RPG / 开放世界 / 魂类 / 模拟经营 / 沙盒都玩。
+        <a href={steamUrl} target="_blank" rel="noopener noreferrer" class="link-quiet">我的 Steam 主页 ↗</a>
+      </p>
+
+      <!-- 最爱游戏卡片墙 -->
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {favoriteGames.map((g) => (
+          <a
+            href={g.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bento-card bento-card-interactive group flex items-stretch overflow-hidden p-0 transition-colors"
+          >
+            <div class="w-2/5 shrink-0 overflow-hidden" style="min-height: 100px;">
+              <img
+                src={g.cover}
+                alt={g.title}
+                loading="lazy"
+                class="h-full w-full object-cover transition-transform duration-[var(--duration-base,200ms)] group-hover:scale-110"
+              />
+            </div>
+            <div class="flex flex-1 flex-col justify-center gap-1 px-3 py-3">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[13px] font-medium leading-tight group-hover:text-[color:var(--color-accent)] transition-colors">{g.title}</span>
+              </div>
+              <span class="font-mono text-[10px]" style="color: var(--color-accent);">{g.tag}</span>
+              <p class="text-[11px] leading-relaxed" style="color: var(--color-text-subtle);">{g.note}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- 按类型分类 -->
+      <div class="mt-5 flex flex-col gap-2.5">
+        {gameCategories.map((c) => (
+          <div class="flex items-baseline gap-3 text-xs" style="color: var(--color-text-muted);">
+            <span class="shrink-0 font-mono text-[10px] uppercase tracking-wider" style="color: var(--color-text-subtle); min-width: 64px;">{c.label}</span>
+            <span>{c.games}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-12" data-fade>
+      <SectionTitle eyebrow="05" title="兴趣" />
+      <div class="flex flex-wrap gap-x-6 gap-y-2">
+        {interests.map((i) => (
+          <div>
+            <span class="text-[14px] font-medium">{i.label}</span>
+            <span class="ml-1 text-xs" style="color: var(--color-text-subtle);">· {i.desc}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-12" data-fade>
+      <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">联系方式</p>
+      <p class="mt-3 text-sm" style="color: var(--color-text-muted);">
+        GitHub <a href="https://github.com/yugonglian2333" target="_blank" rel="noopener noreferrer" class="link-quiet">@yugonglian2333</a>
+        · 邮箱 <a href="mailto:1070881879@qq.com" class="link-quiet">1070881879@qq.com</a>
+        · X <a href="https://x.com/yugonglian12" target="_blank" rel="noopener noreferrer" class="link-quiet">@yugonglian12</a>
+        · Steam <a href={steamUrl} target="_blank" rel="noopener noreferrer" class="link-quiet">1070881879</a>
+      </p>
+    </div>
+
+    <div class="mt-12" data-fade>
+      <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">更多页面</p>
+      <div class="mt-4 flex gap-6">
+        <a href="/uses" class="font-mono text-sm transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-muted);">/uses</a>
+        <span style="color: var(--color-text-subtle);">·</span>
+        <a href="/bookmarks" class="font-mono text-sm transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-muted);">/bookmarks</a>
+      </div>
     </div>
   </section>
 </BaseLayout>
