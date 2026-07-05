@@ -30,7 +30,7 @@ const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "RenOS",
-  url: "https://renos.top",
+  url: "https://www.renos.top",
   jobTitle: "AI Builder",
   description: "AI builder。在造旅行助手一路记 WayLog，做 Agent 提案式编辑。",
   sameAs: [
@@ -43,7 +43,7 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "RenOS",
-  url: "https://renos.top",
+  url: "https://www.renos.top",
   description: "AI builder 的个人网站",
   author: { "@type": "Person", name: "RenOS" },
   publisher: { "@type": "Person", name: "RenOS" },
@@ -59,8 +59,8 @@ const articleSchema =
         image: socialImage,
         datePublished: publishedTime.toISOString(),
         dateModified: publishedTime.toISOString(),
-        author: { "@type": "Person", name: "RenOS", url: "https://renos.top" },
-        publisher: { "@type": "Person", name: "RenOS", url: "https://renos.top" },
+        author: { "@type": "Person", name: "RenOS", url: "https://www.renos.top" },
+        publisher: { "@type": "Person", name: "RenOS", url: "https://www.renos.top" },
         mainEntityOfPage: { "@type": "WebPage", "@id": canonicalURL.href },
         ...(section ? { articleSection: section } : {}),
       }

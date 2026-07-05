@@ -11,7 +11,7 @@ import icon from "astro-icon";
 import rehypeAutolink from "rehype-autolink-headings";
 import { remarkReadingTime } from "./src/utils/reading-time.mjs";
 
-const SITE = "https://renos.top";
+const SITE = "https://www.renos.top";
 
 export default defineConfig({
   site: SITE,
