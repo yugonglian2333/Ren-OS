@@ -1,6 +1,6 @@
 # RenOS — 个人网站
 
-> AI builder & BTC holder.
+> AI builder.
 > 在造旅行助手一路记 WayLog，做 Agent 提案式编辑；持续跟踪 AI 前沿，写下所见所学。
 
 技术人版 Bento：首页 Hero 区用 Bento 卡片墙释放视觉冲击，内容区回到稳重单栏。
@@ -11,7 +11,7 @@
 - 静态生成，Vercel 部署
 - 深浅双模式（跟随系统 + 手动切换，`localStorage` 记忆）
 - 内容集合：`src/content/blog/` 丢 md/mdx 即可发文
-- 强调色 BTC 橙 `#f7931a`，设计 token 全在 `src/styles/global.css`
+- 强调色赤陶橙 `#c96442`，设计 token 全在 `src/styles/global.css`
 
 ## 本地开发
 
@@ -66,7 +66,7 @@ draft: false          # true 则不发布
 | 正在投入 | 主项目深度描述 |
 | 在跟 / 在学 | 在跟的技术/领域 |
 | 在读 / 在听 | 论文/文章/书/音乐 |
-| 生活 & 其他 | BTC、生活状态 |
+| 生活 & 其他 | 生活状态 |
 | 暂停 / 不接 | 公开优先级，帮你挡事 |
 
 改完顺手把 `updated` 日期变量改成今天。/now 理念是"告诉一年没见的朋友你最近在干嘛"，是大图景不是 todo 清单。
@@ -158,8 +158,96 @@ draft: false          # true 则不发布
 
 1. GitHub 仓库推送到 Vercel（import project），framework 自动识别为 Astro
 2. Build Command：`pnpm build`，Output Directory：`dist`
-3. 部署成功后绑自定义域名：Vercel 项目 → Settings → Domains → Add，按提示在你的域名 DNS 加 CNAME（或 A 记录指向 `cname.vercel-dns.com`）
-4. 等 DNS 生效（几分钟到几小时），Vercel 自动签发 HTTPS 证书
+3. **添加环境变量**（Vercel 项目 → Settings → Environment Variables）：
+
+| 变量名 | 必填 | 说明 |
+|---|---|---|
+| `GITHUB_TOKEN` | 否 | GitHub Personal Access Token，用于 /now 页拉取仓库动态 |
+| `PUBLIC_UMAMI_URL` | 否 | Umami 统计实例地址，如 `https://cloud.umami.is` |
+| `PUBLIC_UMAMI_ID` | 否 | Umami 站点 ID |
+
+4. 部署成功后绑自定义域名：Vercel 项目 → Settings → Domains → Add，按提示在你的域名 DNS 加 CNAME（或 A 记录指向 `cname.vercel-dns.com`）
+5. 等 DNS 生效（几分钟到几小时），Vercel 自动签发 HTTPS 证书
+
+---
+
+## 内容管理（CMS）
+
+项目使用 Decap CMS（原名 Netlify CMS）作为后台内容管理系统。
+
+### 本地使用
+
+开两个终端：
+
+```bash
+# 终端 1：Astro 开发服务器
+pnpm dev
+
+# 终端 2：Decap CMS 本地代理
+pnpm cms
+```
+
+然后访问 `http://localhost:4322/admin/`，无需 GitHub 登录即可直接编辑所有内容。
+
+### 线上部署（可选）
+
+1. 在 GitHub 创建 [OAuth App](https://github.com/settings/developers/new)：
+   - Homepage URL：`https://renos.top`
+   - Authorization callback URL：`https://api.decapcms.org/auth/callback`
+2. 复制 Client ID 和 Client Secret
+3. 在 Vercel 项目环境变量中添加：
+   - `KEYSTATIC_GITHUB_CLIENT_ID`
+   - `KEYSTATIC_GITHUB_CLIENT_SECRET`
+4. 修改 `public/admin/config.yml`，去掉 `local_backend: true`
+5. 部署后访问 `https://renos.top/admin/` 用 GitHub 登录
+
+---
+
+## 搜索功能
+
+使用 **Pagefind** 实现全站离线搜索。搜索索引在构建时生成：
+
+```bash
+pnpm build        # 构建并生成搜索索引
+pnpm preview      # 预览时搜索可正常工作
+```
+
+> 注意：`pnpm dev` 开发模式下搜索不可用，因为需要 `dist/` 下的索引文件。日常写文章用 `pnpm dev`，要搜的时候跑 `pnpm build && pnpm preview`。
+
+---
+
+## 统计（Umami）
+
+[Umami](https://cloud.umami.is) 是一个隐私友好的访问统计工具。
+
+1. 在 Umami 注册账号 → 添加站点（名称：`RenOS`，域名：`renos.top`）
+2. 将 Umami 提供的 Website ID 写入项目根目录 `.env` 文件：
+
+```
+PUBLIC_UMAMI_URL=https://cloud.umami.is
+PUBLIC_UMAMI_ID=你的站点ID
+```
+
+3. 本地自动生效，部署到 Vercel 时需在环境变量中同步配置
+
+---
+
+## /now 页 GitHub 动态
+
+`/now` 页除了手动编辑的 sections，还会在构建时自动拉取 GitHub 公开仓库列表，显示为「最近仓库动态」。
+
+需要配置 `GITHUB_TOKEN`：
+
+1. 在 [GitHub Token 设置页](https://github.com/settings/tokens) 生成 classic token
+2. 权限选 `Public repositories`（read-only）
+3. 写入 `.env` 文件：
+
+```
+GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
+PUBLIC_GITHUB_USER=yugonglian2333
+```
+
+> `.env` 已在 `.gitignore` 中，不会提交到仓库。部署到 Vercel 时需在 Settings → Environment Variables 中手动添加。
 
 ---
 
@@ -208,7 +296,7 @@ public/
 
 ## 设计决策备忘
 
-- **BTC 橙只用在三处**：强调符号（&、·、tag）/ 主 CTA / 链接 hover，其余回归中性色。不滥用。
+- **赤陶橙只用在三处**：强调符号（&、·、tag）/ 主 CTA / 链接 hover，其余回归中性色。不滥用。
 - **移动端导航是全屏覆盖式**（参考苹果官网），不是侧边抽屉。因为 `backdrop-blur` 会破坏 `position: fixed` 的 containing block，全屏方案规避了这个 CSS 坑。
 - **关于页合并了简历**：没有独立 /cv 页，经历和技能栈直接放在 /about 里，对标 stevenpetryk.com 的做法。
 - **/now 页理念**：参考 Derek Sivers 的 nownownow 运动——"告诉一年没见的朋友你最近在干嘛"，是大图景不是 todo 清单。

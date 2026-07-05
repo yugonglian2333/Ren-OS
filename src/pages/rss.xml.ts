@@ -7,7 +7,7 @@ export async function GET(context: { site: URL }) {
   );
 
   return rss({
-    title: "RenOS — AI builder & BTC holder",
+    title: "RenOS — AI builder",
     description:
       "AI 周记 · TIL · 项目复盘。不追热度，只记我看过的、想过的、用过的。",
     site: context.site,

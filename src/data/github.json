@@ -1,0 +1,53 @@
+{
+  "updated": "2026-07-05",
+  "repos": [
+    {
+      "name": "Ren-OS",
+      "url": "https://github.com/yugonglian2333/Ren-OS",
+      "description": "雨宫莲的的个人ip官网",
+      "language": "Astro",
+      "updatedAt": "2026-07-05",
+      "stars": 0
+    },
+    {
+      "name": "yugonglian2333",
+      "url": "https://github.com/yugonglian2333/yugonglian2333",
+      "description": null,
+      "language": null,
+      "updatedAt": "2026-07-05",
+      "stars": 0
+    },
+    {
+      "name": "WayLog-AD",
+      "url": "https://github.com/yugonglian2333/WayLog-AD",
+      "description": "用于一路记（WayLog）产品宣传网页",
+      "language": "HTML",
+      "updatedAt": "2026-07-04",
+      "stars": 0
+    },
+    {
+      "name": "webgis_study",
+      "url": "https://github.com/yugonglian2333/webgis_study",
+      "description": "webgis以及前端的学习代码",
+      "language": "HTML",
+      "updatedAt": "2026-07-03",
+      "stars": 0
+    },
+    {
+      "name": "weibo",
+      "url": "https://github.com/yugonglian2333/weibo",
+      "description": null,
+      "language": "Python",
+      "updatedAt": "2026-06-17",
+      "stars": 0
+    }
+  ],
+  "commits": [],
+  "stars": [
+    {
+      "repo": "rullerzhou-afk/clawd-on-desk",
+      "url": "https://github.com/rullerzhou-afk/clawd-on-desk",
+      "date": "2026-07-05"
+    }
+  ]
+}

@@ -1,68 +1,30 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import d from "../data/now.json";
+import github from "../data/github.json";
 
-const updated = "2026-07-05";
+const updated = d.updated;
+const sections = d.sections.map((s) => ({
+  label: s.label,
+  items: s.items.map((item) => ({
+    title: item.title,
+    desc: item.desc,
+    link: item.link_label ? { label: item.link_label, href: item.link_href } : null,
+  })),
+}));
 
-// /now 页理念（Derek Sivers）：告诉一年没见的朋友你最近在干嘛。
-// 不是 todo 清单，是大图景。每条聚焦"正在投入的事"，而非"做完了的事"。
-
-const sections = [
-  {
-    label: "正在投入",
-    items: [
-      {
-        title: "一路记 WayLog · Agent 提案式编辑",
-        desc: "把 Agent 接进旅行编辑闭环——结构化 AgentProposal、预览→确认→授权→本地写入→云同步。让 AI 只能提议，不能擅动。",
-        link: { label: "看项目", href: "/projects" },
-      },
-    ],
-  },
-  {
-    label: "在跟 / 在学",
-    items: [
-      {
-        title: "AI 前沿动态",
-        desc: "新模型、新 agent 框架、新研究。看到值得的会写进 AI 周记，不追热度。",
-        link: { label: "读周记", href: "/blog" },
-      },
-      {
-        title: "[占位] 在学的体系",
-        desc: "比如某门课、某本书、某个源码精读。后续随手往这里填。",
-        link: null,
-      },
-    ],
-  },
-  {
-    label: "在读 / 在听",
-    items: [
-      {
-        title: "[占位] 本周在读",
-        desc: "论文 / 文章 / 书。后续会随手往这里填本周在看的。",
-        link: null,
-      },
-    ],
-  },
-  {
-    label: "生活 & 其他",
-    items: [
-      {
-        title: "BTC holder",
-        desc: "长期持有，少操作多拿着。这是人格符号，也是信仰。",
-        link: null,
-      },
-    ],
-  },
-  {
-    label: "暂停 / 不接",
-    items: [
-      {
-        title: "暂不接外包",
-        desc: "精力集中在 WayLog 和自己的写作上。感谢理解。",
-        link: null,
-      },
-    ],
-  },
-];
+// 添加 GitHub 活动 section（如果有数据）
+const activeRepos = github.repos?.filter((r) => r.stars > 0 || r.language) || [];
+if (activeRepos.length > 0) {
+  sections.unshift({
+    label: "最近仓库动态",
+    items: activeRepos.slice(0, 3).map((r) => ({
+      title: r.name,
+      desc: r.description || r.language || "",
+      link: { label: "GitHub", href: r.url },
+    })),
+  });
+}
 ---
 
 <BaseLayout title="此刻 — RenOS" description="RenOS 现在在做什么、在跟什么、在读什么。">
@@ -77,7 +39,7 @@ const sections = [
       </div>
       <div class="mt-6 border-l-4 pl-5" style="border-color: var(--color-accent);" data-fade>
         <p class="font-serif text-base leading-relaxed sm:text-lg">
-          告诉一年没见的朋友，我最近在干嘛。
+          正在发生的一切。
         </p>
         <p class="mt-1 font-mono text-xs" style="color: var(--color-text-subtle);">最后更新：{updated}</p>
       </div>

@@ -3,126 +3,141 @@ import { isActive } from "./nav";
 
 const path = Astro.url.pathname;
 
-// 按重要度分组
-const primaryNav = [
-  { href: "/projects", label: "项目" },
-  { href: "/blog", label: "文章" },
+const mainNav = [
+  { href: "/", label: "首页", eyebrow: "Start", desc: "回到 RenOS 的第一屏" },
+  { href: "/projects", label: "项目", eyebrow: "Build", desc: "WayLog 和在造的东西" },
+  { href: "/blog", label: "文章", eyebrow: "Notes", desc: "AI 周记、TIL 与项目复盘" },
+  { href: "/now", label: "此刻", eyebrow: "Now", desc: "最近正在投入什么" },
+  { href: "/about", label: "关于", eyebrow: "About", desc: "背景、兴趣和联系方式" },
 ];
-const secondaryNav = [
-  { href: "/now", label: "此刻" },
-  { href: "https://github.com/yugonglian2333", label: "GitHub", external: true },
+
+const utilityNav = [
+  { href: "/uses", label: "装备" },
+  { href: "/bookmarks", label: "收藏" },
 ];
-const tertiaryNav = [
-  { href: "/about", label: "关于" },
+
+const socialNav = [
+  { href: "https://github.com/yugonglian2333", label: "GitHub" },
+  { href: "https://x.com/yugonglian12", label: "X" },
+  { href: "https://space.bilibili.com/10033138", label: "B站" },
 ];
 ---
 
 <div
   id="mobile-nav-backdrop"
   class="mobile-nav-backdrop fixed inset-0 z-[80] hidden opacity-0 transition-opacity duration-300 sm:hidden"
-  style="background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);"
+  style="background: color-mix(in oklab, var(--color-bg) 78%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);"
 ></div>
 
 <aside
   id="mobile-nav-panel"
   class="mobile-nav-panel fixed inset-0 z-[90] hidden flex-col sm:hidden"
-  style="background: var(--color-bg-elevated);"
   role="dialog"
   aria-modal="true"
   aria-label="导航菜单"
+  tabindex="-1"
 >
-  <div class="flex h-14 items-center justify-between px-5" style="border-bottom: 1px solid var(--color-border);">
-    <a href="/" class="mobile-nav-link inline-flex items-center gap-2 text-[15px] font-semibold tracking-tight">
-      <img src="/ren-avatar.jpg" alt="Ren" width="24" height="24" class="h-6 w-6 rounded-md object-cover" />
-      <span>RenOS</span>
-    </a>
-    <button
-      type="button"
-      id="mobile-nav-close"
-      class="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] transition-colors"
-      style="color: var(--color-text-muted);"
-      aria-label="关闭导航菜单"
-    >
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-      </svg>
-    </button>
-  </div>
+  <div class="flex h-dvh w-full flex-col px-5" style="background: var(--color-bg); padding-top: max(1rem, env(safe-area-inset-top)); padding-bottom: calc(1rem + env(safe-area-inset-bottom));">
+    <div class="flex h-14 shrink-0 items-center justify-between">
+      <a href="/" class="mobile-nav-link inline-flex min-h-11 items-center gap-3 pr-3">
+        <img src="/ren-avatar.jpg" alt="Ren" width="32" height="32" class="h-8 w-8 rounded-[var(--radius-sm)] object-cover" />
+        <span>
+          <span class="block text-[15px] font-semibold leading-tight tracking-tight">RenOS</span>
+          <span class="block font-mono text-[10px] uppercase tracking-[0.16em]" style="color: var(--color-text-subtle);">AI builder</span>
+        </span>
+      </a>
 
-  <nav class="mobile-nav-scroll flex-1 overflow-y-auto px-5 py-6" aria-label="移动端主导航">
-    <!-- 最重要的：项目 + 文章，各占一整行 -->
-    <ul class="flex flex-col">
-      {primaryNav.map((item, i) => {
-        const active = isActive(path, item.href);
-        return (
-          <li
-            class="mobile-nav-item"
-            style={`border-bottom: 1px solid var(--color-border); transition-delay: ${60 + i * 45}ms;`}
-          >
-            <a
-              href={item.href}
-              class="mobile-nav-link flex items-center justify-between py-4 text-[24px] tracking-tight transition-colors"
-              class:list={[active && "is-active"]}
-              style={`color: ${active ? "var(--color-text)" : "var(--color-text-muted)"}; font-weight: ${active ? "500" : "400"};`}
-            >
-              <span>{item.label}</span>
-              {active && (
-                <span class="inline-block h-1.5 w-1.5 rounded-full" style="background: var(--color-accent);"></span>
-              )}
-            </a>
-          </li>
-        );
-      })}
-    </ul>
+      <button
+        type="button"
+        id="mobile-nav-close"
+        class="mobile-nav-close inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius-button)] transition-colors"
+        aria-label="关闭导航菜单"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
 
-    <!-- 次要：此刻 + GitHub，同一行两列 -->
-    <ul class="mobile-nav-item mt-6 grid grid-cols-2 gap-3" style="transition-delay: 150ms;">
-      {secondaryNav.map((item) => {
-        const active = !item.external && isActive(path, item.href);
-        return (
-          <li>
-            <a
-              href={item.href}
-              target={item.external ? "_blank" : undefined}
-              rel={item.external ? "noopener noreferrer" : undefined}
-              class="mobile-nav-link bento-card flex flex-col items-start gap-2 p-4 transition-colors"
-              class:list={[active && "is-active"]}
-              style={`color: ${active ? "var(--color-text)" : "var(--color-text-muted)"};`}
-            >
-              <span class="text-[15px] font-medium" style={`color: ${active ? "var(--color-text)" : "var(--color-text)"};`}>{item.label}</span>
-              {item.external ? (
-                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-subtle);"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-              ) : (
-                active && <span class="inline-block h-1.5 w-1.5 rounded-full" style="background: var(--color-accent);"></span>
-              )}
-            </a>
-          </li>
-        );
-      })}
-    </ul>
+    <nav class="mobile-nav-scroll flex-1 overflow-y-auto py-7" aria-label="移动端主导航">
+      <div class="mobile-nav-item border-l-4 pl-5" style="border-color: var(--color-accent); transition-delay: 45ms;">
+        <p class="font-mono text-[11px] uppercase tracking-[0.16em]" style="color: var(--color-accent);">Menu</p>
+        <p class="mt-2 font-serif text-[26px] font-medium leading-tight tracking-tight">RenOS</p>
+        <p class="mt-2 max-w-[18rem] text-[13px] leading-relaxed" style="color: var(--color-text-muted);">
+          Agent dev & GISer。造 WayLog，写 AI 周记，记录长期项目和个人趣味。
+        </p>
+      </div>
 
-    <!-- 最次要：关于 -->
-    <ul class="mobile-nav-item mt-6" style="transition-delay: 195ms;">
-      {tertiaryNav.map((item) => {
-        const active = isActive(path, item.href);
-        return (
-          <li>
-            <a
-              href={item.href}
-              class="mobile-nav-link inline-flex items-center gap-1 text-sm transition-colors"
-              class:list={[active && "is-active"]}
-              style={`color: ${active ? "var(--color-accent)" : "var(--color-text-subtle)"};`}
-            >
+      <ul class="mt-10">
+        {mainNav.map((item, i) => {
+          const active = isActive(path, item.href);
+          const index = String(i + 1).padStart(2, "0");
+          return (
+            <li class="mobile-nav-item" style={`transition-delay: ${90 + i * 34}ms;`}>
+              <a
+                href={item.href}
+                class:list={[
+                  "mobile-nav-link mobile-nav-row grid min-h-[76px] grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-3 border-b py-4 transition-colors",
+                  active && "is-active",
+                ]}
+                aria-current={active ? "page" : undefined}
+              >
+                <span class="mobile-nav-index font-mono text-[11px]">{index}</span>
+                <span class="min-w-0">
+                  <span class="block font-mono text-[10px] uppercase tracking-[0.16em]" style="color: var(--color-text-subtle);">{item.eyebrow}</span>
+                  <span class="mt-1 block font-serif text-[25px] font-medium leading-none tracking-tight">{item.label}</span>
+                  <span class="mt-1.5 block text-xs leading-relaxed" style="color: var(--color-text-muted);">{item.desc}</span>
+                </span>
+                <span class="mobile-nav-mark flex h-8 w-8 items-center justify-center" aria-hidden="true">
+                  {active ? (
+                    <span class="h-1.5 w-1.5 rounded-full" style="background: var(--color-accent);"></span>
+                  ) : (
+                    <svg class="mobile-nav-arrow h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14" /><path d="m13 6 6 6-6 6" />
+                    </svg>
+                  )}
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div class="mobile-nav-item mt-8" style={`transition-delay: ${110 + mainNav.length * 34}ms;`}>
+        <div class="flex items-center gap-3">
+          <p class="font-mono text-[11px] uppercase tracking-[0.16em]" style="color: var(--color-text-subtle);">More</p>
+          <span class="h-px flex-1" style="background: var(--color-border);"></span>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+          {utilityNav.map((item) => {
+            const active = isActive(path, item.href);
+            return (
+              <a
+                href={item.href}
+                class:list={[
+                  "mobile-nav-link mobile-nav-small-link inline-flex min-h-11 items-center border-b text-[15px] transition-colors",
+                  active && "is-active",
+                ]}
+                aria-current={active ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            );
+          })}
+        </div>
+      </div>
+
+      <div class="mobile-nav-item mt-12 pb-4" style={`transition-delay: ${145 + mainNav.length * 34}ms;`}>
+        <p class="font-mono text-[11px] uppercase tracking-[0.16em]" style="color: var(--color-accent);">造 · 跟 · 记 · 屯</p>
+        <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          {socialNav.map((item) => (
+            <a href={item.href} target="_blank" rel="noopener noreferrer" class="mobile-nav-link link-quiet">
               {item.label}
             </a>
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-
-  <div class="px-5 py-5 font-mono text-[11px] tracking-[0.12em]" style="color: var(--color-text-subtle); border-top: 1px solid var(--color-border);">
-    造 · 跟 · 记 · 屯
+          ))}
+        </div>
+      </div>
+    </nav>
   </div>
 </aside>
 
@@ -135,39 +150,94 @@ const tertiaryNav = [
     opacity: 1;
   }
   .mobile-nav-panel {
+    background: var(--color-bg);
     opacity: 0;
     transform: translateY(-8px);
-    transition: opacity 0.32s ease, transform 0.32s ease;
+    transition: opacity 0.28s var(--ease-out), transform 0.28s var(--ease-out);
   }
   .mobile-nav-panel.is-open {
     opacity: 1;
     transform: translateY(0);
   }
+  .mobile-nav-panel:focus {
+    outline: none;
+  }
+  .mobile-nav-close {
+    color: var(--color-text-muted);
+  }
+  .mobile-nav-close:hover,
+  .mobile-nav-close:active {
+    color: var(--color-text);
+  }
+  .mobile-nav-scroll {
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .mobile-nav-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .mobile-nav-row {
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+  .mobile-nav-row:hover,
+  .mobile-nav-row:focus-visible {
+    color: var(--color-accent);
+  }
+  .mobile-nav-row.is-active {
+    color: var(--color-text);
+    border-color: color-mix(in oklab, var(--color-accent) 34%, var(--color-border));
+  }
+  .mobile-nav-row.is-active .mobile-nav-index {
+    color: var(--color-accent);
+  }
+  .mobile-nav-index,
+  .mobile-nav-mark {
+    color: var(--color-text-subtle);
+  }
+  .mobile-nav-arrow {
+    transition: transform var(--duration-base) var(--ease-spring), color var(--duration-fast) var(--ease-out);
+  }
+  .mobile-nav-row:hover .mobile-nav-arrow,
+  .mobile-nav-row:focus-visible .mobile-nav-arrow {
+    color: var(--color-accent);
+    transform: translateX(2px);
+  }
+  .mobile-nav-small-link {
+    color: var(--color-text-muted);
+    border-color: color-mix(in oklab, currentColor 18%, transparent);
+  }
+  .mobile-nav-small-link:hover,
+  .mobile-nav-small-link:focus-visible,
+  .mobile-nav-small-link.is-active {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
   .mobile-nav-item {
     opacity: 0;
     transform: translateY(6px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition: opacity 0.34s var(--ease-out), transform 0.34s var(--ease-out);
   }
   .mobile-nav-panel.is-open .mobile-nav-item {
     opacity: 1;
     transform: translateY(0);
   }
-  .mobile-nav-link:hover {
-    color: var(--color-accent) !important;
-  }
-  .mobile-nav-link.is-active {
-    color: var(--color-text);
-  }
-  #mobile-nav-close:hover {
-    color: var(--color-text);
-  }
   @media (prefers-reduced-motion: reduce) {
     .mobile-nav-panel,
     .mobile-nav-item,
-    .mobile-nav-backdrop {
+    .mobile-nav-backdrop,
+    .mobile-nav-arrow {
       transition: none !important;
       transform: none !important;
     }
+  }
+</style>
+
+<style is:global>
+  html.mobile-nav-open #scroll-nav-wrap {
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 </style>
 
@@ -185,9 +255,10 @@ const tertiaryNav = [
     backdrop?.classList.add("is-open");
     panel.classList.add("is-open");
     toggle.setAttribute("aria-expanded", "true");
+    document.documentElement.classList.add("mobile-nav-open");
     document.body.style.overflow = "hidden";
     requestAnimationFrame(() => {
-      setTimeout(() => (links[0] as HTMLElement | undefined)?.focus(), 120);
+      setTimeout(() => panel.focus({ preventScroll: true }), 120);
     });
   }
 
@@ -196,6 +267,7 @@ const tertiaryNav = [
     backdrop?.classList.remove("is-open");
     panel.classList.remove("is-open");
     toggle.setAttribute("aria-expanded", "false");
+    document.documentElement.classList.remove("mobile-nav-open");
     document.body.style.overflow = "";
     lastFocused?.focus();
   }
@@ -208,8 +280,25 @@ const tertiaryNav = [
   backdrop?.addEventListener("click", closeMenu);
   links.forEach((a) => a.addEventListener("click", closeMenu));
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && toggle?.getAttribute("aria-expanded") === "true") {
+    const isOpen = toggle?.getAttribute("aria-expanded") === "true";
+    if (e.key === "Escape" && isOpen) {
       closeMenu();
+    }
+    if (e.key !== "Tab" || !isOpen || !panel) return;
+
+    const focusable = Array.from(
+      panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
+    ).filter((el) => el.getClientRects().length > 0);
+    if (focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
     }
   });
 </script>

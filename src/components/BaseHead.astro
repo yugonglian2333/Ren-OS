@@ -14,7 +14,7 @@ interface Props {
 }
 
 const {
-  title = "RenOS — AI 造物者 & BTC 长期主义者",
+  title = "RenOS — AI Dev",
   description = "RenOS：在造旅行助手一路记 WayLog，做 Agent 提案式编辑；持续跟踪 AI 前沿，写下所见所学。",
   image = "/og-default.jpg",
   type = "website",
@@ -32,7 +32,7 @@ const personSchema = {
   name: "RenOS",
   url: "https://renos.top",
   jobTitle: "AI Builder",
-  description: "AI builder & BTC holder。在造旅行助手一路记 WayLog，做 Agent 提案式编辑。",
+  description: "AI builder。在造旅行助手一路记 WayLog，做 Agent 提案式编辑。",
   sameAs: [
     "https://github.com/yugonglian2333",
     "https://x.com/yugonglian12",
@@ -44,7 +44,7 @@ const websiteSchema = {
   "@type": "WebSite",
   name: "RenOS",
   url: "https://renos.top",
-  description: "AI builder & BTC holder 的个人网站",
+  description: "AI builder 的个人网站",
   author: { "@type": "Person", name: "RenOS" },
   publisher: { "@type": "Person", name: "RenOS" },
 };
@@ -82,7 +82,7 @@ const articleSchema =
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 <meta name="author" content="RenOS" />
-<meta name="keywords" content="RenOS, AI builder, BTC, Agent, WayLog, 一路记, 个人博客, AI 周记, 学习笔记" />
+<meta name="keywords" content="RenOS, AI builder, Agent, WayLog, 一路记, 个人博客, AI 周记, 学习笔记" />
 
 <!-- Open Graph -->
 <meta property="og:type" content={type} />
@@ -120,10 +120,19 @@ const articleSchema =
   <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
 )}
 
-<!-- 字体 -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap"
-/>
+<!-- 字体（自托管，零外部请求） -->
+<style>
+  @import "@fontsource/inter/400.css";
+  @import "@fontsource/inter/500.css";
+  @import "@fontsource/inter/600.css";
+  @import "@fontsource/inter/700.css";
+  @import "@fontsource/noto-sans-sc/400.css";
+  @import "@fontsource/noto-sans-sc/500.css";
+  @import "@fontsource/noto-sans-sc/700.css";
+  @import "@fontsource/jetbrains-mono/400.css";
+  @import "@fontsource/jetbrains-mono/500.css";
+  @import "@fontsource/source-serif-4/400.css";
+  @import "@fontsource/source-serif-4/500.css";
+  @import "@fontsource/source-serif-4/600.css";
+  @import "@fontsource/source-serif-4/400-italic.css";
+</style>

@@ -1,0 +1,94 @@
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pagefind/default-ui@1.5.2/css/ui.css" />
+
+<div id="search"></div>
+
+<script>
+  (function() {
+    var initialized = false;
+    var btn = document.querySelector("[data-search-btn]");
+
+    function initPagefind() {
+      if (initialized) return;
+      initialized = true;
+
+      var container = document.getElementById("search");
+      if (!container) return;
+
+      // 检查 Pagefind 索引是否存在
+      var script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/@pagefind/default-ui@1.5.2/js/ui.js";
+      script.onload = function() {
+        if (window.PagefindUI) {
+          new window.PagefindUI({
+            element: "#search",
+            showSubResults: true,
+            showImages: false,
+          });
+        }
+      };
+      document.body.appendChild(script);
+    }
+
+    if (btn) {
+      btn.addEventListener("click", function(e) {
+        e.preventDefault();
+        initPagefind();
+        var container = document.getElementById("search");
+        if (container) {
+          container.style.display = "block";
+          // 等一小会儿让 Pagefind UI 渲染
+          setTimeout(function() {
+            var input = container.querySelector("input");
+            if (input) input.focus();
+          }, 300);
+        }
+      });
+    }
+
+    // 点击遮罩关闭
+    document.addEventListener("click", function(e) {
+      var container = document.getElementById("search");
+      if (container && container.style.display === "block" && !e.target.closest(".pagefind-ui") && !e.target.closest("[data-search-btn]")) {
+        container.style.display = "none";
+      }
+    });
+
+    // ESC 关闭
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") {
+        var container = document.getElementById("search");
+        if (container) container.style.display = "none";
+      }
+    });
+  })();
+</script>
+
+<style>
+  #search {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 8vh 5vw;
+    overflow-y: auto;
+  }
+  #search.is-open {
+    display: block;
+  }
+  .pagefind-ui {
+    --pagefind-ui-primary: var(--color-accent, #c96442);
+    --pagefind-ui-text: var(--color-text, #141413);
+    --pagefind-ui-background: var(--color-bg-elevated, #fff);
+    --pagefind-ui-border: var(--color-border, #f0eee6);
+    --pagefind-ui-tag: var(--color-accent-soft, #f0e3dc);
+    --pagefind-ui-font: var(--font-sans, system-ui);
+    --pagefind-ui-scale: 0.9;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .pagefind-ui__search-clear {
+    display: none;
+  }
+</style>

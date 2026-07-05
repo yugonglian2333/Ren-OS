@@ -10,24 +10,33 @@ const categories = ["AI 周记", "TIL", "学习笔记", "项目复盘"] as const
 const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat);
 ---
 
-<BaseLayout title="文章 — RenOS" description="AI 周记 · TIL · 项目复盘。不追热度，只记我看过的、想过的、用过的。">
+<BaseLayout title="文章 — RenOS" description="一些代码之外的思考，一些思考之外的代码。">
   <section class="section">
     <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);" data-fade>文章</p>
     <div class="mt-4 border-l-4 pl-5" data-fade style="border-color: var(--color-accent);">
       <p class="font-serif text-base leading-relaxed sm:text-lg">
-        不追热度，只记我看过的、想过的、用过的。
+        一些代码之外的思考，一些思考之外的代码。
       </p>
+    </div>
+
+    <!-- 分类导航 tabs -->
+    <div class="mt-10 flex flex-wrap gap-2" data-fade id="category-tabs">
+      <a href="/blog" class="category-tab" data-cat="">全部（{posts.length}）</a>
+      {categories.map((cat) => {
+        const count = byCategory(cat).length;
+        if (count === 0) return null;
+        return (
+          <a href={`/blog?category=${encodeURIComponent(cat)}`} class="category-tab" data-cat={cat}>{cat}（{count}）</a>
+        );
+      })}
     </div>
 
     {posts.length === 0 ? (
       <div data-fade>
-        <p class="text-[15px]" style="color: var(--color-text-muted);">
+        <p class="mt-10 text-[15px]" style="color: var(--color-text-muted);">
           第一篇还在路上。骨架已搭好（AI 周记 / TIL / 项目复盘），随手往
           <code class="font-mono text-xs" style="color: var(--color-accent);">src/content/blog/</code>
           丢一个 mdx 就能上线。
-        </p>
-        <p class="mt-3 text-sm" style="color: var(--color-text-subtle);">
-          建议第一篇写：《WayLog 的 Agent 提案式编辑——让 AI 只能提议，不能擅动》。
         </p>
       </div>
     ) : (
@@ -35,8 +44,8 @@ const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat)
         const list = byCategory(cat);
         if (list.length === 0) return null;
         return (
-          <div class="mb-10" data-fade>
-            <h2 class="mb-2 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">
+          <div class="mb-10 category-section" data-category={cat} data-fade>
+            <h2 class="mb-2 mt-6 font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">
               {cat}
             </h2>
             <div>
@@ -69,3 +78,55 @@ const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat)
     )}
   </section>
 </BaseLayout>
+
+<script>
+function applyCategoryFilter() {
+    const params = new URLSearchParams(location.search);
+    const active = params.get("category") || "";
+
+    // 切换 tab 高亮
+    document.querySelectorAll("#category-tabs .category-tab").forEach((tab) => {
+      const cat = tab.dataset.cat || "";
+      tab.classList.toggle("category-tab-active", cat === active);
+    });
+
+    // 切换文章分类显隐
+    document.querySelectorAll(".category-section").forEach((sec) => {
+      const cat = sec.dataset.category || "";
+      if (!active || cat === active) {
+        sec.style.display = "";
+      } else {
+        sec.style.display = "none";
+      }
+    });
+  }
+
+  // 初始加载 + Astro 导航时都触发
+  document.addEventListener("astro:page-load", applyCategoryFilter);
+  document.addEventListener("DOMContentLoaded", applyCategoryFilter);
+</script>
+
+<style is:global>
+  .category-tab {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    border: 0.5px solid var(--color-border);
+    color: var(--color-text-muted);
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+  .category-tab:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+  .category-tab-active {
+    background: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+  }
+  .category-tab-active:hover {
+    opacity: 0.9;
+  }
+</style>

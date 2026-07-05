@@ -1,34 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import SectionTitle from "../components/SectionTitle.astro";
+import d from "../data/projects.json";
 
-const waylogTags = [
-  "React Native 0.81",
-  "React 19",
-  "Expo SDK 54",
-  "Expo Router 6",
-  "Supabase",
-  "Postgres + RLS",
-  "Edge Functions",
-  "Next.js 16",
-  "pnpm workspace",
-  "Biome",
-  "Sentry",
-  "TypeScript",
-];
-
-const waylogPoints = [
-  "旅行控制台 + 旅行手记：旅行 CRUD、按天行程、地点收藏与搜索、预算记账、多币种、清单备忘",
-  "本地优先同步：AsyncStorage 先落盘、标记 dirty、后台同步 Supabase，支持失败重试与冲突提示",
-  "Agent 提案式编辑闭环：Agent 只生成结构化 AgentProposal，经预览 → 用户确认/授权 → 运行时校验 → 本地写入 → 云同步；低风险自动执行必须用户显式授权",
-  "认证矩阵：邮箱 / 手机号 / Apple / 微信，Supabase Auth + 阿里云短信",
-  "工程化：pnpm workspace 多端（App / admin-web / os-web）、Biome、Sentry 诊断、node:test、完整 PRD/UX/架构/数据契约文档体系",
-];
-
-const waylogLinks = [
-  { label: "GitHub", href: "https://github.com/yugonglian2333/WayLog" },
-  { label: "README", href: "https://github.com/yugonglian2333/WayLog#readme" },
-];
+const waylogTags = d.waylogTags;
+const waylogPoints = d.waylogPoints;
+const waylogLinks = d.waylogLinks;
 ---
 
 <BaseLayout title="项目 — RenOS" description="一路记 WayLog：旅行控制台 + Agent 提案式编辑。">
@@ -48,7 +24,6 @@ const waylogLinks = [
       </p>
     </div>
 
-    <!-- 要点 -->
     <div class="mt-10" data-fade>
       <p class="font-mono text-xs uppercase tracking-[0.12em]" style="color: var(--color-text-subtle);">能力</p>
       <ul class="mt-4 flex flex-col gap-4">
@@ -61,7 +36,6 @@ const waylogLinks = [
       </ul>
     </div>
 
-    <!-- 技术栈 -->
     <div class="mt-10" data-fade>
       <p class="font-mono text-xs uppercase tracking-[0.12em]" style="color: var(--color-text-subtle);">技术栈</p>
       <div class="mt-3 flex flex-wrap gap-1.5">
@@ -69,7 +43,6 @@ const waylogLinks = [
       </div>
     </div>
 
-    <!-- 链接 -->
     <div class="mt-8 flex flex-wrap gap-3" data-fade>
       {waylogLinks.map((l) => (
         <a
@@ -84,7 +57,6 @@ const waylogLinks = [
       ))}
     </div>
 
-    <!-- 空位 -->
     <hr class="my-14 border-0" style="height: 1px; background: var(--color-border);" data-fade />
 
     <div data-fade>

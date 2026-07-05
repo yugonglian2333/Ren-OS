@@ -1,0 +1,191 @@
+{
+  "timeline": [
+    {
+      "year": "2026 — now",
+      "role": "独立开发者 · Builder",
+      "what": "在造一路记 WayLog（旅行控制台 + Agent 提案式编辑），跟踪 AI 前沿写所学。",
+      "link_label": "WayLog",
+      "link_href": "https://waylog.top"
+    },
+    {
+      "year": "2023 — 2026",
+      "role": "硕士 · 蜕变期",
+      "what": "211 地理信息硕士。这三年是真正的转折：减肥成功找回自信，开网店赚到人生第一桶金，也遇到了对的人。从迷茫中走出来，开始相信自己能做成事。",
+      "link_label": "",
+      "link_href": ""
+    },
+    {
+      "year": "2019 — 2023",
+      "role": "本科 · 迷茫探索",
+      "what": "双非地理信息专业。四年里一直在找方向——课业平平，不知道自己该做什么。但也在这段时间开始接触编程，为后来的路埋下种子。",
+      "link_label": "",
+      "link_href": ""
+    }
+  ],
+  "skills": [
+    {
+      "group": "前端 / 客户端",
+      "items": [
+        "React Native",
+        "React 19",
+        "Expo SDK 54",
+        "Expo Router",
+        "Next.js",
+        "Astro",
+        "Tailwind CSS"
+      ]
+    },
+    {
+      "group": "后端 / 云",
+      "items": [
+        "Supabase",
+        "Postgres + RLS",
+        "Edge Functions (Deno)",
+        "Realtime",
+        "Vercel"
+      ]
+    },
+    {
+      "group": "Agent / AI",
+      "items": [
+        "AgentProposal 闭环",
+        "OpenAI-compatible API",
+        "Tavily / Brave 搜索",
+        "提示工程"
+      ]
+    },
+    {
+      "group": "工程化",
+      "items": [
+        "pnpm workspace",
+        "TypeScript",
+        "Biome",
+        "Sentry",
+        "node:test"
+      ]
+    }
+  ],
+  "personalTags": [
+    {
+      "label": "00 后",
+      "icon": "spark"
+    },
+    {
+      "label": "INTJ",
+      "icon": "brain"
+    },
+    {
+      "label": "天秤座",
+      "icon": "scale"
+    },
+    {
+      "label": "数字游民",
+      "icon": "globe"
+    },
+    {
+      "label": "夜猫子",
+      "icon": "moon"
+    },
+    {
+      "label": "咖啡党",
+      "icon": "coffee"
+    },
+    {
+      "label": "跑步",
+      "icon": "run"
+    },
+    {
+      "label": "深度电影",
+      "icon": "film"
+    },
+    {
+      "label": "旅行",
+      "icon": "compass"
+    },
+    {
+      "label": "ACGN",
+      "icon": "gamepad"
+    }
+  ],
+  "interests": [
+    {
+      "label": "听歌",
+      "desc": "什么都听，看心情"
+    },
+    {
+      "label": "深度电影",
+      "desc": "烧脑的、有回味的"
+    },
+    {
+      "label": "跑步",
+      "desc": "最爱的运动，清空大脑"
+    },
+    {
+      "label": "旅行",
+      "desc": "去过中国很多地方"
+    }
+  ],
+  "favoriteGames": [
+    {
+      "title": "女神异闻录 5 皇家版",
+      "tag": "本命",
+      "note": "RenOS 名字来源，Joker 是永远的精神图腾",
+      "url": "https://baike.baidu.com/item/%E5%A5%B3%E7%A5%9E%E5%BC%82%E9%97%BB%E5%BD%95%205%EF%BC%9A%E7%9A%87%E5%AE%B6%E7%89%88/61930933",
+      "cover": "/images/games/p5r.jpg"
+    },
+    {
+      "title": "塞尔达传说：王国之泪",
+      "tag": "年度",
+      "note": "究极手把创造力拉满，开放世界天花板",
+      "url": "https://baike.baidu.com/item/%E5%A1%9E%E5%B0%94%E8%BE%BE%E4%BC%A0%E8%AF%B4%EF%BC%9A%E7%8E%8B%E5%9B%BD%E4%B9%8B%E6%B3%AA/61984963",
+      "cover": "/images/games/zelda.jpg"
+    },
+    {
+      "title": "荒野大镖客：救赎 2",
+      "tag": "神作",
+      "note": "亚瑟的故事让我红了眼眶",
+      "url": "https://baike.baidu.com/item/Red%20Dead%20Redemption%202/23651908",
+      "cover": "/images/games/rdr2.jpg"
+    },
+    {
+      "title": "博德之门 3",
+      "tag": "年度",
+      "note": "CRPG 回归，选择真正有重量",
+      "url": "https://baike.baidu.com/en/item/Baldur%27s%20Gate%203/1484825",
+      "cover": "/images/games/bg3.jpg"
+    },
+    {
+      "title": "艾尔登法环",
+      "tag": "魂类",
+      "note": "交界地探索的孤独感无可替代",
+      "url": "https://baike.baidu.com/item/%E8%89%BE%E5%B0%94%E7%99%BB%E6%B3%95%E7%8E%AF/61000729",
+      "cover": "/images/games/elden.jpg"
+    },
+    {
+      "title": "神界原罪 2",
+      "tag": "硬核",
+      "note": "战术回合制的巅峰",
+      "url": "https://baike.baidu.com/item/%E7%A5%9E%E7%95%8C%EF%BC%9A%E5%8E%9F%E7%BD%AA2/19391411",
+      "cover": "/images/games/divinity.jpg"
+    }
+  ],
+  "gameCategories": [
+    {
+      "label": "RPG",
+      "games": "女神异闻录 5 / 博德之门 3 / 神界原罪 2 / 天际"
+    },
+    {
+      "label": "开放世界",
+      "games": "塞尔达 王国之泪 / 荒野大镖客 2 / 艾尔登法环"
+    },
+    {
+      "label": "模拟经营",
+      "games": "纪元 1800 / 城市天际线 2"
+    },
+    {
+      "label": "沙盒",
+      "games": "泰拉瑞亚"
+    }
+  ],
+  "steamUrl": "https://steamcommunity.com/id/1070881879/"
+}

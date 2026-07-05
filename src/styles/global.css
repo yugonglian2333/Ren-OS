@@ -229,3 +229,12 @@ body {
     transform: none;
   }
 }
+
+/* Heading anchor styles */
+.heading-anchor {
+  text-decoration: none;
+  color: inherit;
+}
+.heading-anchor:hover {
+  color: var(--color-accent);
+}

@@ -1,0 +1,47 @@
+{
+  "categories": [
+    {
+      "label": "AI 资源",
+      "items": [
+        { "name": "Anthropic 官方博客", "url": "https://www.anthropic.com/news", "note": "Claude 背后的团队" },
+        { "name": "OpenAI Cookbook", "url": "https://cookbook.openai.com", "note": "实战示例" },
+        { "name": "Hugging Face", "url": "https://huggingface.co", "note": "模型库 + demos" },
+        { "name": "Papers with Code", "url": "https://paperswithcode.com", "note": "论文 + 代码" },
+        { "name": "AI 周刊（宝玉）", "url": "https://baoyu.io", "note": "中文 AI 资讯" },
+        { "name": "Latent Space", "url": "https://www.latent.space", "note": "AI 工程播客" }
+      ]
+    },
+    {
+      "label": "设计灵感",
+      "items": [
+        { "name": "awwwards", "url": "https://www.awwwards.com", "note": "网页设计奖" },
+        { "name": "dribbble", "url": "https://dribbble.com", "note": "UI 灵感" },
+        { "name": "antfu.me", "url": "https://antfu.me", "note": "极简个人站标杆" },
+        { "name": "rauno.me", "url": "https://rauno.me", "note": "质感天花板" },
+        { "name": "paco.me", "url": "https://paco.me", "note": "Linear 设计师" },
+        { "name": "leerob.com", "url": "https://leerob.com", "note": "Cursor 的 Lee" }
+      ]
+    },
+    {
+      "label": "技术学习",
+      "items": [
+        { "name": "Astro 文档", "url": "https://docs.astro.build", "note": "本站框架" },
+        { "name": "Tailwind CSS", "url": "https://tailwindcss.com/docs", "note": "原子化 CSS" },
+        { "name": "MDN Web Docs", "url": "https://developer.mozilla.org", "note": "Web 标准" },
+        { "name": "TypeScript Handbook", "url": "https://www.typescriptlang.org/docs/handbook", "note": "TS 入门" },
+        { "name": "Expo 文档", "url": "https://docs.expo.dev", "note": "React Native 开发" },
+        { "name": "Supabase 文档", "url": "https://supabase.com/docs", "note": "后端即服务" }
+      ]
+    },
+    {
+      "label": "BTC / Web3",
+      "items": [
+        { "name": "Bitcoin Whitepaper", "url": "https://bitcoin.org/bitcoin.pdf", "note": "中本聪白皮书，一切的开始" },
+        { "name": "learnmeabitcoin", "url": "https://learnmeabitcoin.com", "note": "可视化讲透 BTC" },
+        { "name": "Glassnode", "url": "https://glassnode.com", "note": "链上数据分析" },
+        { "name": "Coindesk", "url": "https://coindesk.com", "note": "行业新闻" },
+        { "name": "vitalik.ca", "url": "https://vitalik.ca", "note": "V 神博客" }
+      ]
+    }
+  ]
+}

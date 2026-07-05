@@ -1,0 +1,128 @@
+# RenOS Content Management — Decap CMS
+# 本地开发：pnpm dev（终端1） + pnpm cms（终端2）
+# 生产环境：部署到 Vercel 后，通过 GitHub OAuth 登录
+
+backend:
+  name: github
+  repo: yugonglian2333/Ren-OS
+  branch: main
+  local_backend: true
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+collections:
+  # ===== 文章（MDX 文件） =====
+  - name: blog
+    label: 文章
+    label_singular: 文章
+    folder: src/content/blog
+    create: true
+    delete: true
+    extension: mdx
+    format: frontmatter
+    slug: "{{slug}}"
+    preview_path: blog/{{slug}}
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "描述", name: "description", widget: "text" }
+      - { label: "发布日期", name: "pubDate", widget: "date", format: "YYYY-MM-DD" }
+      - { label: "分类", name: "category", widget: "select", options: ["AI 周记", "TIL", "项目复盘", "学习笔记"] }
+      - { label: "草稿", name: "draft", widget: "boolean", default: false, required: false }
+      - { label: "正文", name: "body", widget: "markdown" }
+
+  # ===== 页面数据（JSON 文件） =====
+  - name: about
+    label: 关于页
+    format: json
+    folder: src/data
+    slug: about
+    create: false
+    delete: false
+    identifier_field: label
+    fields:
+      - { label: "四原则", name: "principles", widget: "list", summary: "{{fields.k}}", fields:
+          [{ label: "关键词", name: "k", widget: "string" }, { label: "描述", name: "v", widget: "text" }] }
+      - { label: "经历时间线", name: "timeline", widget: "list", summary: "{{fields.role}}", fields:
+          [{ label: "时间", name: "year", widget: "string" }, { label: "角色", name: "role", widget: "string" },
+           { label: "描述", name: "what", widget: "text" }, { label: "链接文字", name: "link_label", widget: "string", required: false },
+           { label: "链接 URL", name: "link_href", widget: "string", required: false }] }
+      - { label: "技能栈", name: "skills", widget: "list", summary: "{{fields.group}}", fields:
+          [{ label: "分类", name: "group", widget: "string" }, { label: "技能列表", name: "items", widget: "list", field: { label: "技能", name: "skill", widget: "string" } }] }
+      - { label: "个人标签", name: "personalTags", widget: "list", summary: "{{fields.label}}", fields:
+          [{ label: "标签", name: "label", widget: "string" }, { label: "图标", name: "icon", widget: "string" }] }
+      - { label: "兴趣", name: "interests", widget: "list", summary: "{{fields.label}}", fields:
+          [{ label: "名称", name: "label", widget: "string" }, { label: "描述", name: "desc", widget: "string" }] }
+      - { label: "最爱游戏", name: "favoriteGames", widget: "list", summary: "{{fields.title}}", fields:
+          [{ label: "游戏名", name: "title", widget: "string" }, { label: "标签", name: "tag", widget: "string" },
+           { label: "一句话", name: "note", widget: "text" }, { label: "链接", name: "url", widget: "string" },
+           { label: "封面图", name: "cover", widget: "string" }] }
+      - { label: "游戏分类", name: "gameCategories", widget: "list", summary: "{{fields.label}}", fields:
+          [{ label: "分类", name: "label", widget: "string" }, { label: "游戏列表", name: "games", widget: "string" }] }
+      - { label: "Steam 链接", name: "steamUrl", widget: "string" }
+      - { label: "BTC 故事", name: "btcStory", widget: "list", summary: "{{fields.q}}", fields:
+          [{ label: "问题", name: "q", widget: "string" }, { label: "回答", name: "a", widget: "text" }] }
+
+  - name: now
+    label: 此刻页
+    format: json
+    folder: src/data
+    slug: now
+    create: false
+    delete: false
+    fields:
+      - { label: "最后更新", name: "updated", widget: "string" }
+      - { label: "Sections", name: "sections", widget: "list", summary: "{{fields.label}}", fields:
+          [{ label: "标题", name: "label", widget: "string" },
+           { label: "条目", name: "items", widget: "list", summary: "{{fields.title}}", fields:
+              [{ label: "标题", name: "title", widget: "string" }, { label: "描述", name: "desc", widget: "text" },
+               { label: "链接文字", name: "link_label", widget: "string", required: false },
+               { label: "链接 URL", name: "link_href", widget: "string", required: false }] }] }
+
+  - name: projects
+    label: 项目页
+    format: json
+    folder: src/data
+    slug: projects
+    create: false
+    delete: false
+    fields:
+      - { label: "技术栈标签", name: "waylogTags", widget: "list", field: { label: "标签", name: "tag", widget: "string" } }
+      - { label: "项目要点", name: "waylogPoints", widget: "list", field: { label: "要点", name: "point", widget: "text" } }
+      - { label: "项目链接", name: "waylogLinks", widget: "list", summary: "{{fields.label}}", fields:
+          [{ label: "文字", name: "label", widget: "string" }, { label: "URL", name: "href", widget: "string" }] }
+
+  - name: uses
+    label: 装备页
+    format: json
+    folder: src/data
+    slug: uses
+    create: false
+    delete: false
+    fields:
+      - { label: "硬件", name: "hardware", widget: "list", summary: "{{fields.name}}", fields:
+          [{ label: "名称", name: "name", widget: "string" }, { label: "备注", name: "note", widget: "string" },
+           { label: "图标", name: "emoji", widget: "string" }] }
+      - { label: "开发 & AI 工具", name: "devAndAiTools", widget: "list", summary: "{{fields.name}}", fields:
+          [{ label: "名称", name: "name", widget: "string" }, { label: "备注", name: "note", widget: "string" },
+           { label: "链接", name: "url", widget: "string", required: false }] }
+      - { label: "设计 / 好物", name: "designAndLife", widget: "list", summary: "{{fields.name}}", fields:
+          [{ label: "名称", name: "name", widget: "string" }, { label: "备注", name: "note", widget: "string" },
+           { label: "链接", name: "url", widget: "string", required: false }] }
+      - { label: "字体栈", name: "fontStack", widget: "list", summary: "{{fields.name}}", fields:
+          [{ label: "字体", name: "name", widget: "string" }, { label: "备注", name: "note", widget: "string" },
+           { label: "链接", name: "url", widget: "string", required: false }] }
+
+  - name: bookmarks
+    label: 收藏页
+    format: json
+    folder: src/data
+    slug: bookmarks
+    create: false
+    delete: false
+    fields:
+      - { label: "分类", name: "categories", widget: "list", summary: "{{fields.label}}", fields:
+          [{ label: "分类名", name: "label", widget: "string" },
+           { label: "收藏项", name: "items", widget: "list", summary: "{{fields.name}}", fields:
+              [{ label: "名称", name: "name", widget: "string" }, { label: "链接", name: "url", widget: "string" },
+               { label: "备注", name: "note", widget: "string" }] }] }

@@ -1,136 +1,23 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionTitle from "../components/SectionTitle.astro";
+import d from "../data/about.json";
 
-const principles = [
-  { k: "造", v: "造能用的工具，不追热度。一路记 WayLog 是当前的长期投入。" },
-  { k: "跟", v: "持续跟踪 AI 前沿，但只记我真的看过、想过、用过的。" },
-  { k: "记", v: "TIL、AI 周记、项目复盘——把所学落成文字，对抗遗忘和被信息冲走。" },
-  { k: "屯", v: "BTC holder。相信长期主义和数字稀缺，少操作多拿着。" },
-];
-
-const timeline = [
-  {
-    year: "2026 — now",
-    role: "独立开发者 · Builder",
-    what: "在造一路记 WayLog（旅行控制台 + Agent 提案式编辑），跟踪 AI 前沿写所学。",
-    link: { label: "WayLog", href: "https://github.com/yugonglian2333/WayLog" },
-  },
-  {
-    year: "[占位]",
-    role: "[角色 / 公司]",
-    what: "[一句话做了什么、解决了什么、留下什么]",
-    link: null,
-  },
-  {
-    year: "[占位]",
-    role: "[更早的一段经历]",
-    what: "[一句话]",
-    link: null,
-  },
-];
-
-const skills = [
-  {
-    group: "前端 / 客户端",
-    items: ["React Native", "React 19", "Expo SDK 54", "Expo Router", "Next.js", "Astro", "Tailwind CSS"],
-  },
-  {
-    group: "后端 / 云",
-    items: ["Supabase", "Postgres + RLS", "Edge Functions (Deno)", "Realtime", "Vercel"],
-  },
-  {
-    group: "Agent / AI",
-    items: ["AgentProposal 闭环", "OpenAI-compatible API", "Tavily / Brave 搜索", "提示工程"],
-  },
-  {
-    group: "工程化",
-    items: ["pnpm workspace", "TypeScript", "Biome", "Sentry", "node:test"],
-  },
-];
-
-const personalTags = [
-  { label: "00 后", icon: "spark" },
-  { label: "INTJ", icon: "brain" },
-  { label: "天秤座", icon: "scale" },
-  { label: "数字游民", icon: "globe" },
-  { label: "夜猫子", icon: "moon" },
-  { label: "咖啡党", icon: "coffee" },
-  { label: "跑步", icon: "run" },
-  { label: "深度电影", icon: "film" },
-  { label: "旅行", icon: "compass" },
-  { label: "ACGN", icon: "gamepad" },
-];
-
-const interests = [
-  { label: "听歌", desc: "什么都听，看心情" },
-  { label: "深度电影", desc: "烧脑的、有回味的" },
-  { label: "跑步", desc: "最爱的运动，清空大脑" },
-  { label: "旅行", desc: "去过中国很多地方" },
-];
-
-const favoriteGames = [
-  {
-    title: "女神异闻录 5 皇家版",
-    tag: "本命",
-    note: "RenOS 名字来源，Joker 是永远的精神图腾",
-    url: "https://baike.baidu.com/item/%E5%A5%B3%E7%A5%9E%E5%BC%82%E9%97%BB%E5%BD%95%205%EF%BC%9A%E7%9A%87%E5%AE%B6%E7%89%88/61930933",
-    cover: "/images/games/p5r.jpg",
-  },
-  {
-    title: "塞尔达传说：王国之泪",
-    tag: "年度",
-    note: "究极手把创造力拉满，开放世界天花板",
-    url: "https://baike.baidu.com/item/%E5%A1%9E%E5%B0%94%E8%BE%BE%E4%BC%A0%E8%AF%B4%EF%BC%9A%E7%8E%8B%E5%9B%BD%E4%B9%8B%E6%B3%AA/61984963",
-    cover: "/images/games/zelda.jpg",
-  },
-  {
-    title: "荒野大镖客：救赎 2",
-    tag: "神作",
-    note: "亚瑟的故事让我红了眼眶",
-    url: "https://baike.baidu.com/item/Red%20Dead%20Redemption%202/23651908",
-    cover: "/images/games/rdr2.jpg",
-  },
-  {
-    title: "博德之门 3",
-    tag: "年度",
-    note: "CRPG 回归，选择真正有重量",
-    url: "https://baike.baidu.com/en/item/Baldur%27s%20Gate%203/1484825",
-    cover: "/images/games/bg3.jpg",
-  },
-  {
-    title: "艾尔登法环",
-    tag: "魂类",
-    note: "交界地探索的孤独感无可替代",
-    url: "https://baike.baidu.com/item/%E8%89%BE%E5%B0%94%E7%99%BB%E6%B3%95%E7%8E%AF/61000729",
-    cover: "/images/games/elden.jpg",
-  },
-  {
-    title: "神界原罪 2",
-    tag: "硬核",
-    note: "战术回合制的巅峰",
-    url: "https://baike.baidu.com/item/%E7%A5%9E%E7%95%8C%EF%BC%9A%E5%8E%9F%E7%BD%AA2/19391411",
-    cover: "/images/games/divinity.jpg",
-  },
-];
-
-const gameCategories = [
-  { label: "RPG", games: "女神异闻录 5 / 博德之门 3 / 神界原罪 2 / 天际" },
-  { label: "开放世界", games: "塞尔达 王国之泪 / 荒野大镖客 2 / 艾尔登法环" },
-  { label: "模拟经营", games: "纪元 1800 / 城市天际线 2" },
-  { label: "沙盒", games: "泰拉瑞亚" },
-];
-
-const steamUrl = "https://steamcommunity.com/id/1070881879/";
-
-const btcStory = [
-  { q: "什么时候入坑？", a: "很早就知道 BTC，但一直没动手。Trump 币大火那波被朋友拽进坑，从此一发不可收拾。" },
-  { q: "为什么信它？", a: "了解它的本质之后，很少会有聪明人不信吧。数字稀缺 + 去中心化 + 长期主义，这三个词凑在一起很难拒绝。" },
-  { q: "持有策略", a: "少操作多拿着。不追涨杀跌，不碰合约，把 BTC 当储蓄而非投机。" },
-];
+const timeline = d.timeline.map((t: typeof d.timeline[0]) => ({
+  year: t.year,
+  role: t.role,
+  what: t.what,
+  link: t.link_label ? { label: t.link_label, href: t.link_href } : null,
+}));
+const skills = d.skills;
+const personalTags = d.personalTags;
+const interests = d.interests;
+const favoriteGames = d.favoriteGames;
+const gameCategories = d.gameCategories;
+const steamUrl = d.steamUrl;
 ---
 
-<BaseLayout title="关于 — RenOS" description="RenOS：AI builder & BTC holder。在造 WayLog，跟踪 AI 前沿，写所学。">
+<BaseLayout title="关于 — RenOS" description="RenOS：AI builder。在造 WayLog，跟踪 AI 前沿，写所学。">
   <section class="section">
     <div data-fade>
       <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">关于</p>
@@ -141,7 +28,7 @@ const btcStory = [
         取「莲」的发音 Ren，配上程序员最熟悉的 OS，就有了 RenOS。
         <br /><br />
         本人双非本 211 硕，地理信息专业出身，现在在江苏。
-        白天造工具，晚上跟 AI 前沿，顺手屯点 BTC。
+        白天 Builder，夜里 Thinker。
       </p>
     </div>
 
@@ -165,22 +52,15 @@ const btcStory = [
       ))}
     </div>
 
-    <div class="mt-8 border-l-4 pl-5" style="border-color: var(--color-accent);" data-fade>
-      <p class="font-serif text-xl font-medium leading-relaxed tracking-tight sm:text-2xl">
-        Agent dev <span style="color: var(--color-accent);">&amp;</span> GISer <span style="color: var(--color-accent);">&amp;</span> BTC holder
-      </p>
-      <p class="mt-3 text-sm" style="color: var(--color-text-muted);">
-        在造旅行助手一路记 WayLog，做 Agent 提案式编辑闭环——让 AI 只能提议，不能擅动。
-      </p>
-    </div>
-
-    <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2" data-fade>
-      {principles.map((p) => (
-        <div class="flex items-baseline gap-3">
-          <span class="font-serif text-2xl font-medium" style="color: var(--color-accent);">{p.k}</span>
-          <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">{p.v}</p>
-        </div>
-      ))}
+    <div class="mt-8 border-l-4 pl-5 space-y-6" style="border-color: var(--color-accent);" data-fade>
+      <div>
+        <p class="font-serif text-xl leading-relaxed tracking-tight sm:text-2xl">世界上只有一种真正的英雄主义，那就是在认清生活真相之后依然热爱生活。</p>
+        <p class="mt-2 text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">罗曼·罗兰</p>
+      </div>
+      <div>
+        <p class="font-serif text-xl leading-relaxed tracking-tight sm:text-2xl">他人即地狱 · 存在即合理</p>
+        <p class="mt-2 text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">让-保罗·萨特</p>
+      </div>
     </div>
 
     <div class="mt-12" data-fade>
@@ -230,26 +110,7 @@ const btcStory = [
     </div>
 
     <div class="mt-12" data-fade>
-      <SectionTitle eyebrow="03" title="BTC 故事" />
-      <div class="flex flex-col gap-5">
-        {btcStory.map((item) => (
-          <div class="flex items-start gap-3">
-            <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-accent);">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-              <path d="M12 17h.01"/>
-            </svg>
-            <div>
-              <div class="text-[14px] font-medium">{item.q}</div>
-              <p class="mt-1 text-sm leading-relaxed" style="color: var(--color-text-muted);">{item.a}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    <div class="mt-12" data-fade>
-      <SectionTitle eyebrow="04" title="游戏" />
+      <SectionTitle eyebrow="03" title="游戏" />
       <p class="mb-5 text-sm" style="color: var(--color-text-muted);">
         ACGN 是我的另一面，尤其游戏。涉猎广泛——RPG / 开放世界 / 魂类 / 模拟经营 / 沙盒都玩。
         <a href={steamUrl} target="_blank" rel="noopener noreferrer" class="link-quiet">我的 Steam 主页 ↗</a>
@@ -295,7 +156,7 @@ const btcStory = [
     </div>
 
     <div class="mt-12" data-fade>
-      <SectionTitle eyebrow="05" title="兴趣" />
+      <SectionTitle eyebrow="04" title="兴趣" />
       <div class="flex flex-wrap gap-x-6 gap-y-2">
         {interests.map((i) => (
           <div>
@@ -307,7 +168,7 @@ const btcStory = [
     </div>
 
     <div class="mt-12" data-fade>
-      <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">联系方式</p>
+      <SectionTitle eyebrow="05" title="联系方式" />
       <p class="mt-3 text-sm" style="color: var(--color-text-muted);">
         GitHub <a href="https://github.com/yugonglian2333" target="_blank" rel="noopener noreferrer" class="link-quiet">@yugonglian2333</a>
         · 邮箱 <a href="mailto:1070881879@qq.com" class="link-quiet">1070881879@qq.com</a>
@@ -319,9 +180,9 @@ const btcStory = [
     <div class="mt-12" data-fade>
       <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">更多页面</p>
       <div class="mt-4 flex gap-6">
-        <a href="/uses" class="font-mono text-sm transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-muted);">/uses</a>
+        <a href="/uses" class="font-mono text-sm transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-muted);">装备</a>
         <span style="color: var(--color-text-subtle);">·</span>
-        <a href="/bookmarks" class="font-mono text-sm transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-muted);">/bookmarks</a>
+        <a href="/bookmarks" class="font-mono text-sm transition-colors hover:text-[color:var(--color-accent)]" style="color: var(--color-text-muted);">收藏</a>
       </div>
     </div>
   </section>

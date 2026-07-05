@@ -1,0 +1,85 @@
+{
+  "hardware": [
+    {
+      "name": "MacBook Air M5",
+      "note": "移动办公主力，轻便续航长",
+      "emoji": "M"
+    },
+    {
+      "name": "台式机 9700x + 5070ti",
+      "note": "重型开发 + 本地跑模型",
+      "emoji": "P"
+    }
+  ],
+  "devAndAiTools": [
+    {
+      "name": "Codex",
+      "note": "日常主力，OpenAI 编程助手",
+      "url": "https://openai.com"
+    },
+    {
+      "name": "Claude Code",
+      "note": "终端里的 AI 结对编程",
+      "url": "https://claude.ai"
+    },
+    {
+      "name": "VS Code",
+      "note": "备用编辑器，插件生态全",
+      "url": "https://code.visualstudio.com"
+    }
+  ],
+  "designAndLife": [
+    {
+      "name": "小米屏幕挂灯",
+      "note": "夜猫子护眼必备",
+      "url": ""
+    },
+    {
+      "name": "Figma",
+      "note": "设计 / 原型",
+      "url": "https://figma.com"
+    },
+    {
+      "name": "Obsidian",
+      "note": "知识管理 / 笔记",
+      "url": "https://obsidian.md"
+    },
+    {
+      "name": "Raycast",
+      "note": "Mac 启动器，替代 Spotlight",
+      "url": "https://raycast.com"
+    },
+    {
+      "name": "1Password",
+      "note": "密码管理",
+      "url": "https://1password.com"
+    },
+    {
+      "name": "Notion",
+      "note": "项目文档 / 轻量数据库",
+      "url": "https://notion.so"
+    }
+  ],
+  "fontStack": [
+    {
+      "name": "Inter",
+      "note": "UI 无衬线正文",
+      "url": "https://rsms.me/inter"
+    },
+    {
+      "name": "Source Serif 4",
+      "note": "标题衬线",
+      "url": "https://fonts.google.com/specimen/Source+Serif+4"
+    },
+    {
+      "name": "JetBrains Mono",
+      "note": "代码 / 等宽",
+      "url": "https://www.jetbrains.com/lp/mono"
+    },
+    {
+      "name": "Source Sans 3",
+      "note": "文章正文（Typora Vue 主题）",
+      "url": "https://fonts.google.com/specimen/Source+Sans+3"
+    }
+  ]
+}

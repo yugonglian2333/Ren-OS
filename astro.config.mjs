@@ -4,15 +4,46 @@ import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
+import expressiveCode from "astro-expressive-code";
+import compress from "astro-compress";
+import critters from "astro-critters";
+import icon from "astro-icon";
+import rehypeAutolink from "rehype-autolink-headings";
+import { remarkReadingTime } from "./src/utils/reading-time.mjs";
 
-// 真实域名：renos.top（用于 sitemap / canonical / OG / RSS）
 const SITE = "https://renos.top";
 
-// https://astro.build/config
 export default defineConfig({
   site: SITE,
   trailingSlash: "ignore",
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    expressiveCode({
+    themes: ["vitesse-dark"],
+    styleOverrides: {
+      borderRadius: "8px",
+      frames: { showCopyToClipboardButton: true },
+    },
+  }),
+  mdx(),
+  sitemap(),
+  compress({
+    HTML: true,
+    CSS: true,
+    JS: true,
+    SVG: true,
+  }),
+  critters(),
+  icon(),
+  ],
+  markdown: {
+    remarkPlugins: [remarkReadingTime],
+    rehypePlugins: [
+      [rehypeAutolink, {
+        behavior: "wrap",
+        properties: { class: "heading-anchor" },
+      }],
+    ],
+  },
   vite: {
     plugins: [tailwindcss()],
     resolve: {

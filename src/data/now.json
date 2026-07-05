@@ -1,0 +1,55 @@
+{
+  "updated": "2026-07-05",
+  "sections": [
+    {
+      "label": "正在投入",
+      "items": [
+        {
+          "title": "一路记 WayLog · Agent 提案式编辑",
+          "desc": "把 Agent 接进旅行编辑闭环——结构化 AgentProposal、预览→确认→授权→本地写入→云同步。让 AI 只能提议，不能擅动。",
+          "link_label": "看项目",
+          "link_href": "/projects"
+        }
+      ]
+    },
+    {
+      "label": "在跟 / 在学",
+      "items": [
+        {
+          "title": "AI 前沿动态",
+          "desc": "新模型、新 agent 框架、新研究。看到值得的会写进 AI 周记，不追热度。",
+          "link_label": "读周记",
+          "link_href": "/blog"
+        },
+        {
+          "title": "[占位] 在学的体系",
+          "desc": "比如某门课、某本书、某个源码精读。后续随手往这里填。",
+          "link_label": "",
+          "link_href": ""
+        }
+      ]
+    },
+    {
+      "label": "在读 / 在听",
+      "items": [
+        {
+          "title": "[占位] 本周在读",
+          "desc": "论文 / 文章 / 书。后续会随手往这里填本周在看的。",
+          "link_label": "",
+          "link_href": ""
+        }
+      ]
+    },
+    {
+      "label": "暂停 / 不接",
+      "items": [
+        {
+          "title": "暂不接外包",
+          "desc": "精力集中在 WayLog 和自己的写作上。感谢理解。",
+          "link_label": "",
+          "link_href": ""
+        }
+      ]
+    }
+  ]
+}

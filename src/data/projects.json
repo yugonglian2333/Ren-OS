@@ -1,0 +1,37 @@
+{
+  "waylogTags": [
+    "React Native 0.81",
+    "React 19",
+    "Expo SDK 54",
+    "Expo Router 6",
+    "Supabase",
+    "Postgres + RLS",
+    "Edge Functions",
+    "Next.js 16",
+    "pnpm workspace",
+    "Biome",
+    "Sentry",
+    "TypeScript"
+  ],
+  "waylogPoints": [
+    "旅行控制台 + 旅行手记：旅行 CRUD、按天行程、地点收藏与搜索、预算记账、多币种、清单备忘",
+    "本地优先同步：AsyncStorage 先落盘、标记 dirty、后台同步 Supabase，支持失败重试与冲突提示",
+    "Agent 提案式编辑闭环：Agent 只生成结构化 AgentProposal，经预览 → 用户确认/授权 → 运行时校验 → 本地写入 → 云同步；低风险自动执行必须用户显式授权",
+    "认证矩阵：邮箱 / 手机号 / Apple / 微信，Supabase Auth + 阿里云短信",
+    "工程化：pnpm workspace 多端（App / admin-web / os-web）、Biome、Sentry 诊断、node:test、完整 PRD/UX/架构/数据契约文档体系"
+  ],
+  "waylogLinks": [
+    {
+      "label": "官网",
+      "href": "https://waylog.top"
+    },
+    {
+      "label": "小红书",
+      "href": "https://www.xiaohongshu.com/user/profile/62ec05a0000000001f016df6"
+    },
+    {
+      "label": "B站",
+      "href": "https://space.bilibili.com/10033138"
+    }
+  ]
+}
