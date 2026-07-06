@@ -1,30 +1,24 @@
 {
   "categories": [
     {
-      "label": "AI 资源",
-      "items": [
-        { "name": "Anthropic 官方博客", "url": "https://www.anthropic.com/news", "note": "Claude 背后的团队" },
-        { "name": "OpenAI Cookbook", "url": "https://cookbook.openai.com", "note": "实战示例" },
-        { "name": "Hugging Face", "url": "https://huggingface.co", "note": "模型库 + demos" },
-        { "name": "Papers with Code", "url": "https://paperswithcode.com", "note": "论文 + 代码" },
-        { "name": "AI 周刊（宝玉）", "url": "https://baoyu.io", "note": "中文 AI 资讯" },
-        { "name": "Latent Space", "url": "https://www.latent.space", "note": "AI 工程播客" }
-      ]
-    },
-    {
-      "label": "官方文档",
+      "label": "AI / Agent",
       "items": [
         { "name": "OpenAI Developers", "url": "https://developers.openai.com/api/docs", "note": "API / Agents / 工具调用" },
         { "name": "Anthropic Docs", "url": "https://docs.anthropic.com", "note": "Claude API 文档" },
-        { "name": "Google AI Developers", "url": "https://ai.google.dev/gemini-api/docs", "note": "Gemini API" },
+        { "name": "Building effective agents", "url": "https://www.anthropic.com/engineering/building-effective-agents", "note": "Agent 工程方法论" },
+        { "name": "Hugging Face Agents Course", "url": "https://huggingface.co/learn/agents-course/zh-CN/unit0/introduction", "note": "Agent 入门课程" },
+        { "name": "Learn Prompting", "url": "https://learnprompting.org/zh-Hans/docs/introduction", "note": "Prompt 工程教程" },
+        { "name": "Papers with Code", "url": "https://paperswithcode.com", "note": "论文 + 代码" }
+      ]
+    },
+    {
+      "label": "模型 / API",
+      "items": [
         { "name": "DeepSeek API", "url": "https://api-docs.deepseek.com", "note": "国产模型 API" },
+        { "name": "Google AI Developers", "url": "https://ai.google.dev/gemini-api/docs", "note": "Gemini API" },
         { "name": "阿里云百炼", "url": "https://help.aliyun.com/zh/model-studio/model-api-reference/", "note": "通义千问 / 模型 API" },
-        { "name": "火山方舟", "url": "https://www.volcengine.com/docs/82379", "note": "豆包 / 推理与 Agent" },
-        { "name": "百度千帆", "url": "https://cloud.baidu.com/doc/qianfan/index.html", "note": "文心 / Agent 平台" },
-        { "name": "腾讯混元", "url": "https://cloud.tencent.com/document/product/1729", "note": "混元大模型" },
-        { "name": "Kimi API", "url": "https://platform.kimi.com/docs/overview", "note": "长上下文 / Coding" },
-        { "name": "智谱 BigModel", "url": "https://docs.bigmodel.cn", "note": "GLM API" },
-        { "name": "SiliconFlow", "url": "https://docs.siliconflow.cn", "note": "聚合模型 API" }
+        { "name": "火山方舟", "url": "https://www.volcengine.com/docs/82379", "note": "豆包 / 推理平台" },
+        { "name": "Kimi API", "url": "https://platform.kimi.com/docs/overview", "note": "长上下文 / Coding" }
       ]
     },
     {
@@ -35,42 +29,26 @@
         { "name": "Chain-of-Thought Prompting", "url": "https://arxiv.org/abs/2201.11903", "note": "推理提示" },
         { "name": "ReAct", "url": "https://arxiv.org/abs/2210.03629", "note": "推理 + 行动" },
         { "name": "Toolformer", "url": "https://arxiv.org/abs/2302.04761", "note": "模型学会用工具" },
-        { "name": "Tree of Thoughts", "url": "https://arxiv.org/abs/2305.10601", "note": "搜索式推理" },
-        { "name": "Voyager", "url": "https://arxiv.org/abs/2305.16291", "note": "开放式 Agent" },
-        { "name": "LoRA", "url": "https://arxiv.org/abs/2106.09685", "note": "低秩微调" },
-        { "name": "FlashAttention", "url": "https://arxiv.org/abs/2205.14135", "note": "长上下文基础" },
         { "name": "DPO", "url": "https://arxiv.org/abs/2305.18290", "note": "偏好优化" }
       ]
     },
     {
-      "label": "设计灵感",
+      "label": "设计 / 个人站",
       "items": [
         { "name": "awwwards", "url": "https://www.awwwards.com", "note": "网页设计奖" },
-        { "name": "dribbble", "url": "https://dribbble.com", "note": "UI 灵感" },
         { "name": "antfu.me", "url": "https://antfu.me", "note": "极简个人站标杆" },
-        { "name": "rauno.me", "url": "https://rauno.me", "note": "质感天花板" },
-        { "name": "paco.me", "url": "https://paco.me", "note": "Linear 设计师" },
-        { "name": "leerob.com", "url": "https://leerob.com", "note": "Cursor 的 Lee" }
+        { "name": "rauno.me", "url": "https://rauno.me", "note": "交互与质感" },
+        { "name": "paco.me", "url": "https://paco.me", "note": "Linear 设计师" }
       ]
     },
     {
-      "label": "技术学习",
+      "label": "GIS / Web3",
       "items": [
-        { "name": "Astro 文档", "url": "https://docs.astro.build", "note": "本站框架" },
-        { "name": "Tailwind CSS", "url": "https://tailwindcss.com/docs", "note": "原子化 CSS" },
-        { "name": "MDN Web Docs", "url": "https://developer.mozilla.org", "note": "Web 标准" },
-        { "name": "TypeScript Handbook", "url": "https://www.typescriptlang.org/docs/handbook", "note": "TS 入门" },
-        { "name": "Expo 文档", "url": "https://docs.expo.dev", "note": "React Native 开发" },
-        { "name": "Supabase 文档", "url": "https://supabase.com/docs", "note": "后端即服务" }
-      ]
-    },
-    {
-      "label": "BTC / Web3",
-      "items": [
-        { "name": "Bitcoin Whitepaper", "url": "https://bitcoin.org/bitcoin.pdf", "note": "中本聪白皮书，一切的开始" },
+        { "name": "PostGIS Docs", "url": "https://postgis.net/documentation/", "note": "空间数据库" },
+        { "name": "GDAL Docs", "url": "https://gdal.org/en/stable/", "note": "地理数据处理" },
+        { "name": "Mapbox GL JS", "url": "https://docs.mapbox.com/mapbox-gl-js/guides/", "note": "Web 地图前端" },
+        { "name": "Bitcoin Whitepaper", "url": "https://bitcoin.org/bitcoin.pdf", "note": "中本聪白皮书" },
         { "name": "learnmeabitcoin", "url": "https://learnmeabitcoin.com", "note": "可视化讲透 BTC" },
-        { "name": "Glassnode", "url": "https://glassnode.com", "note": "链上数据分析" },
-        { "name": "Coindesk", "url": "https://coindesk.com", "note": "行业新闻" },
         { "name": "vitalik.ca", "url": "https://vitalik.ca", "note": "V 神博客" }
       ]
     }
