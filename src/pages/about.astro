@@ -22,7 +22,7 @@ const steamUrl = d.steamUrl;
     <div data-fade>
       <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">关于</p>
       <h1 class="mt-2">
-        <img src="/ren-about-logo.png" alt="RenOS" width="444" height="240" class="about-logo" />
+        <span class="about-logo" role="img" aria-label="RenOS"></span>
       </h1>
       <p class="mt-5 max-w-2xl text-[14px] leading-relaxed" style="color: var(--color-text-muted);">
         RenOS 这个名字，来自游戏《女神异闻录 5》的主角雨宫莲（Ren Amamiya）。
@@ -193,14 +193,19 @@ const steamUrl = d.steamUrl;
 <style>
   .about-logo {
     display: block;
+    width: 74px;
     height: 40px;
-    width: auto;
+    background-color: var(--color-text);
+    -webkit-mask: url("/ren-about-logo.png") center / contain no-repeat;
+    mask: url("/ren-about-logo.png") center / contain no-repeat;
   }
   :global(.dark) .about-logo {
-    filter: invert(1);
+    background-color: #d17755;
+    background-color: color-mix(in oklab, var(--color-accent) 88%, #c7a17f);
   }
   @media (min-width: 640px) {
     .about-logo {
+      width: 89px;
       height: 48px;
     }
   }
