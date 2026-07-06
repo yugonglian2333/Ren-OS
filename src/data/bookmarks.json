@@ -12,6 +12,37 @@
       ]
     },
     {
+      "label": "官方文档",
+      "items": [
+        { "name": "OpenAI Developers", "url": "https://developers.openai.com/api/docs", "note": "API / Agents / 工具调用" },
+        { "name": "Anthropic Docs", "url": "https://docs.anthropic.com", "note": "Claude API 文档" },
+        { "name": "Google AI Developers", "url": "https://ai.google.dev/gemini-api/docs", "note": "Gemini API" },
+        { "name": "DeepSeek API", "url": "https://api-docs.deepseek.com", "note": "国产模型 API" },
+        { "name": "阿里云百炼", "url": "https://help.aliyun.com/zh/model-studio/model-api-reference/", "note": "通义千问 / 模型 API" },
+        { "name": "火山方舟", "url": "https://www.volcengine.com/docs/82379", "note": "豆包 / 推理与 Agent" },
+        { "name": "百度千帆", "url": "https://cloud.baidu.com/doc/qianfan/index.html", "note": "文心 / Agent 平台" },
+        { "name": "腾讯混元", "url": "https://cloud.tencent.com/document/product/1729", "note": "混元大模型" },
+        { "name": "Kimi API", "url": "https://platform.kimi.com/docs/overview", "note": "长上下文 / Coding" },
+        { "name": "智谱 BigModel", "url": "https://docs.bigmodel.cn", "note": "GLM API" },
+        { "name": "SiliconFlow", "url": "https://docs.siliconflow.cn", "note": "聚合模型 API" }
+      ]
+    },
+    {
+      "label": "AI 论文",
+      "items": [
+        { "name": "Attention Is All You Need", "url": "https://arxiv.org/abs/1706.03762", "note": "Transformer 原点" },
+        { "name": "Retrieval-Augmented Generation", "url": "https://arxiv.org/abs/2005.11401", "note": "RAG 起点" },
+        { "name": "Chain-of-Thought Prompting", "url": "https://arxiv.org/abs/2201.11903", "note": "推理提示" },
+        { "name": "ReAct", "url": "https://arxiv.org/abs/2210.03629", "note": "推理 + 行动" },
+        { "name": "Toolformer", "url": "https://arxiv.org/abs/2302.04761", "note": "模型学会用工具" },
+        { "name": "Tree of Thoughts", "url": "https://arxiv.org/abs/2305.10601", "note": "搜索式推理" },
+        { "name": "Voyager", "url": "https://arxiv.org/abs/2305.16291", "note": "开放式 Agent" },
+        { "name": "LoRA", "url": "https://arxiv.org/abs/2106.09685", "note": "低秩微调" },
+        { "name": "FlashAttention", "url": "https://arxiv.org/abs/2205.14135", "note": "长上下文基础" },
+        { "name": "DPO", "url": "https://arxiv.org/abs/2305.18290", "note": "偏好优化" }
+      ]
+    },
+    {
       "label": "设计灵感",
       "items": [
         { "name": "awwwards", "url": "https://www.awwwards.com", "note": "网页设计奖" },

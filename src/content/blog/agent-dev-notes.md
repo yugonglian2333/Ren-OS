@@ -73,13 +73,13 @@ Agent = LLM + Harness;
 
 ### 1、**LLM**大语言模型 & **prompt** 提示词工程
 
-### 2、**Function** & **Function calling** & **Tool**
+### 2、**context** 上下文
 
-### 3、**SKILL**技能 & **MCP** & 插件
+### 3、**Function** & **Function calling** & **Tool** 
 
-### 4、**router** 路由
+### 4、**SKILL**技能 & **MCP** & 插件
 
-### 5、**context** 上下文
+### 5、**router** 路由
 
 ### 6、**ReAct loop** 循环
 
@@ -145,3 +145,20 @@ Agent = LLM + Harness;
 ```
 
 ## 二、Agent架构设计
+
+```mermaid
+sequenceDiagram
+  participant U as 用户
+  participant App as 客户端/服务端应用
+  participant M as 大模型
+  participant Tool as 你的函数/工具
+
+  U->>App: 云南三日游，查下天气再规划
+  App->>M: 用户输入 + 可用 tools 定义
+  M-->>App: function_call(get_weather, {location:"云南"})
+  App->>Tool: 执行 get_weather("云南")
+  Tool-->>App: 天气 JSON
+  App->>M: function_call_output(call_id, 天气结果)
+  M-->>App: 最终自然语言/结构化回答
+  App-->>U: 展示结果
+```
