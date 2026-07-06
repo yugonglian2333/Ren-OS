@@ -2,9 +2,11 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => {
+  if (a.data.pinned !== b.data.pinned) return a.data.pinned ? -1 : 1;
+  if (a.data.priority !== b.data.priority) return b.data.priority - a.data.priority;
+  return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+});
 
 const categories = ["AI 周记", "TIL", "学习笔记", "项目复盘"] as const;
 const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat);
@@ -57,6 +59,11 @@ const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat)
                 >
                   <div class="min-w-0 flex-1">
                     <div class="flex items-baseline gap-2">
+                      {post.data.pinned && (
+                        <span class="shrink-0 font-mono text-[10px] uppercase tracking-wider" style="color: var(--color-accent);">
+                          置顶
+                        </span>
+                      )}
                       <span class="shrink-0 text-[10px] font-mono uppercase tracking-wider" style="color: var(--color-accent);">
                         {post.data.category}
                       </span>
@@ -86,12 +93,14 @@ function applyCategoryFilter() {
 
     // 切换 tab 高亮
     document.querySelectorAll("#category-tabs .category-tab").forEach((tab) => {
+      if (!(tab instanceof HTMLElement)) return;
       const cat = tab.dataset.cat || "";
       tab.classList.toggle("category-tab-active", cat === active);
     });
 
     // 切换文章分类显隐
     document.querySelectorAll(".category-section").forEach((sec) => {
+      if (!(sec instanceof HTMLElement)) return;
       const cat = sec.dataset.category || "";
       if (!active || cat === active) {
         sec.style.display = "";

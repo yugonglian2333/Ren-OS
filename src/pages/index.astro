@@ -13,11 +13,13 @@ const latest = posts.slice(0, 4);
   <section class="section">
     <!-- ===== Hero ===== -->
     <div data-fade>
-      <div class="flex items-center gap-4">
-        <img src="/ren-avatar.jpg" alt="Ren" width="48" height="48" class="h-12 w-12 rounded-full border object-cover" style="border-color: var(--color-accent-soft);" />
+      <div class="flex items-center gap-5">
+        <div class="ren-hero-mark-wrap">
+          <img src="/ren-hero-mark.png" alt="Ren" width="472" height="696" class="ren-hero-mark" />
+        </div>
         <div>
-          <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">RenOS</p>
-          <p class="font-mono text-[11px]" style="color: var(--color-text);">雨宫莲</p>
+          <p class="font-mono text-sm uppercase tracking-[0.16em]" style="color: var(--color-accent);">RenOS</p>
+          <p class="font-mono text-[13px] leading-5" style="color: var(--color-text);">雨宫莲</p>
         </div>
       </div>
 
@@ -128,3 +130,29 @@ const latest = posts.slice(0, 4);
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .ren-hero-mark-wrap {
+    width: 64px;
+    height: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+  .ren-hero-mark {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  :global(.dark) .ren-hero-mark {
+    filter: invert(1);
+  }
+  @media (min-width: 640px) {
+    .ren-hero-mark-wrap {
+      width: 78px;
+      height: 114px;
+    }
+  }
+</style>

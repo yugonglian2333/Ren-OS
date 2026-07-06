@@ -32,6 +32,7 @@
     "astro-expressive-code": "^0.44.0",
     "astro-icon": "^1.1.5",
     "astro-seo": "^1.1.0",
+    "mermaid": "^11.16.0",
     "pagefind": "^1.5.2",
     "rehype-autolink-headings": "^7.1.0",
     "remark-reading-time": "^2.1.0",

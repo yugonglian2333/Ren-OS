@@ -21,8 +21,10 @@ const steamUrl = d.steamUrl;
   <section class="section">
     <div data-fade>
       <p class="font-mono text-xs uppercase tracking-[0.15em]" style="color: var(--color-accent);">关于</p>
-      <h1 class="mt-3 font-serif text-3xl font-medium tracking-tight sm:text-4xl">RenOS</h1>
-      <p class="mt-4 max-w-2xl text-[14px] leading-relaxed" style="color: var(--color-text-muted);">
+      <h1 class="mt-2">
+        <img src="/ren-about-logo.png" alt="RenOS" width="444" height="240" class="about-logo" />
+      </h1>
+      <p class="mt-5 max-w-2xl text-[14px] leading-relaxed" style="color: var(--color-text-muted);">
         RenOS 这个名字，来自游戏《女神异闻录 5》的主角雨宫莲（Ren Amamiya）。
         他代号 Joker，是心之怪盗团的首领——平时沉默寡言，关键时刻能掀翻整盘棋。
         取「莲」的发音 Ren，配上程序员最熟悉的 OS，就有了 RenOS。
@@ -187,3 +189,19 @@ const steamUrl = d.steamUrl;
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .about-logo {
+    display: block;
+    height: 40px;
+    width: auto;
+  }
+  :global(.dark) .about-logo {
+    filter: invert(1);
+  }
+  @media (min-width: 640px) {
+    .about-logo {
+      height: 48px;
+    }
+  }
+</style>

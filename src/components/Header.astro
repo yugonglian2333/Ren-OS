@@ -7,13 +7,12 @@ const path = Astro.url.pathname;
 ---
 
 <header class="sticky top-0 z-50 backdrop-blur-md" style="background: color-mix(in oklab, var(--color-bg) 80%, transparent); border-bottom: 1px solid var(--color-border);">
-  <div class="section-wide flex h-14 items-center justify-between">
+  <div class="section-wide flex h-14 items-center justify-between sm:h-16">
     <a href="/" class="group inline-flex items-center gap-2 text-[15px] font-semibold tracking-tight">
-      <img src="/ren-avatar.jpg" alt="Ren" width="24" height="24" class="h-6 w-6 rounded-md object-cover" />
       <span class="transition-colors group-hover:text-[color:var(--color-accent)]">RenOS</span>
     </a>
 
-    <nav class="hidden items-center gap-1 sm:flex" aria-label="主导航">
+    <nav class="hidden items-center gap-1 sm:flex" aria-label="主导航" data-primary-nav>
       {navItems.map((item) => (
         <a
           href={item.href}
@@ -49,6 +48,8 @@ const path = Astro.url.pathname;
         class="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] transition-colors hover:text-[color:var(--color-text)]"
         style="color: var(--color-text-muted);"
         aria-label="搜索"
+        aria-controls="site-search"
+        aria-expanded="false"
         data-search-btn
       >
         <Icon name="mdi:magnify" class="h-4 w-4" />

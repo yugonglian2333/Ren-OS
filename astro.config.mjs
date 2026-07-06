@@ -18,7 +18,7 @@ export default defineConfig({
   trailingSlash: "ignore",
   integrations: [
     expressiveCode({
-    themes: ["vitesse-dark"],
+    themes: ["vitesse-light"],
     styleOverrides: {
       borderRadius: "8px",
       frames: { showCopyToClipboardButton: true },

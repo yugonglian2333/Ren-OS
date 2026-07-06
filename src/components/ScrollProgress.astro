@@ -1,8 +1,17 @@
 <!--
   ScrollNavigator — Codex 风格阅读进度条
-  横线条数随页面长度动态变化，hover 单个横条变宽，点击跳转
+  横线条数随页面长度动态变化，hover 中心横条最长并向两侧递减，点击跳转
 -->
-<div id="scroll-nav-wrap" role="scrollbar" aria-controls="main" tabindex="0" aria-label="阅读进度条">
+<div
+  id="scroll-nav-wrap"
+  role="scrollbar"
+  aria-controls="main"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-valuenow="0"
+  tabindex="0"
+  aria-label="阅读进度条"
+>
   <div id="scroll-nav-dashes" aria-hidden="true"></div>
 </div>
 
@@ -17,9 +26,9 @@
   #scroll-nav-wrap {
     position: fixed;
     top: 0;
-    left: 6px;
+    left: 5px;
     bottom: 0;
-    width: 20px;
+    width: 34px;
     z-index: 100;
     cursor: pointer;
     display: flex;
@@ -39,32 +48,42 @@
   #scroll-nav-dashes {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 3px;
-    padding: 16px 0;
+    padding: 16px 0 16px 8px;
     pointer-events: none;
     width: 100%;
   }
 
   .scroll-dot {
-    width: 6px;
+    width: var(--scroll-dot-width, 5px);
     height: 2px;
-    border-radius: 2px;
+    border-radius: 999px;
     flex-shrink: 0;
-    background: color-mix(in oklab, var(--color-text-muted, #5e5d59) 22%, transparent);
-    transition: width 0.15s ease, background 0.15s ease;
+    background: var(
+      --scroll-dot-color,
+      color-mix(in oklab, var(--color-text-muted, #5e5d59) 22%, transparent)
+    );
+    opacity: var(--scroll-dot-opacity, 1);
+    transition: width 0.18s var(--ease-spring, cubic-bezier(0.32, 0.72, 0, 1)),
+      background 0.16s var(--ease-out, ease),
+      opacity 0.16s var(--ease-out, ease);
   }
   .scroll-dot.is-active {
-    background: var(--color-accent, #c96442);
-    width: 12px;
+    --scroll-dot-width: 14px;
+    --scroll-dot-color: var(--color-accent, #c96442);
   }
-  .scroll-dot.is-hover {
-    width: 14px;
-    background: color-mix(in oklab, var(--color-text-muted, #5e5d59) 40%, transparent);
-  }
-  .scroll-dot.is-active.is-hover {
-    width: 16px;
-    background: var(--color-accent-hover, #d97757);
+
+  @media (max-width: 1023px), (pointer: coarse) {
+    html.scroll-custom-visible {
+      scrollbar-width: auto;
+    }
+    html.scroll-custom-visible::-webkit-scrollbar {
+      display: block;
+    }
+    #scroll-nav-wrap {
+      display: none;
+    }
   }
 </style>
 
@@ -80,10 +99,44 @@
   var dots = [];
   var ticking = false;
   var hoverIdx = -1;
+  var hoverPosition = -1;
+  var activeIdx = 0;
+  var lastPointerY = null;
   var isVisible = false;
+  var progressMedia = window.matchMedia("(min-width: 1024px) and (pointer: fine)");
+  var BASE_WIDTH = 5;
+  var ACTIVE_WIDTH = 12;
+  var HOVER_WIDTH = 15;
+  var HOVER_RADIUS = 6.5;
+  var BASE_COLOR = "color-mix(in oklab, var(--color-text-muted, #5e5d59) 22%, transparent)";
+  var ACTIVE_COLOR = "var(--color-accent, #c96442)";
+  var HOVER_COLOR = "var(--color-accent-hover, #d97757)";
+
+  function hoverCurve(distance) {
+    if (distance >= HOVER_RADIUS) return 0;
+    return (Math.cos((Math.PI * distance) / HOVER_RADIUS) + 1) / 2;
+  }
+
+  function getClientY(e) {
+    if (!e) return null;
+    if (typeof e.clientY === "number") return e.clientY;
+    if (e.touches && e.touches[0]) return e.touches[0].clientY;
+    if (e.changedTouches && e.changedTouches[0]) return e.changedTouches[0].clientY;
+    return null;
+  }
+
+  function canUseNavigator() {
+    return progressMedia.matches;
+  }
+
+  function disableNavigator() {
+    wrap.classList.remove("is-visible");
+    document.documentElement.classList.remove("scroll-custom-visible");
+    isVisible = false;
+    clearHover();
+  }
 
   function buildDots(count) {
-    // 清空
     while (container.firstChild) container.removeChild(container.firstChild);
     dots = [];
     for (var i = 0; i < count; i++) {
@@ -100,6 +153,7 @@
       dots.push(dot);
     }
     segments = count;
+    paintDots();
   }
 
   function calcSegments() {
@@ -119,14 +173,12 @@
     return false;
   }
 
-  function getScrollRatio() {
-    var ms = document.documentElement.scrollHeight - window.innerHeight;
-    if (ms <= 5) return 0;
-    return window.scrollY / ms;
-  }
-
   function update() {
-    // 内容不够两屏 → 隐藏
+    if (!canUseNavigator()) {
+      disableNavigator();
+      return;
+    }
+
     var ms = document.documentElement.scrollHeight - window.innerHeight;
     if (ms < window.innerHeight) {
       if (isVisible) {
@@ -143,16 +195,54 @@
     }
 
     var ratio = window.scrollY / ms;
-    var activeIdx = Math.round(ratio * (segments - 1));
+    activeIdx = Math.round(ratio * (segments - 1));
+    wrap.setAttribute("aria-valuenow", String(Math.round(ratio * 100)));
+    paintDots();
+  }
+
+  function paintDots() {
+    var hasHover = hoverPosition >= 0;
 
     for (var i = 0; i < segments; i++) {
-      var isActive = (i === activeIdx);
-      dots[i].classList.toggle("is-active", isActive);
+      var dot = dots[i];
+      if (!dot) continue;
+
+      var width = BASE_WIDTH;
+      var color = BASE_COLOR;
+      var opacity = 1;
+      var isActive = i === activeIdx;
+
+      if (!hasHover && isActive) {
+        width = ACTIVE_WIDTH;
+        color = ACTIVE_COLOR;
+      }
+
+      if (hasHover) {
+        var distance = Math.abs(i - hoverPosition);
+        var eased = hoverCurve(distance);
+
+        width = BASE_WIDTH + (HOVER_WIDTH - BASE_WIDTH) * eased;
+        if (i === hoverIdx) {
+          width = HOVER_WIDTH;
+        }
+        opacity = 0.5 + 0.5 * eased;
+        color =
+          i === hoverIdx
+            ? HOVER_COLOR
+            : "color-mix(in oklab, var(--color-text-muted, #5e5d59) " +
+              Math.round(22 + eased * 34) +
+              "%, transparent)";
+      }
+
+      dot.classList.toggle("is-active", isActive && !hasHover);
+      dot.style.setProperty("--scroll-dot-width", width.toFixed(1) + "px");
+      dot.style.setProperty("--scroll-dot-color", color);
+      dot.style.setProperty("--scroll-dot-opacity", opacity.toFixed(2));
     }
   }
 
-  // 鼠标悬停：高亮 hover 的 dot
   function getDotIndex(clientY) {
+    if (typeof clientY !== "number") return -1;
     if (dots.length === 0) return -1;
     var first = dots[0];
     var last = dots[dots.length - 1];
@@ -165,26 +255,54 @@
     return Math.max(0, Math.min(segments - 1, idx));
   }
 
-  function onMouseMove(e) {
-    var idx = getDotIndex(e.clientY);
-    if (idx !== hoverIdx) {
-      if (hoverIdx >= 0 && dots[hoverIdx]) dots[hoverIdx].classList.remove("is-hover");
+  function getDotPosition(clientY) {
+    if (typeof clientY !== "number") return -1;
+    if (dots.length === 0) return -1;
+    var first = dots[0];
+    var last = dots[dots.length - 1];
+    var top = first.getBoundingClientRect().top;
+    var bottom = last.getBoundingClientRect().bottom;
+    var h = bottom - top;
+    if (h <= 0) return -1;
+    var pct = (clientY - top) / h;
+    var pos = pct * (segments - 1);
+    return Math.max(0, Math.min(segments - 1, pos));
+  }
+
+  function setHoverFromClientY(clientY) {
+    if (typeof clientY !== "number") return;
+    lastPointerY = clientY;
+    var pos = getDotPosition(clientY);
+    if (pos < 0) return;
+    var idx = Math.round(pos);
+    if (idx !== hoverIdx || Math.abs(pos - hoverPosition) > 0.02) {
       hoverIdx = idx;
-      if (idx >= 0 && dots[idx]) dots[idx].classList.add("is-hover");
+      hoverPosition = pos;
+      paintDots();
     }
+  }
+
+  function clearHover() {
+    if (hoverPosition === -1) return;
+    hoverIdx = -1;
+    hoverPosition = -1;
+    lastPointerY = null;
+    paintDots();
+  }
+
+  function onMouseMove(e) {
+    if (!canUseNavigator()) return;
+    setHoverFromClientY(e.clientY);
   }
 
   function onMouseLeave() {
-    if (hoverIdx >= 0 && dots[hoverIdx]) {
-      dots[hoverIdx].classList.remove("is-hover");
-    }
-    hoverIdx = -1;
+    clearHover();
   }
 
   function jump(clientY) {
+    if (typeof clientY !== "number") return;
     var ms = document.documentElement.scrollHeight - window.innerHeight;
     if (ms < window.innerHeight) return;
-    // 通过鼠标位置算出对应的 dot 索引，再映射到滚动位置（精准定位）
     var idx = getDotIndex(clientY);
     if (idx < 0) return;
     var ratio = idx / (segments - 1);
@@ -192,18 +310,25 @@
   }
 
   function onPointer(e) {
+    if (!canUseNavigator()) return;
     e.preventDefault();
-    jump(e.clientY || (e.touches && e.touches[0].clientY));
+    var clientY = getClientY(e);
+    setHoverFromClientY(clientY);
+    jump(clientY);
     function onMove(ev) {
       ev.preventDefault();
-      jump(ev.clientY || (ev.touches && ev.touches[0].clientY));
+      var moveY = getClientY(ev);
+      setHoverFromClientY(moveY);
+      jump(moveY);
     }
-    function onEnd() {
+    function onEnd(ev) {
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseup", onEnd);
       document.removeEventListener("touchmove", onMove);
       document.removeEventListener("touchend", onEnd);
       document.body.style.userSelect = "";
+      if (ev && ev.type === "touchend") clearHover();
+      else if (!wrap.matches(":hover")) clearHover();
     }
     document.addEventListener("mousemove", onMove, { passive: false });
     document.addEventListener("mouseup", onEnd);
@@ -218,26 +343,33 @@
       requestAnimationFrame(function () {
         ticking = false;
         var changed = rebuildIfNeeded();
-        update();
-        if (changed) {
-          // 重建后重新计算 hover
-          if (hoverIdx >= 0) {
-            var idx = getDotIndexFromLastMove();
-          }
+        if (changed && lastPointerY !== null) {
+          hoverPosition = getDotPosition(lastPointerY);
+          hoverIdx = Math.round(hoverPosition);
         }
+        update();
       });
     }
   }
 
-  // 重建+更新（防抖版本）
   var rebuildTimer = null;
   function scheduleRebuild() {
     if (rebuildTimer) clearTimeout(rebuildTimer);
     rebuildTimer = setTimeout(function () {
       rebuildTimer = null;
       rebuildIfNeeded();
+      if (lastPointerY !== null) {
+        hoverPosition = getDotPosition(lastPointerY);
+        hoverIdx = Math.round(hoverPosition);
+      }
       update();
     }, 200);
+  }
+
+  function onProgressMediaChange() {
+    clearHover();
+    rebuildIfNeeded();
+    update();
   }
 
   wrap.addEventListener("mousedown", onPointer);
@@ -246,6 +378,11 @@
   wrap.addEventListener("mouseleave", onMouseLeave);
   window.addEventListener("scroll", tick, { passive: true });
   window.addEventListener("resize", scheduleRebuild, { passive: true });
+  if (progressMedia.addEventListener) {
+    progressMedia.addEventListener("change", onProgressMediaChange);
+  } else if (progressMedia.addListener) {
+    progressMedia.addListener(onProgressMediaChange);
+  }
 
   // 初始化
   function init() {

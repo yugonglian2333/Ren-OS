@@ -1,12 +1,12 @@
 {
-  "updated": "2026-07-05",
+  "updated": "2026-07-06",
   "repos": [
     {
       "name": "Ren-OS",
       "url": "https://github.com/yugonglian2333/Ren-OS",
       "description": "雨宫莲的的个人ip官网",
       "language": "Astro",
-      "updatedAt": "2026-07-05",
+      "updatedAt": "2026-07-06",
       "stars": 0
     },
     {
@@ -14,7 +14,7 @@
       "url": "https://github.com/yugonglian2333/yugonglian2333",
       "description": null,
       "language": null,
-      "updatedAt": "2026-07-05",
+      "updatedAt": "2026-07-06",
       "stars": 0
     },
     {
@@ -45,9 +45,19 @@
   "commits": [],
   "stars": [
     {
-      "repo": "rullerzhou-afk/clawd-on-desk",
-      "url": "https://github.com/rullerzhou-afk/clawd-on-desk",
-      "date": "2026-07-05"
+      "repo": "dreammis/social-auto-upload",
+      "url": "https://github.com/dreammis/social-auto-upload",
+      "date": "2026-07-06"
+    },
+    {
+      "repo": "wechatsync/Wechatsync",
+      "url": "https://github.com/wechatsync/Wechatsync",
+      "date": "2026-07-06"
+    },
+    {
+      "repo": "gitroomhq/postiz-app",
+      "url": "https://github.com/gitroomhq/postiz-app",
+      "date": "2026-07-06"
     }
   ]
 }

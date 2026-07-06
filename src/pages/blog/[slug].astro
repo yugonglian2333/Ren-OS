@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -14,9 +15,28 @@ interface Props {
   post: CollectionEntry<"blog">;
 }
 
-const { post } = Astro.props;
+const { post } = Astro.props as Props;
 const { Content, headings } = await post.render();
-const { title, description, pubDate, category, readingTime } = post.data;
+const { title, description, pubDate, category } = post.data;
+const { readingTime } = post.data as CollectionEntry<"blog">["data"] & { readingTime?: string };
+const tocHeadings = headings.filter((heading) => heading.depth > 1 && heading.depth <= 3);
+const fallbackHeadings = headings.filter((heading) => heading.depth <= 3);
+const visibleTocHeadings = tocHeadings.length > 0 ? tocHeadings : fallbackHeadings;
+const hasToc = visibleTocHeadings.length > 1;
+type TocHeading = (typeof visibleTocHeadings)[number];
+type TocSection = {
+  heading: TocHeading;
+  children: TocHeading[];
+};
+const tocSections = visibleTocHeadings.reduce<TocSection[]>((sections, heading) => {
+  if (heading.depth <= 2 || sections.length === 0) {
+    sections.push({ heading, children: [] });
+    return sections;
+  }
+
+  sections[sections.length - 1].children.push(heading);
+  return sections;
+}, []);
 
 const dateStr = pubDate.toLocaleDateString("zh-CN", {
   year: "numeric",
@@ -32,72 +52,365 @@ const dateStr = pubDate.toLocaleDateString("zh-CN", {
   publishedTime={pubDate}
   section={category}
 >
-  <article class="section">
-    <header data-fade>
-      <div class="flex items-center gap-3 text-xs flex-wrap" style="color: var(--color-text-subtle);">
-        <span class="font-mono uppercase tracking-wider" style="color: var(--color-accent);">{category}</span>
-        <span>·</span>
-        <time class="font-mono">{dateStr}</time>
-        {readingTime && (
-          <>
-            <span>·</span>
-            <span class="font-mono">{readingTime} 分钟阅读</span>
-          </>
-        )}
-      </div>
-      <h1 class="mt-3 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">{title}</h1>
-      {description && (
-        <p class="mt-3 text-[15px] leading-relaxed" style="color: var(--color-text-muted);">{description}</p>
-      )}
-    </header>
+  <div class="article-layout">
+    <div class="article-layout-spacer" aria-hidden="true"></div>
 
-    {/* 目录 TOC（可折叠） */}
-    {headings && headings.length > 1 && (
-      <details class="mt-10 rounded-lg border p-5" style="border-color: var(--color-border); background: var(--color-bg-secondary, #faf9f5);" data-fade>
-        <summary class="cursor-pointer font-mono text-xs uppercase tracking-wider" style="color: var(--color-text-subtle);">
-          目录
-        </summary>
-        <ul class="mt-3 flex flex-col gap-1.5">
-          {headings
-            .filter((h: any) => h.depth <= 3)
-            .map((h: any) => (
-              <li>
-                <a
-                  href={`#${h.slug}`}
-                  class="text-sm transition-colors hover:text-[color:var(--color-accent)]"
-                  style={{ paddingLeft: `${(h.depth - 1) * 12}px`, color: "var(--color-text-muted)" }}
-                >
-                  {h.text}
-                </a>
+    <article class="article-main">
+      <header data-fade>
+        <div class="flex items-center gap-3 text-xs flex-wrap" style="color: var(--color-text-subtle);">
+          <span class="font-mono uppercase tracking-wider" style="color: var(--color-accent);">{category}</span>
+          <span>·</span>
+          <time class="font-mono">{dateStr}</time>
+          {readingTime && (
+            <>
+              <span>·</span>
+              <span class="font-mono">{readingTime} 分钟阅读</span>
+            </>
+          )}
+        </div>
+        <h1 class="mt-3 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">{title}</h1>
+      </header>
+
+      {/* 移动端目录：桌面端会使用右侧 sticky 目录。 */}
+      {hasToc && (
+        <details class="article-toc-mobile" data-fade>
+          <summary>
+            <span class="toc-summary-label">本文目录</span>
+            <span class="toc-summary-count">{visibleTocHeadings.length} 节</span>
+          </summary>
+          <ol class="article-toc-sections">
+            {tocSections.map((section) => (
+              <li class="article-toc-section" data-toc-section>
+                <div class="article-toc-parent-row">
+                  <a
+                    href={`#${section.heading.slug}`}
+                    class:list={["article-toc-link", "article-toc-parent", `article-toc-depth-${section.heading.depth}`]}
+                  >
+                    <span class="toc-link-text">{section.heading.text}</span>
+                  </a>
+                  {section.children.length > 0 && (
+                    <button
+                      type="button"
+                      class="article-toc-toggle"
+                      aria-label={`折叠 ${section.heading.text}`}
+                      aria-expanded="true"
+                      data-toc-toggle
+                    >
+                      <Icon name="mdi:chevron-down" class="article-toc-toggle-icon" />
+                    </button>
+                  )}
+                </div>
+                {section.children.length > 0 && (
+                  <ol class="article-toc-children" data-toc-children>
+                    {section.children.map((h) => (
+                      <li>
+                        <a
+                          href={`#${h.slug}`}
+                          class:list={["article-toc-link", "article-toc-child", `article-toc-depth-${h.depth}`]}
+                        >
+                          <span class="toc-link-text">{h.text}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                )}
               </li>
             ))}
-        </ul>
-      </details>
+          </ol>
+        </details>
+      )}
+
+      <div class="prose-renos mt-10">
+        <Content />
+      </div>
+
+      {/* 评论（utterances - GitHub Issues 驱动） */}
+      <section class="comments-section" aria-labelledby="comments-title" data-fade>
+        <div class="comments-rule" aria-hidden="true"></div>
+        <div class="comments-panel">
+          <header class="comments-header">
+            <div>
+              <p class="comments-kicker">Comments</p>
+              <h2 id="comments-title" class="comments-title">留下评论</h2>
+            </div>
+            <a
+              class="comments-source"
+              href="https://github.com/yugonglian2333/Ren-OS/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="在 GitHub Issues 查看评论"
+            >
+              <Icon name="mdi:github" class="comments-source-icon" />
+              <span>GitHub Issues</span>
+            </a>
+          </header>
+          <div id="utterances-thread" class="comments-thread" aria-live="polite"></div>
+        </div>
+        <script is:inline>
+          (function () {
+            var thread = document.getElementById("utterances-thread");
+            if (!thread) return;
+
+            var lightTheme = "boxy-light";
+            var darkTheme = "github-dark-orange";
+
+            function getUtterancesTheme() {
+              return document.documentElement.classList.contains("dark") ? darkTheme : lightTheme;
+            }
+
+            function syncUtterancesTheme() {
+              var frame = document.querySelector(".utterances-frame");
+              if (!frame || !frame.contentWindow) return;
+              frame.contentWindow.postMessage(
+                { type: "set-theme", theme: getUtterancesTheme() },
+                "https://utteranc.es",
+              );
+            }
+
+            var script = document.createElement("script");
+            script.src = "https://utteranc.es/client.js";
+            script.setAttribute("repo", "yugonglian2333/Ren-OS");
+            script.setAttribute("issue-term", "pathname");
+            script.setAttribute("theme", getUtterancesTheme());
+            script.crossOrigin = "anonymous";
+            script.async = true;
+            script.addEventListener("load", function () {
+              window.setTimeout(syncUtterancesTheme, 300);
+            });
+            thread.appendChild(script);
+
+            var themeObserver = new MutationObserver(syncUtterancesTheme);
+            themeObserver.observe(document.documentElement, {
+              attributes: true,
+              attributeFilter: ["class"],
+            });
+          })();
+        </script>
+      </section>
+
+      <div class="mt-8 flex items-center justify-between border-t pt-6" style="border-color: var(--color-border);">
+        <a href="/blog" class="link-quiet text-sm">← 回文章列表</a>
+        <a href="/" class="link-quiet text-sm">回到首页</a>
+      </div>
+    </article>
+
+    {hasToc && (
+      <aside class="article-toc-desktop" aria-label="文章目录" data-fade>
+        <nav class="article-toc-panel">
+          <div class="article-toc-heading">
+            <span class="article-toc-kicker">阅读导航</span>
+            <span class="article-toc-title">本文目录</span>
+          </div>
+          <ol class="article-toc-sections">
+            {tocSections.map((section) => (
+              <li class="article-toc-section" data-toc-section>
+                <div class="article-toc-parent-row">
+                  <a
+                    href={`#${section.heading.slug}`}
+                    class:list={["article-toc-link", "article-toc-parent", `article-toc-depth-${section.heading.depth}`]}
+                  >
+                    <span class="toc-link-text">{section.heading.text}</span>
+                  </a>
+                  {section.children.length > 0 && (
+                    <button
+                      type="button"
+                      class="article-toc-toggle"
+                      aria-label={`折叠 ${section.heading.text}`}
+                      aria-expanded="true"
+                      data-toc-toggle
+                    >
+                      <Icon name="mdi:chevron-down" class="article-toc-toggle-icon" />
+                    </button>
+                  )}
+                </div>
+                {section.children.length > 0 && (
+                  <ol class="article-toc-children" data-toc-children>
+                    {section.children.map((h) => (
+                      <li>
+                        <a
+                          href={`#${h.slug}`}
+                          class:list={["article-toc-link", "article-toc-child", `article-toc-depth-${h.depth}`]}
+                        >
+                          <span class="toc-link-text">{h.text}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </aside>
     )}
-
-    <div class="prose-renos mt-10" data-fade>
-      <Content />
-    </div>
-
-    {/* 评论（utterances - GitHub Issues 驱动） */}
-    <div class="mt-16" data-fade>
-      <hr class="mb-8 border-0" style="height: 1px; background: var(--color-border);" />
-      <script
-        src="https://utteranc.es/client.js"
-        repo="yugonglian2333/Ren-OS"
-        issue-term="pathname"
-        theme="github-light"
-        crossorigin="anonymous"
-        async
-      />
-    </div>
-
-    <div class="mt-8 flex items-center justify-between border-t pt-6" style="border-color: var(--color-border);">
-      <a href="/blog" class="link-quiet text-sm">← 回文章列表</a>
-      <a href="/" class="link-quiet text-sm">回到首页</a>
-    </div>
-  </article>
+  </div>
 </BaseLayout>
+
+<script is:inline>
+  (function () {
+    /** @type {HTMLAnchorElement[]} */
+    var links = Array.prototype.slice.call(document.querySelectorAll(".article-toc-link"));
+    if (links.length === 0) return;
+
+    /**
+     * @param {HTMLAnchorElement} link
+     * @returns {string}
+     */
+    function getIdFromLink(link) {
+      var href = link.getAttribute("href") || "";
+      var raw = href.charAt(0) === "#" ? href.slice(1) : "";
+      try {
+        return decodeURIComponent(raw);
+      } catch (_error) {
+        return raw;
+      }
+    }
+
+    var targets = links
+      .map(function (link) {
+        var decodedId = getIdFromLink(link);
+        var rawId = (link.getAttribute("href") || "").slice(1);
+        var target = document.getElementById(decodedId) || document.getElementById(rawId);
+        return target;
+      })
+      .filter(function (target, index, list) {
+        return target && list.indexOf(target) === index;
+      });
+
+    if (targets.length === 0) return;
+
+    /** @type {HTMLElement[]} */
+    var headingTargets = targets;
+
+    var ticking = false;
+
+    /**
+     * @param {string} activeId
+     */
+    function setActive(activeId) {
+      links.forEach(function (link) {
+        var isActive = getIdFromLink(link) === activeId;
+        link.classList.toggle("is-active", isActive);
+        if (isActive) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    }
+
+    function updateActiveHeading() {
+      var activeId = headingTargets[0].id;
+      var offset = 112;
+
+      headingTargets.forEach(function (target) {
+        if (target.getBoundingClientRect().top <= offset) {
+          activeId = target.id;
+        }
+      });
+
+      setActive(activeId);
+    }
+
+    function scheduleUpdate() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () {
+        ticking = false;
+        updateActiveHeading();
+      });
+    }
+
+    /** @type {HTMLButtonElement[]} */
+    var toggles = Array.prototype.slice.call(document.querySelectorAll("[data-toc-toggle]"));
+    toggles.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var section = button.closest("[data-toc-section]");
+        if (!section) return;
+
+        var isCollapsed = section.classList.toggle("is-collapsed");
+        button.setAttribute("aria-expanded", String(!isCollapsed));
+        var label = button.getAttribute("aria-label") || "";
+        button.setAttribute(
+          "aria-label",
+          label.replace(isCollapsed ? "折叠" : "展开", isCollapsed ? "展开" : "折叠"),
+        );
+      });
+    });
+
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate, { passive: true });
+    updateActiveHeading();
+  })();
+</script>
+
+<script>
+  function getMermaidSource(pre: HTMLPreElement) {
+    const copyButton = pre.parentElement?.querySelector<HTMLButtonElement>(".copy button[data-code]");
+    const encodedSource = copyButton?.dataset.code;
+    if (encodedSource) {
+      return encodedSource.replace(/\u007f/g, "\n");
+    }
+
+    return pre.textContent ?? "";
+  }
+
+  async function renderMermaidBlocks() {
+    const blocks = Array.from(document.querySelectorAll<HTMLPreElement>('pre[data-language="mermaid"]'));
+    if (blocks.length === 0) return;
+
+    const { default: mermaid } = await import("mermaid");
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "base",
+      themeVariables: {
+        background: "transparent",
+        primaryColor: "#fff7ed",
+        primaryTextColor: "#141413",
+        primaryBorderColor: "#c96442",
+        lineColor: "#87867f",
+        secondaryColor: "#f8f4ee",
+        tertiaryColor: "#ffffff",
+        actorBkg: "#ffffff",
+        actorBorder: "#c96442",
+        actorTextColor: "#141413",
+        signalColor: "#5e5d59",
+        signalTextColor: "#141413",
+        noteBkgColor: "#fff7ed",
+        noteTextColor: "#141413",
+        noteBorderColor: "#e8e6dc",
+        fontFamily: "Inter, Noto Sans SC, ui-sans-serif, system-ui, sans-serif",
+      },
+    });
+
+    for (const [index, pre] of blocks.entries()) {
+      const source = getMermaidSource(pre).trim();
+      if (!source) continue;
+
+      const wrapper = pre.closest(".expressive-code") ?? pre;
+      const diagram = document.createElement("figure");
+      diagram.className = "mermaid-diagram";
+      diagram.setAttribute("aria-label", "Mermaid diagram");
+      diagram.setAttribute("data-mermaid-rendering", "true");
+      wrapper.insertAdjacentElement("beforebegin", diagram);
+
+      try {
+        const { svg, bindFunctions } = await mermaid.render(`mermaid-diagram-${index}`, source);
+        diagram.innerHTML = svg;
+        bindFunctions?.(diagram);
+        diagram.removeAttribute("data-mermaid-rendering");
+        wrapper.remove();
+      } catch (error) {
+        diagram.remove();
+        wrapper.classList.add("mermaid-diagram-fallback");
+        console.error("Failed to render Mermaid diagram", error);
+      }
+    }
+  }
+
+  renderMermaidBlocks();
+</script>
 
 <style>
   @import "@fontsource/source-sans-3/300.css";
@@ -107,6 +420,400 @@ const dateStr = pubDate.toLocaleDateString("zh-CN", {
   @import "@fontsource/source-sans-3/400-italic.css";
   @import "@fontsource/roboto-mono/400.css";
   @import "@fontsource/roboto-mono/500.css";
+
+  .article-layout {
+    --article-measure: 48rem;
+    --article-toc-width: clamp(13.5rem, 14vw, 17rem);
+    --article-toc-gap: clamp(3rem, 5vw, 6rem);
+
+    width: 100%;
+    max-width: var(--article-measure);
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  .article-main {
+    min-width: 0;
+  }
+
+  .article-layout-spacer,
+  .article-toc-desktop {
+    display: none;
+  }
+
+  .article-toc-mobile {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    background: transparent;
+    overflow: hidden;
+  }
+
+  .article-toc-mobile summary {
+    display: flex;
+    min-height: 3rem;
+    cursor: pointer;
+    list-style: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0;
+    color: var(--color-text);
+  }
+
+  .article-toc-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .article-toc-mobile summary::after {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    color: var(--color-text-subtle);
+    transform: rotate(45deg);
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .article-toc-mobile[open] summary::after {
+    transform: translateY(0.15rem) rotate(225deg);
+  }
+
+  .toc-summary-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .toc-summary-count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-text-subtle);
+  }
+
+  .article-toc-panel {
+    position: sticky;
+    top: 5.5rem;
+    max-height: calc(100dvh - 7rem);
+    overflow: auto;
+    border-left: 1px solid var(--color-border);
+    background: transparent;
+    padding: 0.15rem 0 0.15rem 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--color-text-subtle) 45%, transparent) transparent;
+  }
+
+  .article-toc-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-bottom: 1rem;
+  }
+
+  .article-toc-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    line-height: 1;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+
+  .article-toc-title {
+    font-size: 0.875rem;
+    font-weight: 650;
+    color: var(--color-text);
+  }
+
+  .article-toc-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0.6rem 0 0.9rem;
+    list-style: none;
+  }
+
+  .article-toc-panel .article-toc-sections {
+    padding: 0;
+  }
+
+  .article-toc-section {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 0.1rem;
+  }
+
+  .article-toc-parent-row {
+    display: flex;
+    min-width: 0;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .article-toc-children {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05rem;
+    margin: 0.05rem 0 0.05rem 0;
+    padding: 0 0 0 0.75rem;
+    border-left: 1px solid color-mix(in oklab, var(--color-text-muted) 14%, transparent);
+    list-style: none;
+    transform-origin: top;
+    transition: opacity var(--duration-fast) var(--ease-out);
+  }
+
+  .article-toc-section.is-collapsed .article-toc-children {
+    display: none;
+    opacity: 0;
+  }
+
+  .article-toc-section:not(.is-collapsed) .article-toc-children {
+    opacity: 1;
+  }
+
+  .article-toc-link {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .article-toc-link::before {
+    content: "";
+    position: absolute;
+    left: -1rem;
+    top: 0.65rem;
+    bottom: 0.65rem;
+    width: 2px;
+    border-radius: 999px;
+    background: transparent;
+    transition: background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .article-toc-link:hover,
+  .article-toc-link.is-active {
+    color: var(--color-text);
+  }
+
+  .article-toc-link.is-active::before {
+    background: var(--color-accent);
+  }
+
+  .article-toc-child.is-active::before {
+    left: -1.78rem;
+  }
+
+  .article-toc-toggle {
+    display: inline-flex;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: 0 0 auto;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--color-text-subtle);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .article-toc-toggle:hover {
+    color: var(--color-accent);
+  }
+
+  .article-toc-toggle-icon {
+    width: 1rem;
+    height: 1rem;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .article-toc-section.is-collapsed .article-toc-toggle-icon {
+    transform: rotate(-90deg);
+  }
+
+  .toc-link-text {
+    display: block;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .article-toc-depth-1,
+  .article-toc-depth-2 {
+    padding: 0.26rem 0 0.26rem 0;
+    font-size: 0.8125rem;
+    font-weight: 650;
+    line-height: 1.45;
+  }
+
+  .article-toc-depth-3 {
+    padding: 0.28rem 0;
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .comments-section {
+    margin-top: 4rem;
+  }
+
+  .comments-rule {
+    height: 1px;
+    margin-bottom: 2rem;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-border-strong) 16%,
+      var(--color-border-strong) 84%,
+      transparent
+    );
+  }
+
+  .comments-panel {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--color-bg-elevated) 94%, var(--color-accent-soft)),
+        color-mix(in oklab, var(--color-bg) 92%, var(--color-bg-elevated))
+      );
+    box-shadow: 0 14px 40px -30px rgba(20, 20, 19, 0.35);
+  }
+
+  .comments-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 1.1rem 1.15rem 0.8rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .comments-kicker {
+    margin: 0 0 0.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .comments-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.35;
+    color: var(--color-text);
+  }
+
+  .comments-source {
+    display: inline-flex;
+    min-height: 2rem;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-button);
+    padding: 0.38rem 0.65rem;
+    background: color-mix(in oklab, var(--color-bg-elevated) 74%, transparent);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    text-decoration: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .comments-source:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-bg-elevated);
+    color: var(--color-accent);
+  }
+
+  .comments-source-icon {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .comments-thread {
+    min-height: 13rem;
+    padding: 0.2rem 0.75rem 0.9rem;
+  }
+
+  .comments-thread :global(.utterances) {
+    max-width: none;
+    margin: 0;
+  }
+
+  .comments-thread :global(.utterances-frame) {
+    color-scheme: light;
+  }
+
+  :global(.dark) .comments-thread :global(.utterances-frame) {
+    color-scheme: dark;
+  }
+
+  @media (max-width: 640px) {
+    .comments-section {
+      margin-top: 3.25rem;
+    }
+
+    .comments-header {
+      flex-direction: column;
+      gap: 0.85rem;
+      padding: 1rem 1rem 0.85rem;
+    }
+
+    .comments-source {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .comments-thread {
+      padding-inline: 0.45rem;
+    }
+  }
+
+  @media (min-width: 1240px) {
+    .article-layout {
+      display: grid;
+      grid-template-columns:
+        minmax(0, var(--article-toc-width))
+        minmax(0, var(--article-measure))
+        minmax(0, var(--article-toc-width));
+      gap: var(--article-toc-gap);
+      max-width: calc(
+        var(--article-measure) + var(--article-toc-width) * 2 + var(--article-toc-gap) * 2
+      );
+      align-items: start;
+    }
+
+    .article-layout-spacer,
+    .article-toc-desktop {
+      display: block;
+      min-width: 0;
+    }
+
+    .article-toc-mobile {
+      display: none;
+    }
+  }
 </style>
 
 <style is:global>
@@ -293,17 +1000,19 @@ const dateStr = pubDate.toLocaleDateString("zh-CN", {
   }
 
   .prose-renos pre {
-    border: 1px solid #F4F4F4;
-    -webkit-font-smoothing: initial;
-    margin: 0.8rem 0 !important;
-    padding: 0.3rem 1rem !important;
-    line-height: 1.43rem;
-    background-color: #F8F8F8 !important;
-    border-radius: 2px;
+    border: 1px solid var(--color-border-strong);
+    -webkit-font-smoothing: antialiased;
+    margin: 1rem 0 !important;
+    padding: 1rem 1.1rem !important;
+    line-height: 1.65;
+    color: var(--color-text);
+    background-color: color-mix(in oklab, var(--color-bg-elevated) 88%, var(--color-bg)) !important;
+    border-radius: 8px;
     font-family: var(--font-monospace);
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     word-wrap: normal;
     overflow-x: auto;
+    box-shadow: none;
   }
 
   .prose-renos code,
@@ -319,9 +1028,56 @@ const dateStr = pubDate.toLocaleDateString("zh-CN", {
   .prose-renos pre code {
     padding: 0;
     border-radius: 0;
-    color: inherit;
+    color: var(--color-text);
     background-color: transparent;
     font-size: inherit;
+  }
+
+  .prose-renos .expressive-code {
+    margin: 1rem 0;
+  }
+
+  .prose-renos .expressive-code figure.frame {
+    border: 1px solid var(--color-border-strong);
+    border-radius: 8px;
+    box-shadow: none;
+  }
+
+  .prose-renos .expressive-code pre {
+    margin: 0 !important;
+  }
+
+  .prose-renos .expressive-code .ec-line,
+  .prose-renos .expressive-code .code {
+    color: var(--color-text);
+  }
+
+  .prose-renos .expressive-code span[style*="--0"] {
+    color: var(--0);
+  }
+
+  .prose-renos .mermaid-diagram {
+    display: flex;
+    justify-content: center;
+    margin: 1.2rem 0;
+    overflow-x: auto;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 8px;
+    background: color-mix(in oklab, var(--color-bg-elevated) 88%, var(--color-bg));
+    padding: 1rem;
+  }
+
+  .prose-renos .mermaid-diagram[data-mermaid-rendering="true"] {
+    min-height: 12rem;
+  }
+
+  .prose-renos .mermaid-diagram svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .prose-renos .mermaid-diagram-fallback {
+    display: block;
   }
 
   .prose-renos tt {
@@ -343,5 +1099,9 @@ const dateStr = pubDate.toLocaleDateString("zh-CN", {
 
   .prose-renos img {
     max-width: 100%;
+  }
+
+  .prose-renos :where(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 5.5rem;
   }
 </style>

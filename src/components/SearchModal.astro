@@ -1,94 +1,428 @@
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pagefind/default-ui@1.5.2/css/ui.css" />
+---
+import { Icon } from "astro-icon/components";
+---
 
-<div id="search"></div>
+<div id="site-search" class="site-search" role="dialog" aria-label="站内搜索" aria-hidden="true">
+  <div class="site-search-panel">
+    <label class="site-search-field" for="site-search-input">
+      <input
+        id="site-search-input"
+        class="site-search-input"
+        type="search"
+        placeholder="搜索 RenOS"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </label>
+    <button type="button" class="site-search-icon" aria-label="搜索" data-site-search-focus>
+      <Icon name="mdi:magnify" class="h-4 w-4" />
+    </button>
+  </div>
+  <div id="site-search-results" class="site-search-results" role="listbox" aria-live="polite"></div>
+</div>
 
-<script>
-  (function() {
-    var initialized = false;
+<script is:inline>
+  (function () {
+    var root = document.getElementById("site-search");
+    var input = document.getElementById("site-search-input");
+    var results = document.getElementById("site-search-results");
     var btn = document.querySelector("[data-search-btn]");
+    var focusBtn = document.querySelector("[data-site-search-focus]");
+    var primaryNav = document.querySelector("[data-primary-nav]");
+    var pagefindPromise = null;
+    var activeRequest = 0;
+    var debounceTimer = 0;
 
-    function initPagefind() {
-      if (initialized) return;
-      initialized = true;
+    if (!root || !input || !results || !btn || !focusBtn) return;
 
-      var container = document.getElementById("search");
-      if (!container) return;
-
-      // 检查 Pagefind 索引是否存在
-      var script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/@pagefind/default-ui@1.5.2/js/ui.js";
-      script.onload = function() {
-        if (window.PagefindUI) {
-          new window.PagefindUI({
-            element: "#search",
-            showSubResults: true,
-            showImages: false,
-          });
-        }
-      };
-      document.body.appendChild(script);
+    function setButtonState(isOpen) {
+      btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
     }
 
-    if (btn) {
-      btn.addEventListener("click", function(e) {
-        e.preventDefault();
-        initPagefind();
-        var container = document.getElementById("search");
-        if (container) {
-          container.style.display = "block";
-          // 等一小会儿让 Pagefind UI 渲染
-          setTimeout(function() {
-            var input = container.querySelector("input");
-            if (input) input.focus();
-          }, 300);
-        }
+    function alignToButton() {
+      var rect = btn.getBoundingClientRect();
+      var viewportWidth = document.documentElement.clientWidth;
+      var margin = 12;
+      var navRect = primaryNav ? primaryNav.getBoundingClientRect() : null;
+      var hasDesktopNav = navRect && window.matchMedia("(min-width: 640px)").matches;
+      var reservedLeft = hasDesktopNav ? navRect.right + 12 : margin;
+      var availableWidth = Math.max(rect.width, rect.left - reservedLeft + rect.width);
+      var width = hasDesktopNav
+        ? Math.min(252, viewportWidth - margin * 2, availableWidth)
+        : Math.min(320, viewportWidth - margin * 2);
+      var right = Math.max(margin, viewportWidth - rect.right);
+      var top = Math.max(8, rect.top);
+
+      root.style.setProperty("--site-search-width", width + "px");
+      root.style.setProperty("--site-search-top", top + "px");
+      root.style.setProperty("--site-search-right", right + "px");
+    }
+
+    function openSearch() {
+      alignToButton();
+      root.classList.add("is-open");
+      root.setAttribute("aria-hidden", "false");
+      setButtonState(true);
+
+      window.setTimeout(function () {
+        input.focus();
+      }, 180);
+    }
+
+    function closeSearch() {
+      root.classList.remove("is-open");
+      root.setAttribute("aria-hidden", "true");
+      setButtonState(false);
+    }
+
+    function loadPagefind() {
+      if (!pagefindPromise) {
+        pagefindPromise = import("/pagefind/pagefind.js").catch(function () {
+          return null;
+        });
+      }
+
+      return pagefindPromise;
+    }
+
+    function clearResults() {
+      results.replaceChildren();
+      results.classList.remove("has-results");
+    }
+
+    function renderStatus(message) {
+      results.replaceChildren();
+
+      var status = document.createElement("div");
+      status.className = "site-search-status";
+      status.textContent = message;
+      results.appendChild(status);
+      results.classList.add("has-results");
+    }
+
+    function renderResults(items, query) {
+      results.replaceChildren();
+
+      if (!items.length) {
+        renderStatus("没有找到相关内容");
+        return;
+      }
+
+      var list = document.createElement("div");
+      list.className = "site-search-result-list";
+
+      items.forEach(function (item) {
+        var link = document.createElement("a");
+        link.className = "site-search-result";
+        link.href = item.url;
+        link.setAttribute("role", "option");
+
+        var title = document.createElement("span");
+        title.className = "site-search-result-title";
+        title.textContent = item.meta && item.meta.title ? item.meta.title : item.url;
+
+        var excerpt = document.createElement("span");
+        excerpt.className = "site-search-result-excerpt";
+        excerpt.innerHTML = item.excerpt || query;
+
+        link.append(title, excerpt);
+        list.appendChild(link);
       });
+
+      results.appendChild(list);
+      results.classList.add("has-results");
     }
 
-    // 点击遮罩关闭
-    document.addEventListener("click", function(e) {
-      var container = document.getElementById("search");
-      if (container && container.style.display === "block" && !e.target.closest(".pagefind-ui") && !e.target.closest("[data-search-btn]")) {
-        container.style.display = "none";
+    async function runSearch() {
+      var query = input.value.trim();
+      var requestId = ++activeRequest;
+
+      if (!query) {
+        clearResults();
+        return;
+      }
+
+      renderStatus("正在搜索...");
+
+      var pagefind = await loadPagefind();
+      if (requestId !== activeRequest) return;
+
+      if (!pagefind || !pagefind.search) {
+        renderStatus("本地开发模式不加载搜索索引，请使用 pnpm build 后的预览页面测试搜索");
+        return;
+      }
+
+      var search = await pagefind.search(query);
+      if (requestId !== activeRequest) return;
+
+      var data = await Promise.all(
+        search.results.slice(0, 6).map(function (result) {
+          return result.data();
+        })
+      );
+      if (requestId !== activeRequest) return;
+
+      renderResults(data, query);
+    }
+
+    btn.addEventListener("click", function (event) {
+      event.preventDefault();
+
+      if (root.classList.contains("is-open")) {
+        closeSearch();
+        return;
+      }
+
+      openSearch();
+    });
+
+    focusBtn.addEventListener("click", function () {
+      input.focus();
+      runSearch();
+    });
+
+    input.addEventListener("input", function () {
+      window.clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(runSearch, 140);
+    });
+
+    document.addEventListener("click", function (event) {
+      if (
+        root.classList.contains("is-open") &&
+        !root.contains(event.target) &&
+        !event.target.closest("[data-search-btn]")
+      ) {
+        closeSearch();
       }
     });
 
-    // ESC 关闭
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "Escape") {
-        var container = document.getElementById("search");
-        if (container) container.style.display = "none";
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && root.classList.contains("is-open")) {
+        closeSearch();
+        btn.focus();
       }
+    });
+
+    window.addEventListener("resize", function () {
+      if (root.classList.contains("is-open")) alignToButton();
     });
   })();
 </script>
 
-<style>
-  #search {
-    display: none;
+<style is:global>
+  .site-search {
+    --site-search-width: 252px;
+    --site-search-top: 10px;
+    --site-search-right: 20px;
     position: fixed;
-    inset: 0;
-    z-index: 999;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 8vh 5vw;
-    overflow-y: auto;
+    top: var(--site-search-top);
+    right: var(--site-search-right);
+    z-index: 80;
+    width: 40px;
+    pointer-events: none;
+    opacity: 0;
+    transform-origin: right center;
+    transition:
+      width 260ms var(--ease-spring),
+      opacity 120ms var(--ease-out),
+      transform 260ms var(--ease-spring);
   }
-  #search.is-open {
-    display: block;
+
+  .site-search.is-open {
+    width: var(--site-search-width);
+    pointer-events: auto;
+    opacity: 1;
   }
-  .pagefind-ui {
-    --pagefind-ui-primary: var(--color-accent, #c96442);
-    --pagefind-ui-text: var(--color-text, #141413);
-    --pagefind-ui-background: var(--color-bg-elevated, #fff);
-    --pagefind-ui-border: var(--color-border, #f0eee6);
-    --pagefind-ui-tag: var(--color-accent-soft, #f0e3dc);
-    --pagefind-ui-font: var(--font-sans, system-ui);
-    --pagefind-ui-scale: 0.9;
-    max-width: 640px;
-    margin: 0 auto;
+
+  .site-search-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 24px;
+    align-items: center;
+    height: 36px;
+    overflow: hidden;
+    border: 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-text) 14%, transparent);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: scaleX(0.14);
+    transform-origin: right center;
+    transition:
+      transform 280ms var(--ease-spring),
+      border-color var(--duration-base) var(--ease-out),
+      opacity var(--duration-base) var(--ease-out);
   }
-  .pagefind-ui__search-clear {
+
+  .site-search.is-open .site-search-panel {
+    transform: scaleX(1);
+  }
+
+  .site-search-panel:focus-within {
+    border-color: var(--color-accent);
+    box-shadow: none;
+  }
+
+  .site-search-field {
+    min-width: 0;
+    opacity: 0;
+    transform: translateX(10px);
+    transition:
+      opacity 160ms var(--ease-out) 90ms,
+      transform 220ms var(--ease-spring) 70ms;
+  }
+
+  .site-search.is-open .site-search-field {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .site-search-input {
+    width: 100%;
+    min-width: 0;
+    height: 34px;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+    padding: 0 2px 0 0;
+    font: inherit;
+    font-size: 14px;
+    outline: 0;
+  }
+
+  .site-search-input::placeholder {
+    color: var(--color-text-subtle);
+  }
+
+  .site-search-input:focus-visible {
+    outline: 0;
+  }
+
+  .site-search-input::-webkit-search-decoration,
+  .site-search-input::-webkit-search-cancel-button {
     display: none;
+  }
+
+  .site-search-icon {
+    display: inline-flex;
+    height: 36px;
+    width: 24px;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-spring);
+  }
+
+  .site-search-icon:hover {
+    color: var(--color-text);
+  }
+
+  .site-search.is-open .site-search-icon {
+    color: color-mix(in oklab, var(--color-accent) 80%, var(--color-text-muted));
+  }
+
+  [data-search-btn][aria-expanded="true"] > * {
+    opacity: 0;
+  }
+
+  .site-search-results {
+    display: none;
+    margin-top: 8px;
+    overflow: hidden;
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    border-radius: 0;
+    background: color-mix(in oklab, var(--color-bg) 96%, transparent);
+    box-shadow: none;
+    backdrop-filter: blur(12px);
+  }
+
+  .site-search-results.has-results {
+    display: block;
+    animation: site-search-results-in 180ms var(--ease-out);
+  }
+
+  .site-search-status {
+    padding: 10px 0;
+    color: var(--color-text-muted);
+    font-size: 13px;
+  }
+
+  .site-search-result-list {
+    display: grid;
+    max-height: min(420px, calc(100vh - 86px));
+    overflow-y: auto;
+    padding: 6px 0;
+  }
+
+  .site-search-result {
+    display: grid;
+    gap: 3px;
+    border-radius: 0;
+    padding: 9px 0;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-border) 72%, transparent);
+    color: var(--color-text);
+    text-decoration: none;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .site-search-result:hover,
+  .site-search-result:focus-visible {
+    background: transparent;
+    color: var(--color-accent);
+  }
+
+  .site-search-result-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .site-search-result-excerpt {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--color-text-muted);
+    font-size: 12px;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .site-search-result-excerpt mark {
+    border-radius: 3px;
+    background: var(--color-accent-soft);
+    color: var(--color-text);
+  }
+
+  @keyframes site-search-results-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .site-search {
+      right: 12px !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-search,
+    .site-search-panel,
+    .site-search-field,
+    .site-search-results.has-results {
+      animation: none;
+      transition: none;
+    }
   }
 </style>

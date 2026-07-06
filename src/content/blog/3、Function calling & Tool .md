@@ -1,4 +1,10 @@
-## **Function calling** & **Tool** 
+---
+title: "Function Calling 与 Tool"
+description: "关于 Function Calling、Tool 调用链路与工具分类的学习草稿。"
+pubDate: 2026-07-06
+category: "学习笔记"
+draft: false
+---
 
 ### 1、名词解释
 

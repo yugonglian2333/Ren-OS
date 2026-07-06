@@ -1,12 +1,12 @@
 ---
-title: "Agent 开发笔记 —— 基础概念与架构"
+title: "Agent 开发笔记合集"
 description: "什么是 Agent？LLM / Agent / Skill / Tool 的区别与关系，从厨房比喻到 OpenClaw 实践的入门梳理。"
 pubDate: 2026-07-05
 category: "学习笔记"
 draft: false
----
+pinned: true
 
-# Agent 开发笔记
+---
 
 ## 一、基础名词/概念
 
