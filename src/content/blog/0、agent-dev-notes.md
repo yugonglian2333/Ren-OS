@@ -74,7 +74,7 @@ Agent = LLM + Harness;
 1. [**LLM**大语言模型 & **prompt** 提示词工程](./1、LLM大语言模型%20&%20prompt提示词工程.md)
 2. [**context** 上下文](./2、context上下文.md)
 3. [**Function** & **Function calling** & **Tool**](./3、Function%20&%20Function%20calling%20&%20Tool.md)
-4. [**SKILL**技能 & **MCP** & 插件](./4、SKILL技能%20&%20MCP%20&%20插件.md)
+4. [**API**、**SDK**、**SKILL** 技能、**MCP** 与插件](./4、SKILL技能%20&%20MCP%20&%20插件.md)
 5. [**router** 路由](./5、router路由.md)
 6. [**ReAct loop** 循环](./6、ReAct%20loop循环.md)
 7. [**harness**驾驭工程](./7、harness驾驭工程.md)
