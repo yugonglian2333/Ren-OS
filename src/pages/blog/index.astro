@@ -8,7 +8,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, 
   return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
 });
 
-const categories = ["AI 周记", "TIL", "学习笔记", "项目复盘"] as const;
+const categories = ["AI 周记", "TIL", "工具", "学习笔记", "项目复盘", "面经"] as const;
 const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat);
 ---
 
@@ -36,7 +36,7 @@ const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat)
     {posts.length === 0 ? (
       <div data-fade>
         <p class="mt-10 text-[15px]" style="color: var(--color-text-muted);">
-          第一篇还在路上。骨架已搭好（AI 周记 / TIL / 项目复盘），随手往
+          第一篇还在路上。骨架已搭好（AI 周记 / TIL / 工具 / 学习笔记 / 项目复盘 / 面经），随手往
           <code class="font-mono text-xs" style="color: var(--color-accent);">src/content/blog/</code>
           丢一个 mdx 就能上线。
         </p>

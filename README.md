@@ -41,7 +41,7 @@ pnpm check        # 类型检查
 title: "文章标题"
 description: "一句话摘要"
 pubDate: 2026-07-05
-category: "AI 周记"   # 四选一：AI 周记 / TIL / 学习笔记 / 项目复盘
+category: "AI 周记"   # 五选一：AI 周记 / TIL / 学习笔记 / 项目复盘 / 面经
 draft: false          # true 则不发布
 ---
 ```
@@ -49,11 +49,12 @@ draft: false          # true 则不发布
 3. 正文用 Markdown / MDX 写，图片放 `public/blog-img/`，引用时写 `![](../../../public/blog-img/xxx.png)` 或用相对路径
 4. `pnpm dev` 实时预览，满意后 `draft: false` 提交推送，Vercel 自动部署
 
-**四个栏目定位**：
+**五个栏目定位**：
 - **AI 周记**：每周一篇，记本周看到的新东西 + 短判断
 - **TIL**：Today I Learned 碎片笔记
 - **学习笔记**：成体系的学习总结与教程
 - **项目复盘**：做完某个功能写"为什么这么设计"
+- **面经**：记录每次面试中遇到的问题、回答思路和复盘
 
 > 文章正文样式由 `src/pages/blog/[slug].astro` 里的 `.prose-renos` 全局样式控制，会随深浅模式联动。要调排版改这里。
 

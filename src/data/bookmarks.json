@@ -1,24 +1,52 @@
 {
   "categories": [
     {
-      "label": "AI / Agent",
+      "label": "模型 / API",
       "items": [
         { "name": "OpenAI Developers", "url": "https://developers.openai.com/api/docs", "note": "API / Agents / 工具调用" },
         { "name": "Anthropic Docs", "url": "https://docs.anthropic.com", "note": "Claude API 文档" },
-        { "name": "Building effective agents", "url": "https://www.anthropic.com/engineering/building-effective-agents", "note": "Agent 工程方法论" },
-        { "name": "Hugging Face Agents Course", "url": "https://huggingface.co/learn/agents-course/zh-CN/unit0/introduction", "note": "Agent 入门课程" },
-        { "name": "Learn Prompting", "url": "https://learnprompting.org/zh-Hans/docs/introduction", "note": "Prompt 工程教程" },
-        { "name": "Papers with Code", "url": "https://paperswithcode.com", "note": "论文 + 代码" }
-      ]
-    },
-    {
-      "label": "模型 / API",
-      "items": [
         { "name": "DeepSeek API", "url": "https://api-docs.deepseek.com", "note": "国产模型 API" },
         { "name": "Google AI Developers", "url": "https://ai.google.dev/gemini-api/docs", "note": "Gemini API" },
         { "name": "阿里云百炼", "url": "https://help.aliyun.com/zh/model-studio/model-api-reference/", "note": "通义千问 / 模型 API" },
         { "name": "火山方舟", "url": "https://www.volcengine.com/docs/82379", "note": "豆包 / 推理平台" },
         { "name": "Kimi API", "url": "https://platform.kimi.com/docs/overview", "note": "长上下文 / Coding" }
+      ]
+    },
+    {
+      "label": "Agent 工程",
+      "items": [
+        { "name": "Model Context Protocol", "url": "https://modelcontextprotocol.io/docs/getting-started/intro", "note": "工具 / 资源 / 上下文协议" },
+        { "name": "Vercel AI SDK", "url": "https://ai-sdk.dev/docs", "note": "流式输出 / 工具调用 / 结构化输出" },
+        { "name": "LangGraph", "url": "https://docs.langchain.com/oss/javascript/langgraph/overview", "note": "状态机式 Agent / 持久化 / 中断恢复" },
+        { "name": "OpenAI Cookbook", "url": "https://cookbook.openai.com", "note": "API 实战范例" },
+        { "name": "Building effective agents", "url": "https://www.anthropic.com/engineering/building-effective-agents", "note": "Agent 工程方法论" },
+        { "name": "Hugging Face Agents Course", "url": "https://huggingface.co/learn/agents-course/zh-CN/unit0/introduction", "note": "Agent 入门课程" }
+      ]
+    },
+    {
+      "label": "RAG / 应用框架",
+      "items": [
+        { "name": "LlamaIndex", "url": "https://developers.llamaindex.ai/python/framework/", "note": "RAG / 索引 / 检索 / 数据连接器" },
+        { "name": "LangChain", "url": "https://docs.langchain.com/oss/javascript/langchain/overview", "note": "LLM 应用组件与编排" },
+        { "name": "Microsoft Semantic Kernel", "url": "https://learn.microsoft.com/en-us/semantic-kernel/", "note": "企业级 Agent / 插件 / Memory" },
+        { "name": "Pinecone Docs", "url": "https://docs.pinecone.io", "note": "向量数据库 / 语义检索" },
+        { "name": "Weaviate Docs", "url": "https://docs.weaviate.io/weaviate", "note": "向量搜索 / RAG 数据层" }
+      ]
+    },
+    {
+      "label": "AI 安全",
+      "items": [
+        { "name": "OWASP LLM Top 10", "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/", "note": "LLM 应用安全风险" },
+        { "name": "OWASP GenAI Security Project", "url": "https://genai.owasp.org", "note": "生成式 AI 安全资料库" },
+        { "name": "Google SAIF", "url": "https://saif.google/", "note": "AI 系统安全框架" },
+        { "name": "NIST AI RMF", "url": "https://www.nist.gov/itl/ai-risk-management-framework", "note": "AI 风险管理框架" }
+      ]
+    },
+    {
+      "label": "AI 学习资源",
+      "items": [
+        { "name": "Learn Prompting", "url": "https://learnprompting.org/zh-Hans/docs/introduction", "note": "Prompt 工程教程" },
+        { "name": "Papers with Code", "url": "https://paperswithcode.com", "note": "论文 + 代码" }
       ]
     },
     {

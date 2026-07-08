@@ -71,59 +71,34 @@ Agent = LLM + Harness;
 
 在正式学习如何完成一个 Agent 的开发之前，我们先需要进行一些基础概念名词的科普，有助于帮助我们更好的理解在开发过程中的一些设计与思想:
 
-### 1、**LLM**大语言模型 & **prompt** 提示词工程
-
-### 2、**context** 上下文
-
-### 3、**Function** & **Function calling** & **Tool** 
-
-### 4、**SKILL**技能 & **MCP** & 插件
-
-### 5、**router** 路由
-
-### 6、**ReAct loop** 循环
-
-### 7、**harness**驾驭工程
-
-### 8、**RAG** 检索增强技术
-
-### 9、**Langgraph & langchain**
-
-### 10、**Workflow**
-
-### 11、（**Session** 会话 & **Storage**持久化 & **Memory**记忆） 辨析
-
-### 12、**Sandbox** 沙盒
-
-### 13、**trace** 追踪 痕迹
-
-### 14、**Orchestrator** 编排器
-
-### 15、**Planner** 规划器
-
-### 16、**Executor** 执行器
-
-### 17、**Runtime** 运行时
-
-### 18、**State** 状态
-
-### 19、**Checkpointing** 检查点
-
-### 20、**Middleware** 中间件
-
-### 21、**Agent**分类
-
-### 22、**A2A**(Agent-to-Agent 协议) & MCP & Plugin 插件
-
-### 23、Human-in-the-loop / Approval Gate
-
-### 24、Structured Output / Schema
-
-### 25、Idempotency
-
-### 26、Interrupt / Resume
-
-### 27、token
+1. [**LLM**大语言模型 & **prompt** 提示词工程](./1、LLM大语言模型%20&%20prompt提示词工程.md)
+2. [**context** 上下文](./2、context上下文.md)
+3. [**Function** & **Function calling** & **Tool**](./3、Function%20&%20Function%20calling%20&%20Tool.md)
+4. [**SKILL**技能 & **MCP** & 插件](./4、SKILL技能%20&%20MCP%20&%20插件.md)
+5. [**router** 路由](./5、router路由.md)
+6. [**ReAct loop** 循环](./6、ReAct%20loop循环.md)
+7. [**harness**驾驭工程](./7、harness驾驭工程.md)
+8. [**RAG** 检索增强技术](./8、RAG检索增强技术.md)
+9. [**Langgraph & langchain**](./9、Langgraph%20&%20langchain.md)
+10. [**Workflow**](./10、Workflow.md)
+11. [（**Session** 会话 & **Storage**持久化 & **Memory**记忆） 辨析](./11、Session会话%20&%20Storage持久化%20&%20Memory记忆辨析.md)
+12. [Sandbox 沙盒](./12、Sandbox沙盒.md)
+13. [**trace** 追踪痕迹](./13、trace追踪痕迹.md)
+14. [**Orchestrator** 编排器](./14、Orchestrator编排器.md)
+15. [**Planner** 规划器](./15、Planner规划器.md)
+16. [**Executor** 执行器](./16、Executor执行器.md)
+17. [**Runtime** 运行时](./17、Runtime运行时.md)
+18. [State状态](./18、State状态.md)
+19. [**Checkpointing** 检查点](./19、Checkpointing检查点.md)
+20. [**Middleware** 中间件](./20、Middleware中间件.md)
+21. [**Agent**分类](./21、Agent分类.md)
+22. [**A2A**(Agent-to-Agent 协议) & MCP & Plugin 插件](./22、A2A(Agent-to-Agent协议)%20&%20MCP%20&%20Plugin插件.md)
+23. [Human-in-the-loop / Approval Gate](./23、Human-in-the-loop%20&%20Approval%20Gate.md)
+24. [Structured Output / Schema](./24、Structured%20Output%20&%20Schema.md)
+25. [Idempotency](./25、Idempotency.md)
+26. [Interrupt / Resume](./26、Interrupt%20&%20Resume.md)
+27. [token](./27、Token.md)
+28. [**Loop Engineering** 循环工程](./28、Loop%20Engineering循环工程.md)
 
 ```
 1. Agent 是什么
@@ -140,8 +115,6 @@ Agent = LLM + Harness;
 12. Guardrails / Policy / Approval / Sandbox
 13. Observability: Trace / Logs / Audit / Usage
 14. Eval / Red Teaming
-15. MCP / Plugin / A2A
-16. WayLog Agent 架构设计
 ```
 
 ## 二、Agent架构设计

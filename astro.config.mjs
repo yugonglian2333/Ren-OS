@@ -10,6 +10,7 @@ import critters from "astro-critters";
 import icon from "astro-icon";
 import rehypeAutolink from "rehype-autolink-headings";
 import { remarkReadingTime } from "./src/utils/reading-time.mjs";
+import { rehypeBlogMdLinks, remarkBlogMdLinks } from "./src/utils/rehype-blog-md-links.mjs";
 
 const SITE = "https://www.renos.top";
 
@@ -36,8 +37,9 @@ export default defineConfig({
   icon(),
   ],
   markdown: {
-    remarkPlugins: [remarkReadingTime],
+    remarkPlugins: [remarkBlogMdLinks, remarkReadingTime],
     rehypePlugins: [
+      rehypeBlogMdLinks,
       [rehypeAutolink, {
         behavior: "wrap",
         properties: { class: "heading-anchor" },

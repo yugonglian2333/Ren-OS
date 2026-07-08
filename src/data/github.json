@@ -1,19 +1,19 @@
 {
-  "updated": "2026-07-06",
+  "updated": "2026-07-07",
   "repos": [
-    {
-      "name": "Ren-OS",
-      "url": "https://github.com/yugonglian2333/Ren-OS",
-      "description": "雨宫莲的的个人ip官网",
-      "language": "Astro",
-      "updatedAt": "2026-07-06",
-      "stars": 0
-    },
     {
       "name": "yugonglian2333",
       "url": "https://github.com/yugonglian2333/yugonglian2333",
       "description": null,
       "language": null,
+      "updatedAt": "2026-07-07",
+      "stars": 0
+    },
+    {
+      "name": "Ren-OS",
+      "url": "https://github.com/yugonglian2333/Ren-OS",
+      "description": "雨宫莲的的个人ip官网",
+      "language": "Astro",
       "updatedAt": "2026-07-06",
       "stars": 0
     },
@@ -45,18 +45,23 @@
   "commits": [],
   "stars": [
     {
-      "repo": "dreammis/social-auto-upload",
-      "url": "https://github.com/dreammis/social-auto-upload",
-      "date": "2026-07-06"
+      "repo": "nexu-io/open-design",
+      "url": "https://github.com/nexu-io/open-design",
+      "date": "2026-07-07"
     },
     {
-      "repo": "wechatsync/Wechatsync",
-      "url": "https://github.com/wechatsync/Wechatsync",
-      "date": "2026-07-06"
+      "repo": "awesome-selfhosted/awesome-selfhosted",
+      "url": "https://github.com/awesome-selfhosted/awesome-selfhosted",
+      "date": "2026-07-07"
     },
     {
-      "repo": "gitroomhq/postiz-app",
-      "url": "https://github.com/gitroomhq/postiz-app",
+      "repo": "meituan-longcat/LongCat-Video",
+      "url": "https://github.com/meituan-longcat/LongCat-Video",
+      "date": "2026-07-07"
+    },
+    {
+      "repo": "nextai-translator/nextai-translator",
+      "url": "https://github.com/nextai-translator/nextai-translator",
       "date": "2026-07-06"
     }
   ]
