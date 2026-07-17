@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "astro dev",
     "cms": "netlify-cms-proxy-server",
-    "build": "node src/scripts/fetch-github.mjs && astro build && npx pagefind --site dist",
+    "build": "astro build && npx pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro"

@@ -63,22 +63,6 @@ collections:
       - { label: "BTC 故事", name: "btcStory", widget: "list", summary: "{{fields.q}}", fields:
           [{ label: "问题", name: "q", widget: "string" }, { label: "回答", name: "a", widget: "text" }] }
 
-  - name: now
-    label: 此刻页
-    format: json
-    folder: src/data
-    slug: now
-    create: false
-    delete: false
-    fields:
-      - { label: "最后更新", name: "updated", widget: "string" }
-      - { label: "Sections", name: "sections", widget: "list", summary: "{{fields.label}}", fields:
-          [{ label: "标题", name: "label", widget: "string" },
-           { label: "条目", name: "items", widget: "list", summary: "{{fields.title}}", fields:
-              [{ label: "标题", name: "title", widget: "string" }, { label: "描述", name: "desc", widget: "text" },
-               { label: "链接文字", name: "link_label", widget: "string", required: false },
-               { label: "链接 URL", name: "link_href", widget: "string", required: false }] }] }
-
   - name: projects
     label: 项目页
     format: json

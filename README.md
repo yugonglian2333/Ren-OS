@@ -57,20 +57,6 @@ draft: false          # true 则不发布
 
 > 文章正文样式由 `src/pages/blog/[slug].astro` 里的 `.prose-renos` 全局样式控制，会随深浅模式联动。要调排版改这里。
 
-### 更新"此刻"页
-
-编辑 `src/pages/now.astro`，改 `sections` 数组。五个 section：
-
-| Section | 放什么 |
-|---|---|
-| 正在投入 | 主项目深度描述 |
-| 在跟 / 在学 | 在跟的技术/领域 |
-| 在读 / 在听 | 论文/文章/书/音乐 |
-| 生活 & 其他 | 生活状态 |
-| 暂停 / 不接 | 公开优先级，帮你挡事 |
-
-改完顺手把 `updated` 日期变量改成今天。/now 理念是"告诉一年没见的朋友你最近在干嘛"，是大图景不是 todo 清单。
-
 ### 更新"关于"页
 
 编辑 `src/pages/about.astro`，三个数据数组：
@@ -85,11 +71,11 @@ draft: false          # true 则不发布
 
 ### 改首页 Bento 卡片
 
-编辑 `src/pages/index.astro`。Bento Hero 区是 6 块卡片（主卡 / Now / 旗舰项目 / 最新文章 / GitHub / 社交），下方单栏是最新文章列表 + 项目入口。最新文章自动从 `src/content/blog/` 拉取，不用手动改。
+编辑 `src/pages/index.astro`。首页包含个人介绍、旗舰项目、最新文章和关于入口。最新文章自动从 `src/content/blog/` 拉取，不用手动改。
 
 ### 改导航栏
 
-编辑 `src/components/nav.ts` 的 `navItems` 数组。桌面端导航和移动端抽屉都从这里读，改一处全站生效。当前 5 项：首页 / 项目 / 文章 / 此刻 / 关于。
+编辑 `src/components/nav.ts` 的 `navItems` 数组。桌面端导航从这里读取；移动端导航在 `src/components/MobileNav.astro` 中维护。当前 4 项：首页 / 项目 / 文章 / 关于。
 
 ### 改社交链接
 
@@ -162,7 +148,6 @@ draft: false          # true 则不发布
 
 | 变量名 | 必填 | 说明 |
 |---|---|---|
-| `GITHUB_TOKEN` | 否 | GitHub Personal Access Token，用于 /now 页拉取仓库动态 |
 | `PUBLIC_UMAMI_URL` | 否 | Umami 统计实例地址，如 `https://cloud.umami.is` |
 | `PUBLIC_UMAMI_ID` | 否 | Umami 站点 ID |
 
@@ -232,25 +217,6 @@ PUBLIC_UMAMI_ID=你的站点ID
 
 ---
 
-## /now 页 GitHub 动态
-
-`/now` 页除了手动编辑的 sections，还会在构建时自动拉取 GitHub 公开仓库列表，显示为「最近仓库动态」。
-
-需要配置 `GITHUB_TOKEN`：
-
-1. 在 [GitHub Token 设置页](https://github.com/settings/tokens) 生成 classic token
-2. 权限选 `Public repositories`（read-only）
-3. 写入 `.env` 文件：
-
-```
-GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
-PUBLIC_GITHUB_USER=yugonglian2333
-```
-
-> `.env` 已在 `.gitignore` 中，不会提交到仓库。部署到 Vercel 时需在 Settings → Environment Variables 中手动添加。
-
----
-
 ## 项目结构
 
 ```
@@ -273,7 +239,6 @@ src/
 │   ├── blog/
 │   │   ├── index.astro       # 文章列表
 │   │   └── [slug].astro      # 文章详情（含 .prose-renos 正文样式）
-│   ├── now.astro             # 此刻页（五段式）
 │   ├── about.astro           # 关于页（定位 + 四原则 + 经历 + 技能栈 + 联系）
 │   ├── 404.astro             # 404 页
 │   └── rss.xml.ts            # RSS 端点
@@ -299,5 +264,4 @@ public/
 - **赤陶橙只用在三处**：强调符号（&、·、tag）/ 主 CTA / 链接 hover，其余回归中性色。不滥用。
 - **移动端导航是全屏覆盖式**（参考苹果官网），不是侧边抽屉。因为 `backdrop-blur` 会破坏 `position: fixed` 的 containing block，全屏方案规避了这个 CSS 坑。
 - **关于页合并了简历**：没有独立 /cv 页，经历和技能栈直接放在 /about 里，对标 stevenpetryk.com 的做法。
-- **/now 页理念**：参考 Derek Sivers 的 nownownow 运动——"告诉一年没见的朋友你最近在干嘛"，是大图景不是 todo 清单。
 - **文章正文样式**：`[slug].astro` 里的 `.prose-renos` 是手写的 prose 样式，用全站 token 体系，会随深浅模式联动。没用 Typora CSS（许可证 + 设计一致性都不允许）。
