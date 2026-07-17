@@ -71,7 +71,7 @@ Agent = LLM + Harness;
 
 在正式学习如何完成一个 Agent 的开发之前，我们先需要进行一些基础概念名词的科普，有助于帮助我们更好的理解在开发过程中的一些设计与思想:
 
-1. [**LLM**大语言模型 & **prompt** 提示词工程](./1、LLM大语言模型%20&%20prompt提示词工程.md)
+1. [**LLM & Prompt & Token**](./1、LLM大语言模型%20&%20prompt提示词工程.md)
 2. [**context** 上下文](./2、context上下文.md)
 3. [**Function** & **Function calling** & **Tool**](./3、Function%20&%20Function%20calling%20&%20Tool.md)
 4. [**API**、**SDK**、**SKILL** 技能、**MCP** 与插件](./4、SKILL技能%20&%20MCP%20&%20插件.md)
@@ -97,8 +97,7 @@ Agent = LLM + Harness;
 24. [Structured Output / Schema](./24、Structured%20Output%20&%20Schema.md)
 25. [Idempotency](./25、Idempotency.md)
 26. [Interrupt / Resume](./26、Interrupt%20&%20Resume.md)
-27. [token](./27、Token.md)
-28. [**Loop Engineering** 循环工程](./28、Loop%20Engineering循环工程.md)
+27. [**Loop Engineering** 循环工程](./28、Loop%20Engineering循环工程.md)
 
 ```
 1. Agent 是什么
