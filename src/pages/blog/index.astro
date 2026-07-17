@@ -8,7 +8,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, 
   return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
 });
 
-const categories = ["AI 周记", "TIL", "工具", "学习笔记", "项目复盘", "面经"] as const;
+const categories = ["AI 周记", "TIL", "工具", "学习笔记", "项目介绍", "项目复盘", "面经"] as const;
 const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat);
 ---
 
@@ -26,17 +26,20 @@ const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat)
       <a href="/blog" class="category-tab" data-cat="">全部（{posts.length}）</a>
       {categories.map((cat) => {
         const count = byCategory(cat).length;
-        if (count === 0) return null;
         return (
-          <a href={`/blog?category=${encodeURIComponent(cat)}`} class="category-tab" data-cat={cat}>{cat}（{count}）</a>
+          <a href={`/blog?category=${encodeURIComponent(cat)}`} class="category-tab" data-cat={cat} data-count={count}>{cat}（{count}）</a>
         );
       })}
     </div>
 
+    <p id="empty-category" class="mt-10 hidden text-sm" style="color: var(--color-text-muted);" data-fade>
+      这个分类还没有文章。
+    </p>
+
     {posts.length === 0 ? (
       <div data-fade>
         <p class="mt-10 text-[15px]" style="color: var(--color-text-muted);">
-          第一篇还在路上。骨架已搭好（AI 周记 / TIL / 工具 / 学习笔记 / 项目复盘 / 面经），随手往
+          第一篇还在路上。骨架已搭好（AI 周记 / TIL / 工具 / 学习笔记 / 项目介绍 / 项目复盘 / 面经），随手往
           <code class="font-mono text-xs" style="color: var(--color-accent);">src/content/blog/</code>
           丢一个 mdx 就能上线。
         </p>
@@ -90,12 +93,14 @@ const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat)
 function applyCategoryFilter() {
     const params = new URLSearchParams(location.search);
     const active = params.get("category") || "";
+    let activeCount = 0;
 
     // 切换 tab 高亮
     document.querySelectorAll("#category-tabs .category-tab").forEach((tab) => {
       if (!(tab instanceof HTMLElement)) return;
       const cat = tab.dataset.cat || "";
       tab.classList.toggle("category-tab-active", cat === active);
+      if (cat === active) activeCount = Number(tab.dataset.count || 0);
     });
 
     // 切换文章分类显隐
@@ -108,6 +113,8 @@ function applyCategoryFilter() {
         sec.style.display = "none";
       }
     });
+
+    document.querySelector("#empty-category")?.classList.toggle("hidden", !active || activeCount > 0);
   }
 
   // 初始加载 + Astro 导航时都触发
