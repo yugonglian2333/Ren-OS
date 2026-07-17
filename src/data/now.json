@@ -23,8 +23,8 @@
       "items": [
         {
           "title": "AI 前沿动态",
-          "desc": "新模型、新 agent 框架、新研究。看到值得的会写进 AI 周记，不追热度。",
-          "link_label": "读周记",
+          "desc": "新模型、新 agent 框架、新研究。看到值得的会写成学习笔记，不追热度。",
+          "link_label": "读文章",
           "link_href": "/blog"
         },
         {
