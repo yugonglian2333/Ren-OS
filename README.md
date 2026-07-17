@@ -1,7 +1,7 @@
 # RenOS — 个人网站
 
 > AI builder.
-> 在造旅行助手一路记 WayLog，做 Agent 提案式编辑；持续跟踪 AI 前沿，写下所见所学。
+> 把 idea 快速落地并持续迭代，正在打造旅行助手一路记 WayLog 与桌面语音输入工具 Saymore。
 
 技术人版 Bento：首页 Hero 区用 Bento 卡片墙释放视觉冲击，内容区回到稳重单栏。
 

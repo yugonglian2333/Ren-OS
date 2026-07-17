@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-05",
+  "updated": "2026-07-17",
   "sections": [
     {
       "label": "正在投入",
@@ -7,6 +7,12 @@
         {
           "title": "一路记 WayLog · Agent 提案式编辑",
           "desc": "把 Agent 接进旅行编辑闭环——结构化 AgentProposal、预览→确认→授权→本地写入→云同步。让 AI 只能提议，不能擅动。",
+          "link_label": "看项目",
+          "link_href": "/projects"
+        },
+        {
+          "title": "Saymore · 桌面语音输入",
+          "desc": "把自然表达变成可以直接使用的文字：跨应用语音输入、中英混合识别、可选 LLM 精炼，以及本地优先的隐私与模型控制。",
           "link_label": "看项目",
           "link_href": "/projects"
         }
@@ -45,7 +51,7 @@
       "items": [
         {
           "title": "暂不接外包",
-          "desc": "精力集中在 WayLog 和自己的写作上。感谢理解。",
+          "desc": "精力集中在 WayLog、Saymore 和自己的写作上。感谢理解。",
           "link_label": "",
           "link_href": ""
         }
