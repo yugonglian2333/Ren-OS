@@ -17,6 +17,9 @@ const SITE = "https://www.renos.top";
 export default defineConfig({
   site: SITE,
   trailingSlash: "ignore",
+  redirects: {
+    "/now": "/about",
+  },
   integrations: [
     expressiveCode({
     themes: ["vitesse-light"],

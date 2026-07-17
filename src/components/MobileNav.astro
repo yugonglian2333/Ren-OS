@@ -1,15 +1,7 @@
 ---
-import { isActive } from "./nav";
-import { BLOG_CATEGORIES } from "../content/categories";
+import { isActive, navItems } from "./nav";
 
 const path = Astro.url.pathname;
-
-const mainNav = [
-  { href: "/", label: "首页", eyebrow: "Start", desc: "回到 RenOS 的第一屏" },
-  { href: "/projects", label: "项目", eyebrow: "Build", desc: "WayLog、Saymore 和持续落地的想法" },
-  { href: "/blog", label: "文章", eyebrow: "Notes", desc: BLOG_CATEGORIES.join("、") },
-  { href: "/about", label: "关于", eyebrow: "About", desc: "背景、兴趣和联系方式" },
-];
 
 const utilityNav = [
   { href: "/uses", label: "装备" },
@@ -68,7 +60,7 @@ const socialNav = [
       </div>
 
       <ul class="mt-10">
-        {mainNav.map((item, i) => {
+        {navItems.map((item, i) => {
           const active = isActive(path, item.href);
           const index = String(i + 1).padStart(2, "0");
           return (
@@ -102,7 +94,7 @@ const socialNav = [
         })}
       </ul>
 
-      <div class="mobile-nav-item mt-8" style={`transition-delay: ${110 + mainNav.length * 34}ms;`}>
+      <div class="mobile-nav-item mt-8" style={`transition-delay: ${110 + navItems.length * 34}ms;`}>
         <div class="flex items-center gap-3">
           <p class="font-mono text-[11px] uppercase tracking-[0.16em]" style="color: var(--color-text-subtle);">More</p>
           <span class="h-px flex-1" style="background: var(--color-border);"></span>
@@ -126,7 +118,7 @@ const socialNav = [
         </div>
       </div>
 
-      <div class="mobile-nav-item mt-12 pb-4" style={`transition-delay: ${145 + mainNav.length * 34}ms;`}>
+      <div class="mobile-nav-item mt-12 pb-4" style={`transition-delay: ${145 + navItems.length * 34}ms;`}>
         <p class="font-mono text-[11px] uppercase tracking-[0.16em]" style="color: var(--color-accent);">造 · 跟 · 记 · 屯</p>
         <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
           {socialNav.map((item) => (

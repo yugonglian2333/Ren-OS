@@ -3,7 +3,7 @@
 > AI builder.
 > 把 idea 快速落地并持续迭代，正在打造旅行助手一路记 WayLog 与桌面语音输入工具 Saymore。
 
-技术人版 Bento：首页 Hero 区用 Bento 卡片墙释放视觉冲击，内容区回到稳重单栏。
+克制的单栏个人网站：首页突出个人介绍、旗舰项目、最新文章和关于入口。
 
 ## 技术栈
 
@@ -69,7 +69,7 @@ draft: false          # true 则不发布
 
 编辑 `src/pages/projects.astro`，改 `waylogTags` / `waylogPoints` / `waylogLinks` 三个数组。要加新项目，复制旗舰项目卡的 `<article>` 结构再改一份。
 
-### 改首页 Bento 卡片
+### 改首页内容
 
 编辑 `src/pages/index.astro`。首页包含个人介绍、旗舰项目、最新文章和关于入口。最新文章自动从 `src/content/blog/` 拉取，不用手动改。
 
@@ -84,7 +84,7 @@ draft: false          # true 则不发布
 | 位置 | 文件 |
 |---|---|
 | 页脚 | `src/components/Footer.astro` |
-| 首页社交卡 | `src/pages/index.astro`（第 ⑤ 块 Bento 卡） |
+| 首页社交链接 | `src/pages/index.astro` |
 | 关于页联系区 | `src/pages/about.astro` |
 
 ### 改全站配色 / 字体 / 间距
@@ -99,7 +99,7 @@ draft: false          # true 则不发布
 
 | 文件 | 用途 |
 |---|---|
-| `public/ren-avatar.jpg` | 全站头像（Header / 首页主卡 / about / 移动端导航） |
+| `public/ren-avatar.jpg` | 全站头像（Header / 首页 / about / 移动端导航） |
 | `public/og-default.jpg` | 社交分享默认预览图（1200×630） |
 | `public/favicon.svg` | 浏览器 tab 图标 |
 
@@ -234,7 +234,7 @@ src/
 ├── layouts/
 │   └── BaseLayout.astro      # 全站骨架（skip-link + Header + main + Footer + MobileNav）
 ├── pages/
-│   ├── index.astro           # 首页（Bento Hero + 最新文章 + 项目入口）
+│   ├── index.astro           # 首页（个人介绍 + 旗舰项目 + 最新文章 + 关于入口）
 │   ├── projects.astro        # 项目页
 │   ├── blog/
 │   │   ├── index.astro       # 文章列表
@@ -255,7 +255,7 @@ public/
 └── blog-img/                 # 文章配图
 ```
 
-设计参考：antfu.me / paco.me / leerob.com（单栏节奏 + Bento Hero 卡片墙），不抄代码，抄思路。
+设计参考：antfu.me / paco.me / leerob.com 的单栏节奏，不抄代码，抄思路。
 
 ---
 
