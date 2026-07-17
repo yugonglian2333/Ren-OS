@@ -9,7 +9,7 @@ export async function GET(context: { site: URL }) {
   return rss({
     title: "RenOS — AI builder",
     description:
-      "AI 周记 · TIL · 工具 · 项目复盘。不追热度，只记我看过的、想过的、用过的。",
+      "项目介绍 · 学习笔记 · 面经 · 工具。记录做过的产品、学到的知识与长期使用的工具。",
     site: context.site,
     items: posts.map((post) => ({
       title: post.data.title,
