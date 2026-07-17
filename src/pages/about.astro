@@ -80,8 +80,13 @@ const steamUrl = d.steamUrl;
                 {item.link && (
                   <>
                     {" "}
-                    <a href={item.link.href} target="_blank" rel="noopener noreferrer" class="link-quiet">
-                      {item.link.label} ↗
+                    <a
+                      href={item.link.href}
+                      target={item.link.href.startsWith("http") ? "_blank" : undefined}
+                      rel={item.link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      class="link-quiet"
+                    >
+                      {item.link.label} {item.link.href.startsWith("http") ? "↗" : "→"}
                     </a>
                   </>
                 )}
