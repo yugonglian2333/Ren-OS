@@ -49,7 +49,7 @@ draft: false          # true 则不发布
 3. 正文用 Markdown / MDX 写，图片放 `public/blog-img/`，引用时写 `![](../../../public/blog-img/xxx.png)` 或用相对路径
 4. `pnpm dev` 实时预览，满意后 `draft: false` 提交推送，Vercel 自动部署
 
-**五个栏目定位**：
+**七个栏目定位**：
 - **AI 周记**：每周一篇，记本周看到的新东西 + 短判断
 - **TIL**：Today I Learned 碎片笔记
 - **工具**：记录值得长期使用的工具与实践方法

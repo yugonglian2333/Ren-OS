@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { BLOG_CATEGORIES } from "../../content/categories";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => {
   if (a.data.pinned !== b.data.pinned) return a.data.pinned ? -1 : 1;
@@ -8,7 +9,6 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, 
   return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
 });
 
-const categories = ["AI 周记", "TIL", "工具", "学习笔记", "项目介绍", "项目复盘", "面经"] as const;
 const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat);
 ---
 
@@ -24,7 +24,7 @@ const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat)
     <!-- 分类导航 tabs -->
     <div class="mt-10 flex flex-wrap gap-2" data-fade id="category-tabs">
       <a href="/blog" class="category-tab" data-cat="">全部（{posts.length}）</a>
-      {categories.map((cat) => {
+      {BLOG_CATEGORIES.map((cat) => {
         const count = byCategory(cat).length;
         return (
           <a href={`/blog?category=${encodeURIComponent(cat)}`} class="category-tab" data-cat={cat} data-count={count}>{cat}（{count}）</a>
@@ -45,7 +45,7 @@ const byCategory = (cat: string) => posts.filter((p) => p.data.category === cat)
         </p>
       </div>
     ) : (
-      categories.map((cat) => {
+      BLOG_CATEGORIES.map((cat) => {
         const list = byCategory(cat);
         if (list.length === 0) return null;
         return (

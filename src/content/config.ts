@@ -1,4 +1,5 @@
 import { defineCollection, z } from "astro:content";
+import { BLOG_CATEGORIES } from "./categories";
 
 const blog = defineCollection({
   type: "content",
@@ -6,7 +7,7 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
-    category: z.enum(["AI 周记", "TIL", "工具", "学习笔记", "项目介绍", "项目复盘", "面经"]),
+    category: z.enum(BLOG_CATEGORIES),
     draft: z.boolean().default(false),
     pinned: z.boolean().default(false),
     priority: z.number().default(0),
