@@ -1,0 +1,221 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const shots = {
+  hero: "/images/projects/waylog/hero-promo.png",
+  list: "/images/projects/waylog/trip-list.png",
+  overview: "/images/projects/waylog/trip-overview.png",
+  route: "/images/projects/waylog/route-summary.png",
+  map: "/images/projects/waylog/day-map.png",
+  place: "/images/projects/waylog/place-detail.png",
+};
+---
+
+<BaseLayout
+  title="一路记 WayLog | RenOS"
+  description="一路记 WayLog：把旅行计划、每日行程、地点、预算、清单与旅行记录放回同一个上下文。"
+  image={shots.hero}
+>
+  <article class="waylog-page">
+    <section class="section-wide">
+      <a href="/projects" class="back-link" data-fade>← 返回项目</a>
+
+      <header class="waylog-hero" data-fade>
+        <div class="hero-copy">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="project-status">旗舰项目</span>
+            <span class="font-mono text-xs" style="color: var(--color-text-subtle);">2026 / 进行中</span>
+          </div>
+          <h1>重新组织每一段旅行</h1>
+          <p>把计划、路线、地点、预算与回忆放进同一段旅程，随时继续，也方便回看。</p>
+          <a href="https://waylog.top" target="_blank" rel="noopener noreferrer" class="primary-button">访问官网 ↗</a>
+        </div>
+      </header>
+
+      <figure class="hero-visual" data-fade>
+        <img
+          src={shots.hero}
+          alt="WayLog 产品主视觉，展示行程列表、路线地图和旅行控制台"
+          width="1609"
+          height="977"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </figure>
+
+      <dl class="project-facts" data-fade>
+        <div><dt>产品形态</dt><dd>移动旅行助手</dd></div>
+        <div><dt>核心体验</dt><dd>一段旅行，一个上下文</dd></div>
+        <div><dt>技术方向</dt><dd>React Native + Expo</dd></div>
+        <div><dt>产品原则</dt><dd>本地优先，提案式 Agent</dd></div>
+      </dl>
+    </section>
+
+    <section class="section-wide trip-story" data-fade>
+      <div class="story-copy">
+        <h2>从一次旅行开始</h2>
+        <p>
+          每段旅程都有自己的日期、目的地与地点集合。从列表进入后，行程控制台会把天数、到访进度、预算、清单和备忘聚合到一起。
+        </p>
+        <p>不需要在地图、备忘录、记账工具和聊天记录之间来回寻找。</p>
+      </div>
+      <div class="phone-pair">
+        <figure class="phone-frame phone-frame-small">
+          <img src={shots.list} alt="WayLog 行程列表，展示云南 3 日旅行卡片" width="906" height="1418" loading="lazy" />
+        </figure>
+        <figure class="phone-frame phone-frame-large">
+          <img src={shots.overview} alt="WayLog 行程控制台，展示旅行概览、账本和出行清单" width="912" height="1408" loading="lazy" />
+        </figure>
+      </div>
+    </section>
+
+    <section class="section-wide route-story" data-fade>
+      <div class="section-heading">
+        <h2>把一天放回地图</h2>
+        <p>路线不是孤立的地点清单。WayLog 按天组织地点、时间、交通与备忘，并在地图上还原当天的移动关系。</p>
+      </div>
+      <div class="route-grid">
+        <figure class="phone-frame map-frame">
+          <img src={shots.map} alt="WayLog 每日路线地图，展示地点顺序、驾车路线和天气信息" width="906" height="1402" loading="lazy" />
+        </figure>
+        <figure class="phone-frame summary-frame">
+          <img src={shots.route} alt="WayLog 路线总览与出行信息页面" width="896" height="1418" loading="lazy" />
+        </figure>
+      </div>
+    </section>
+
+    <section class="section-wide place-story" data-fade>
+      <figure class="phone-frame place-frame">
+        <img src={shots.place} alt="WayLog 地点详情页，展示滇池海埂公园图片、标签和 AI 地点介绍" width="904" height="1420" loading="lazy" />
+      </figure>
+      <div class="story-copy">
+        <h2>一个地点，不止一个坐标</h2>
+        <p>
+          地点详情会保留图片、标签、评分、地址、个人备忘和到访状态。它既服务于出发前的判断，也承接旅行中的导航与旅行后的回忆。
+        </p>
+        <div class="feature-notes">
+          <div><strong>计划之前</strong><span>了解地点，判断是否放入行程。</span></div>
+          <div><strong>旅行之中</strong><span>查看地址、时间、天气和下一段路线。</span></div>
+          <div><strong>回来以后</strong><span>把照片、开销和个人记录留在旅程里。</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section agent-story" data-fade>
+      <h2>Agent 只能提议，不能擅动</h2>
+      <p>
+        AI 可以理解当前旅行并生成结构化修改建议，但写入行程前必须经过预览、用户确认与运行时校验。自动执行只在用户明确授权后发生。
+      </p>
+      <div class="agent-flow" aria-label="WayLog Agent 提案流程">
+        <span>理解当前 Trip</span>
+        <span>生成修改提案</span>
+        <span>用户确认</span>
+        <span>本地写入与同步</span>
+      </div>
+    </section>
+
+    <section class="section closing" data-fade>
+      <h2>让旅程保持连续</h2>
+      <p>WayLog 希望减少整理旅行的摩擦，把更多注意力留给真正发生的体验。</p>
+      <div class="closing-actions">
+        <a href="https://waylog.top" target="_blank" rel="noopener noreferrer" class="primary-button">访问官网 ↗</a>
+        <a href="/projects" class="secondary-button">返回项目</a>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .waylog-page { overflow: hidden; }
+  .back-link { color: var(--color-text-muted); text-decoration: none; transition: color var(--duration-fast) var(--ease-out); }
+  .back-link:hover { color: var(--color-accent); }
+  .project-status { border-radius: var(--radius-sm); padding: 0.25rem 0.65rem; background: var(--color-accent-soft); color: var(--color-accent); font-size: 0.75rem; font-weight: 600; }
+  .waylog-hero { display: flex; align-items: flex-end; justify-content: space-between; min-height: 31rem; padding: 4.5rem 0 3rem; }
+  .hero-copy h1 { margin-top: 1.5rem; max-width: 10ch; font-family: var(--font-serif); font-size: clamp(3.2rem, 6vw, 5.5rem); font-weight: 500; line-height: 0.98; letter-spacing: -0.055em; }
+  .hero-copy > p { margin-top: 1.5rem; max-width: 32rem; font-size: 1rem; line-height: 1.8; color: var(--color-text-muted); }
+  .primary-button, .secondary-button { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; margin-top: 1.75rem; padding: 0.65rem 1.1rem; border-radius: var(--radius-button); font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: transform var(--duration-fast) var(--ease-spring), background var(--duration-fast) var(--ease-out); }
+  .primary-button { background: var(--color-accent); color: var(--color-accent-contrast); }
+  .primary-button:hover { background: var(--color-accent-hover); transform: translateY(-1px); }
+  .secondary-button { border: 1px solid var(--color-border-strong); color: var(--color-text); background: var(--color-bg-elevated); }
+  .secondary-button:hover { transform: translateY(-1px); }
+  .hero-visual { overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: #fbf8f5; box-shadow: 0 28px 70px -44px color-mix(in oklab, var(--color-text) 35%, transparent); }
+  .hero-visual img { display: block; width: 100%; height: auto; }
+  .project-facts { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 3rem; padding: 1.5rem 0; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); }
+  .project-facts div { padding: 0 1rem; border-left: 1px solid var(--color-border); }
+  .project-facts div:first-child { padding-left: 0; border-left: 0; }
+  .project-facts dt { font-size: 0.75rem; color: var(--color-text-subtle); }
+  .project-facts dd { margin-top: 0.35rem; font-weight: 600; }
+  .trip-story, .place-story { display: grid; grid-template-columns: 0.72fr 1.28fr; align-items: center; gap: clamp(2.5rem, 7vw, 7rem); padding-top: 8rem; padding-bottom: 8rem; }
+  .story-copy h2, .section-heading h2, .agent-story h2, .closing h2 { font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 500; line-height: 1.08; letter-spacing: -0.035em; }
+  .story-copy > p, .section-heading p, .agent-story > p, .closing > p { margin-top: 1.25rem; max-width: 43rem; font-size: 1rem; line-height: 1.9; color: var(--color-text-muted); }
+  .story-copy > p + p { margin-top: 0.6rem; }
+  .phone-pair { display: grid; grid-template-columns: 0.78fr 1.22fr; align-items: end; gap: 1.25rem; }
+  .phone-frame {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(5px, 0.55vw, 8px);
+    border: 1px solid color-mix(in oklab, var(--color-text) 36%, transparent);
+    border-radius: clamp(1.65rem, 3.2vw, 2.7rem);
+    background: linear-gradient(145deg, #4b4a47 0%, #171716 42%, #050505 100%);
+    box-shadow:
+      0 34px 74px -42px color-mix(in oklab, var(--color-text) 48%, transparent),
+      inset 0 0 0 1px rgb(255 255 255 / 0.18);
+  }
+  .phone-frame::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: clamp(2px, 0.2vw, 3px);
+    left: 50%;
+    width: 18%;
+    height: 2px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.28);
+    transform: translateX(-50%);
+  }
+  .phone-frame img {
+    display: block;
+    width: calc(100% + 3px);
+    max-width: none;
+    height: auto;
+    margin-right: -3px;
+    border-radius: clamp(1.3rem, 2.7vw, 2.2rem);
+  }
+  .phone-frame-small { transform: translateY(2.5rem); }
+  .route-story { padding-top: 7rem; padding-bottom: 7rem; }
+  .section-heading { max-width: 43rem; }
+  .route-grid { display: grid; grid-template-columns: 1.18fr 0.82fr; align-items: start; gap: 1.25rem; margin-top: 3rem; }
+  .summary-frame { margin-top: 6rem; }
+  .place-story { grid-template-columns: 1.2fr 0.8fr; }
+  .place-frame { max-width: 36rem; }
+  .feature-notes { margin-top: 2rem; }
+  .feature-notes div { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--color-border); }
+  .feature-notes strong { font-weight: 650; }
+  .feature-notes span { color: var(--color-text-muted); }
+  .agent-story { margin-top: 4rem; margin-bottom: 7rem; padding: 3rem; border-radius: var(--radius-card); background: var(--color-accent-soft); }
+  .agent-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 2.25rem; }
+  .agent-flow span { padding: 1rem; border-radius: var(--radius-button); background: var(--color-bg-elevated); color: var(--color-text-muted); text-align: center; }
+  .closing { margin-top: 4rem; margin-bottom: 2rem; padding: 3rem; border-radius: var(--radius-card); background: var(--color-bg-elevated); border: 1px solid var(--color-border); }
+  .closing-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  @media (max-width: 1023px) {
+    .trip-story, .place-story { grid-template-columns: 1fr; }
+    .story-copy { max-width: 43rem; }
+    .place-frame { max-width: 100%; }
+    .place-story .story-copy { order: -1; }
+  }
+  @media (max-width: 767px) {
+    .waylog-hero { min-height: auto; padding-top: 3.5rem; }
+    .hero-copy h1 { font-size: 3.25rem; }
+    .project-facts { grid-template-columns: 1fr 1fr; gap: 1.5rem 0; }
+    .project-facts div:nth-child(3) { padding-left: 0; border-left: 0; }
+    .trip-story, .place-story, .route-story { padding-top: 5rem; padding-bottom: 5rem; }
+    .phone-pair, .route-grid { grid-template-columns: 1fr; }
+    .phone-frame-small, .summary-frame { transform: none; margin-top: 0; }
+    .agent-story, .closing { padding: 1.5rem; }
+    .agent-flow { grid-template-columns: 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .primary-button, .secondary-button { transition: none; }
+    .primary-button:hover, .secondary-button:hover { transform: none; }
+  }
+</style>

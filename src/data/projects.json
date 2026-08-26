@@ -22,6 +22,10 @@
   ],
   "waylogLinks": [
     {
+      "label": "产品介绍",
+      "href": "/projects/waylog"
+    },
+    {
       "label": "官网",
       "href": "https://waylog.top"
     },
@@ -54,8 +58,7 @@
   "saymoreLinks": [
     {
       "label": "产品介绍",
-      "href": null,
-      "status": "待补充"
+      "href": "/projects/saymore"
     },
     {
       "label": "GitHub",
@@ -63,8 +66,7 @@
     },
     {
       "label": "宣传网站",
-      "href": null,
-      "status": "筹备中"
+      "href": "https://saymore.praxisgrove.org"
     }
   ]
 }

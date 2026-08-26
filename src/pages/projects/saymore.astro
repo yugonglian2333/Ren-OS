@@ -1,0 +1,186 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import d from "../../data/projects.json";
+
+const shots = {
+  hero: "/images/projects/saymore/hero-promo.png",
+  home: "/images/projects/saymore/home.png",
+  asr: "/images/projects/saymore/models-asr.png",
+  polish: "/images/projects/saymore/models-polish.png",
+  history: "/images/projects/saymore/history.png",
+  dictionary: "/images/projects/saymore/dictionary.png",
+  settings: "/images/projects/saymore/settings.png",
+  privacy: "/images/projects/saymore/privacy-data.png",
+};
+---
+
+<BaseLayout title="Saymore | RenOS" description="Saymore：本地优先的桌面语音输入工具，把自然口述整理成可以直接使用的文字。" image={shots.hero}>
+  <article class="saymore-page">
+    <section class="section-wide">
+      <a href="/projects" class="back-link" data-fade>← 返回项目</a>
+
+      <header class="saymore-hero" data-fade>
+        <div class="hero-copy">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="project-status">开源产品</span>
+            <span class="font-mono text-xs" style="color: var(--color-text-subtle);">2026 / 已落地</span>
+          </div>
+          <h1>解放双手，说出所想</h1>
+          <p>本地优先的桌面语音输入工具，把自然口述整理成可以直接使用的文字。</p>
+          <div class="hero-actions">
+            <a href="https://saymore.praxisgrove.org" target="_blank" rel="noopener noreferrer" class="primary-button">访问官网 ↗</a>
+            <a href="https://github.com/PraxisGrove/Saymore" target="_blank" rel="noopener noreferrer" class="secondary-button">查看 GitHub ↗</a>
+          </div>
+        </div>
+      </header>
+
+      <figure class="hero-visual" data-fade>
+        <img src={shots.hero} alt="Saymore 桌面端产品界面组合，展示首页、模型选择和隐私数据页面" width="1586" height="992" loading="eager" fetchpriority="high" />
+      </figure>
+
+      <dl class="project-facts" data-fade>
+        <div><dt>产品形态</dt><dd>macOS 桌面工具</dd></div>
+        <div><dt>核心体验</dt><dd>跨应用语音输入</dd></div>
+        <div><dt>技术方向</dt><dd>Rust + Slint</dd></div>
+        <div><dt>产品原则</dt><dd>本地优先，可替换模型</dd></div>
+      </dl>
+    </section>
+
+    <section class="section case-intro" data-fade>
+      <h2>从开口到可用文字</h2>
+      <p>
+        语音识别只是第一步。真正影响输入体验的是停顿、口误、自我修正、专业词和最终写入。Saymore 把这些步骤合并为一次自然表达。
+      </p>
+      <div class="flow-grid">
+        <div><strong>说出来</strong><span>全局快捷键开始与结束，不打断当前工作。</span></div>
+        <div><strong>整理好</strong><span>识别中英混合语音，补充标点并清理冗余。</span></div>
+        <div><strong>写进去</strong><span>最终文字直接回到当前输入框，继续原来的任务。</span></div>
+      </div>
+    </section>
+
+    <section class="section-wide showcase" data-fade>
+      <div class="section-heading">
+        <h2>模型选择权留给用户</h2>
+        <p>语音识别和文本润色都采用可替换 Provider。用户可以根据速度、精度、隐私和成本选择本地模型或云端服务。</p>
+      </div>
+      <div class="model-grid">
+        <figure>
+          <img src={shots.asr} alt="Saymore 语音识别模型选择页" width="1840" height="1400" loading="lazy" />
+          <figcaption>语音识别：系统听写、本地模型、云端 API 和兼容接口可以按需切换。</figcaption>
+        </figure>
+        <figure>
+          <img src={shots.polish} alt="Saymore 文本润色模型提供商设置页" width="1840" height="1400" loading="lazy" />
+          <figcaption>文本润色：由用户决定是否启用，以及请求发送到哪个模型提供商。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section-wide dictionary-story" data-fade>
+      <div class="dictionary-copy">
+        <h2>越用越懂你的词</h2>
+        <p>
+          人名、品牌、项目名、代码标识符和专业术语很容易被通用模型写错。个人词典让正确写法沉淀在本地，也让后续识别更贴近用户自己的表达习惯。
+        </p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          {d.saymoreTags.slice(0, 5).map((tag) => <span class="tag">{tag}</span>)}
+        </div>
+      </div>
+      <figure class="image-frame dictionary-image">
+        <img src={shots.dictionary} alt="Saymore 个人词典，展示自动添加与手动添加的词条" width="1840" height="1400" loading="lazy" />
+      </figure>
+    </section>
+
+    <section class="section-wide privacy-story" data-fade>
+      <div class="section-heading">
+        <h2>隐私不是一句口号</h2>
+        <p>用户能看到数据保存在何处、模型占用了多少空间、诊断日志是否开启，也能直接打开数据目录或导出不含敏感内容的报告。</p>
+      </div>
+      <div class="privacy-grid">
+        <figure class="image-frame privacy-main">
+          <img src={shots.privacy} alt="Saymore 隐私与数据页面，展示本地数据占用和诊断选项" width="1840" height="1400" loading="lazy" />
+        </figure>
+        <figure class="image-frame settings-image">
+          <img src={shots.settings} alt="Saymore 通用设置页面，展示启动、语言、主题和明暗模式选项" width="1840" height="1400" loading="lazy" />
+        </figure>
+        <figure class="image-frame history-image">
+          <img src={shots.history} alt="Saymore 历史记录空状态，说明识别结果的本地保存方式" width="1840" height="1400" loading="lazy" />
+        </figure>
+      </div>
+    </section>
+
+    <section class="section closing" data-fade>
+      <h2>工具应该服从表达</h2>
+      <p>Saymore 的目标不是让用户学习一套新的输入流程，而是让自然说话变成一个可靠、可控、能进入任何应用的输入方式。</p>
+      <div class="closing-actions">
+        <a href="https://saymore.praxisgrove.org" target="_blank" rel="noopener noreferrer" class="primary-button">访问 Saymore 官网 ↗</a>
+        <a href="https://github.com/PraxisGrove/Saymore" target="_blank" rel="noopener noreferrer" class="secondary-button">查看 GitHub ↗</a>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .saymore-page { overflow: hidden; }
+  .back-link { color: var(--color-text-muted); text-decoration: none; transition: color var(--duration-fast) var(--ease-out); }
+  .back-link:hover { color: var(--color-accent); }
+  .project-status { border-radius: var(--radius-sm); padding: 0.25rem 0.65rem; background: var(--color-accent-soft); color: var(--color-accent); font-size: 0.75rem; font-weight: 600; }
+  .saymore-hero { display: flex; align-items: flex-end; min-height: 31rem; padding: 4.5rem 0 3rem; }
+  .hero-copy { max-width: 47rem; }
+  .hero-copy h1 { margin-top: 1.5rem; max-width: 11ch; font-family: var(--font-serif); font-size: clamp(3.2rem, 7vw, 5.7rem); font-weight: 500; line-height: 0.96; letter-spacing: -0.06em; }
+  .hero-copy > p { margin-top: 1.5rem; max-width: 30rem; font-size: 1rem; line-height: 1.8; color: var(--color-text-muted); }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .primary-button, .secondary-button { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; margin-top: 1.75rem; padding: 0.65rem 1.1rem; border-radius: var(--radius-button); font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: transform var(--duration-fast) var(--ease-spring), background var(--duration-fast) var(--ease-out); }
+  .primary-button { background: var(--color-accent); color: var(--color-accent-contrast); }
+  .primary-button:hover { background: var(--color-accent-hover); transform: translateY(-1px); }
+  .secondary-button { border: 1px solid var(--color-border-strong); color: var(--color-text); background: var(--color-bg-elevated); }
+  .secondary-button:hover { transform: translateY(-1px); }
+  .hero-visual { width: 100%; border: 1px solid var(--color-border); border-radius: var(--radius-card); overflow: hidden; background: #f5f8fc; box-shadow: 0 32px 80px -46px color-mix(in oklab, var(--color-text) 38%, transparent); }
+  .hero-visual img { display: block; width: 100%; height: auto; }
+  .project-facts { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 1rem; padding: 1.5rem 0; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); }
+  .project-facts div { padding: 0 1rem; border-left: 1px solid var(--color-border); }
+  .project-facts div:first-child { padding-left: 0; border-left: 0; }
+  .project-facts dt { font-size: 0.75rem; color: var(--color-text-subtle); }
+  .project-facts dd { margin-top: 0.35rem; font-weight: 600; }
+  .case-intro { padding-top: 8rem; padding-bottom: 8rem; }
+  .case-intro h2, .section-heading h2, .dictionary-copy h2, .closing h2 { font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 500; line-height: 1.08; letter-spacing: -0.035em; }
+  .case-intro > p, .section-heading p, .dictionary-copy > p, .closing > p { margin-top: 1.25rem; max-width: 44rem; font-size: 1rem; line-height: 1.9; color: var(--color-text-muted); }
+  .flow-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1rem; margin-top: 3rem; }
+  .flow-grid > div { padding: 1.5rem; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-bg-elevated); }
+  .flow-grid > div:first-child { grid-row: span 2; min-height: 18rem; display: flex; flex-direction: column; justify-content: flex-end; background: var(--color-accent-soft); }
+  .flow-grid strong { display: block; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 500; }
+  .flow-grid span { display: block; margin-top: 0.6rem; color: var(--color-text-muted); line-height: 1.7; }
+  .showcase, .privacy-story { padding-top: 6rem; padding-bottom: 6rem; }
+  .section-heading { max-width: 43rem; }
+  .model-grid { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 1.25rem; margin-top: 3rem; }
+  .model-grid figure { overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-bg-elevated); }
+  .model-grid img { display: block; width: 100%; height: auto; }
+  .model-grid figcaption { padding: 1.1rem 1.25rem 1.25rem; font-size: 0.82rem; line-height: 1.6; color: var(--color-text-muted); }
+  .dictionary-story { display: grid; grid-template-columns: 0.7fr 1.3fr; align-items: center; gap: clamp(2rem, 6vw, 6rem); padding-top: 7rem; padding-bottom: 7rem; }
+  .image-frame { overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-bg-elevated); box-shadow: 0 24px 64px -44px color-mix(in oklab, var(--color-text) 34%, transparent); }
+  .image-frame img { display: block; width: 100%; height: auto; }
+  .privacy-grid { display: grid; grid-template-columns: 1.22fr 0.78fr; gap: 1.25rem; margin-top: 3rem; align-items: start; }
+  .privacy-main { grid-row: span 2; }
+  .closing { margin-top: 7rem; margin-bottom: 2rem; padding: 3rem; border-radius: var(--radius-card); background: var(--color-accent-soft); }
+  .closing-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  @media (max-width: 1023px) {
+    .saymore-hero { min-height: 25rem; padding-top: 4rem; }
+    .hero-copy h1 { max-width: 10ch; }
+    .dictionary-story { grid-template-columns: 1fr; }
+    .dictionary-copy { max-width: 43rem; }
+  }
+  @media (max-width: 767px) {
+    .saymore-hero { min-height: 23rem; padding-top: 3rem; }
+    .hero-copy h1 { font-size: 3.25rem; }
+    .project-facts { grid-template-columns: 1fr 1fr; gap: 1.5rem 0; }
+    .project-facts div:nth-child(3) { padding-left: 0; border-left: 0; }
+    .case-intro { padding-top: 5rem; padding-bottom: 5rem; }
+    .flow-grid, .model-grid, .privacy-grid { grid-template-columns: 1fr; }
+    .flow-grid > div:first-child, .privacy-main { grid-row: auto; min-height: 0; }
+    .showcase, .privacy-story, .dictionary-story { padding-top: 4rem; padding-bottom: 4rem; }
+    .closing { margin-top: 4rem; padding: 1.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .primary-button, .secondary-button { transition: none; }
+    .primary-button:hover, .secondary-button:hover { transform: none; }
+  }
+</style>
