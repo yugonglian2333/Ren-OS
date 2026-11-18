@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>一次 HTTP 请求的全貌</title>
+<link rel="canonical" href="https://www.renos.top/blog/chrome-devtools-debugging/">
+<style>
+*{box-sizing:border-box}body{max-width:50rem;margin:auto;padding:clamp(1rem,4vw,3rem);font:1.05rem/1.8 system-ui,sans-serif;color:#23312a;background:#fcfbf7}h1,h2{line-height:1.3}h2{margin-top:2.2rem}a{color:#325e54}figure{margin:1.5rem 0}pre{max-width:100%;overflow:auto;padding:1rem;background:#eeefea;font-size:.9rem}dd{margin:0 0 .8rem 1rem}table{border-collapse:collapse;width:100%}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #c8cdc5;padding:.4rem;overflow-wrap:anywhere}
+</style></head><body><h1>一次 HTTP 请求的全貌</h1>
+<article>
+<p>在网页上选中一个文件，点「上传」。浏览器得把它送到哪儿？服务器怎么知道这一串字节是一份文件？上传结束后，页面又是从哪里拿到文件名的？用同一次上传把去程和回程连起来看，URL、方法、请求体和 <code>fetch</code> 就各有了位置。下文的地址、文件和报文都用公开教学示例。</p>
+<section id="journey">
+<h2>从点击到页面更新</h2>
+<p>浏览器拼出 URL，选定方法，准备请求体。服务器根据路径和方法找到处理函数。函数读取上传的内容，保存文件，组装响应。浏览器拿到这份响应，才有材料把新文件加进列表。</p>
+<figure><svg viewBox="0 0 329 536" width="329" height="536" style="display:block;max-width:100%;height:auto;margin:auto;background:white;border-radius:6px" role="img" aria-label="流程图：用户操作、浏览器代码、网络、服务器路由、处理函数、数据源、页面更新" xmlns="http://www.w3.org/2000/svg"><title>从点击到页面更新的请求与响应路径</title><style>.am-edge{fill:none;stroke:#67776e;stroke-width:1.5}.am-edge--dashed{stroke-dasharray:4 3}.am-arrow{fill:#67776e}.am-node-shape{fill:#eff5ef;stroke:#52695b}.am-node-text,.am-edge-label text{fill:#23392b;font:13px system-ui,sans-serif}.am-edge-label rect{fill:#fff}.am-edge-label text{font-size:11px}</style><defs><marker id="am1-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="am-arrow" d="M0,0 L10,5 L0,10 z"/></marker></defs><g></g><g><g data-step="0"><path class="am-edge" d="M178,49 L178,65 Q178,81 178,97 L178,113" marker-end="url(#am1-arrow)"/><g class="am-edge-label"><rect x="129.1" y="72" width="97.9" height="18" rx="3"/><text x="178" y="81" text-anchor="middle" dominant-baseline="central">组装 URL 和方法</text></g></g><g data-step="1"><path class="am-edge" d="M178,148 L178,164 Q178,180 159.9,196 L141.8,212" marker-end="url(#am1-arrow)"/><g class="am-edge-label"><rect x="132.7" y="171" width="90.7" height="18" rx="3"/><text x="178" y="180" text-anchor="middle" dominant-baseline="central">HTTP 请求报文</text></g></g><g data-step="2"><path class="am-edge" d="M148.3,247 L165.6,258.5 Q182.8,270 182.8,281.5 L182.8,293" marker-end="url(#am1-arrow)"/></g><g data-step="3"><path class="am-edge" d="M182.8,328 L182.8,344 Q182.8,360 163.2,376 L143.5,392" marker-end="url(#am1-arrow)"/><g class="am-edge-label"><rect x="143.3" y="351" width="79" height="18" rx="3"/><text x="182.8" y="360" text-anchor="middle" dominant-baseline="central">路径匹配成功</text></g></g><g data-step="4"><path class="am-edge" d="M122,427 L122,438.5 Q122,450 122,461.5 L122,473" marker-end="url(#am1-arrow)"/></g><g data-step="5"><path class="am-edge am-edge--dashed" d="M100.5,392 L80.8,376 Q61.2,360 61.2,335.3 Q61.2,310.5 61.2,290.3 Q61.2,270 78.4,258.5 L95.7,247" marker-end="url(#am1-arrow)"/><g class="am-edge-label"><rect x="15" y="301.5" width="92.3" height="18" rx="3"/><text x="61.2" y="310.5" text-anchor="middle" dominant-baseline="central">状态码 + 响应体</text></g></g><g data-step="6"><path class="am-edge am-edge--dashed" d="M102.2,212 L84.1,196 Q66,180 102.2,164 L138.4,148" marker-end="url(#am1-arrow)"/><g class="am-edge-label"><rect x="21.3" y="171" width="89.4" height="18" rx="3"/><text x="66" y="180" text-anchor="middle" dominant-baseline="central">Response 对象</text></g></g><g data-step="7"><path class="am-edge" d="M209.9,148 L239.1,164 Q268.2,180 268.2,196 L268.2,212" marker-end="url(#am1-arrow)"/></g></g><g><g class="am-node am-node--round" data-key="用户操作" data-step="0"><rect class="am-node-shape" x="132" y="14" width="92" height="35" rx="17.5"/><text x="178" y="31.5" text-anchor="middle" dominant-baseline="central" class="am-node-text">用户操作</text></g><g class="am-node am-node--rect" data-key="浏览器代码" data-step="0"><rect class="am-node-shape" x="131.5" y="113" width="93" height="35" rx="3"/><text x="178" y="130.5" text-anchor="middle" dominant-baseline="central" class="am-node-text">浏览器代码</text></g><g class="am-node am-node--rect" data-key="网络" data-step="1"><rect class="am-node-shape" x="90" y="212" width="64" height="35" rx="3"/><text x="122" y="229.5" text-anchor="middle" dominant-baseline="central" class="am-node-text">网络</text></g><g class="am-node am-node--rect" data-key="服务器路由" data-step="2"><rect class="am-node-shape" x="136.3" y="293" width="93" height="35" rx="3"/><text x="182.8" y="310.5" text-anchor="middle" dominant-baseline="central" class="am-node-text">服务器路由</text></g><g class="am-node am-node--rect" data-key="处理函数" data-step="3"><rect class="am-node-shape" x="82" y="392" width="80" height="35" rx="3"/><text x="122" y="409.5" text-anchor="middle" dominant-baseline="central" class="am-node-text">处理函数</text></g><g class="am-node am-node--db" data-key="数据源" data-step="4"><path class="am-node-shape" d="M88.5,480 A33.5,7 0 0 1 155.5,480 V515 A33.5,7 0 0 1 88.5,515 Z"/><path class="am-node-shape" d="M88.5,480 A33.5,7 0 0 0 155.5,480"/><text x="122" y="501.5" text-anchor="middle" dominant-baseline="central" class="am-node-text">数据源</text></g><g class="am-node am-node--round" data-key="页面更新" data-step="7"><rect class="am-node-shape" x="222.2" y="212" width="92" height="35" rx="17.5"/><text x="268.2" y="229.5" text-anchor="middle" dominant-baseline="central" class="am-node-text">页面更新</text></g></g></svg></figure>
+<p>图里的实线顺着点击往下走，虚线把响应带回来。在 Chrome 的 Network 面板里，这一来一回通常合在一行。点开它，Payload 能看到发出去的数据，Response 能看到回来的内容。想观察自己的一次操作，可以先打开 DevTools，清空 Network 列表，再点按钮。页面会跳转时勾上 Preserve log，以免翻页时把刚才的记录也清掉。</p>
+</section>
+<section id="url">
+<h2>URL 的每一段</h2>
+<pre><code>https://example.com:443/documents?limit=20#recent</code></pre>
+<dl>
+<dt><strong>https://example.com:443</strong></dt><dd>协议、主机名和端口一起给出访问目标。443 是 HTTPS 的默认端口，在地址栏里通常省略。</dd>
+<dt><strong>/documents</strong></dt><dd>路径。这个例子用它表示文档集合。服务器可以把它交给一个函数，实现这个地址并不要求磁盘上恰好有个同名目录。</dd>
+<dt><strong>?limit=20</strong></dt><dd>查询串。这里约定最多取 20 项。在 Network 点开请求的 Payload，可以从 Query String Parameters 看见浏览器实际发出的值。</dd>
+<dt><strong>#recent</strong></dt><dd>片段标识。浏览器用它定位页面中的位置，发出的 HTTP 请求目标到 <code>?limit=20</code> 就结束了。</dd>
+</dl></section>
+<section id="messages">
+<h2>请求和响应长什么样</h2>
+<p>读取列表可以用 GET。上传文件用 POST。下面按 HTTP/1.1 的文本形式写出主要字段，省去了消息长度等细节。HTTP/2、HTTP/3 使用不同的线上编码，DevTools 仍会把方法、路径和标头这些信息展示给你。</p>
+<pre><code>POST /documents HTTP/1.1
+Host: example.com
+Content-Type: multipart/form-data; boundary=UploadBoundary
+
+--UploadBoundary
+Content-Disposition: form-data; name="file"; filename="hello.txt"
+Content-Type: text/plain
+
+hello
+--UploadBoundary--</code></pre>
+<p>第一行给出方法、请求目标和协议版本。再往下是标头。第一个空行之后才是请求体。这里的正文采用 multipart 格式，分隔符划出各个部分，<code>name="file"</code> 是表单字段名，<code>filename</code> 是随这一部分提交的文件名。</p>
+<p>服务器创建文档后，可以这样回复：</p>
+<pre><code>HTTP/1.1 201 Created
+Location: /documents/42
+Content-Type: application/json
+
+{"id":"42","name":"hello.txt"}</code></pre>
+<p>同样一个文件名，在 Payload 中出现是因为浏览器提交了它，在 Response 中出现是因为服务器返回了它。排查“文件名没显示”时，这个区别很有用。Response 有 <code>name</code>，就可以沿着页面读取并渲染这个字段的代码往下找。若 Response 里已经缺了它，先查接口的返回约定。</p>
+</section>
+<section id="methods">
+<h2>方法决定语义</h2>
+<table><thead><tr><th>方法</th><th>文档接口中的含义</th><th>安全</th><th>幂等</th></tr></thead><tbody>
+<tr><td>GET</td><td>读取文档列表或单份文档</td><td>是</td><td>是</td></tr>
+<tr><td>HEAD</td><td>读取与 GET 对应的响应标头，响应没有正文</td><td>是</td><td>是</td></tr>
+<tr><td>POST</td><td>向集合提交一份新文档</td><td>否</td><td>无保证</td></tr>
+<tr><td>PUT</td><td>在指定地址创建或整体替换文档</td><td>否</td><td>是</td></tr>
+<tr><td>PATCH</td><td>提交对已有文档的局部修改</td><td>否</td><td>无保证</td></tr>
+<tr><td>DELETE</td><td>请求删除指定文档</td><td>否</td><td>是</td></tr>
+</tbody></table>
+<p>这里的「安全」描述客户端请求的语义。读列表时，服务器照样可以写访问日志。「幂等」关乎重试的后果。连续两次删除同一文档，第二次可能得到 404，文档最终仍处于已删除状态。连续两次 POST 上传同一个文件，服务端却可能生成两个编号。这正是上传超时后，值得先查一次列表再决定是否重试的原因。<a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2">HTTP 方法的安全性和幂等性</a></p>
+</section>
+<section id="data">
+<h2>数据放在哪里</h2>
+<table><thead><tr><th>位置</th><th>这次请求里装什么</th><th>在 Network 哪里看</th></tr></thead><tbody>
+<tr><td>Path</td><td><code>/documents/42</code> 指定某一份文档</td><td>Headers → Request URL</td></tr>
+<tr><td>Query</td><td><code>?limit=20</code> 指定读取条件</td><td>Payload → Query String Parameters</td></tr>
+<tr><td>Header</td><td><code>Content-Type</code> 描述正文格式</td><td>Headers → Request Headers</td></tr>
+<tr><td>Body</td><td>上传的表单或文件内容，也可以是 JSON</td><td>Payload → Form Data 或 Request Payload</td></tr>
+<tr><td>Cookie</td><td>浏览器按域、路径等规则携带的会话信息</td><td>Cookies 或请求标头中的 Cookie</td></tr>
+</tbody></table>
+<p>如果“只传了一个文件，为什么 Payload 里看不到 JSON”，看一眼请求的 Content-Type。上传示例声明的是 <code>multipart/form-data</code>，打开的是包含文件的表单。JSON 出现在另一边，那是服务器返回的文档信息。</p>
+</section>
+<section id="fetch">
+<h2>fetch 是什么</h2>
+<p><code>fetch</code> 是这里的浏览器代码用来发送请求的函数。下面两段沿用上面的示例接口。第一段取列表，第二段接收从文件输入框选中的 <code>File</code> 对象。</p>
+<pre><code>async function listDocuments() {
+  const response = await fetch(&quot;/documents?limit=20&quot;);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+
+async function uploadDocument(file) {
+  const form = new FormData();
+  form.append(&quot;file&quot;, file);
+  const response = await fetch(&quot;/documents&quot;, { method: &quot;POST&quot;, body: form });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}</code></pre>
+<p>两处 <code>await</code> 在等不同的东西。<code>fetch</code> 在响应标头可用时交回 Response，正文可能还在路上；<code>json()</code> 会读完正文再解析。服务端即使回了 404，前一个 Promise 也可能正常完成，所以代码在解析前检查 <code>ok</code>。如果报的是 JSON 解析错误，点 Response 看一眼原文。有时第一行就是一张登录页的 <code>&lt;!doctype html&gt;</code>。</p>
+<p>上传时直接把 FormData 交给 fetch，由浏览器生成带 boundary 的 Content-Type。若改发 JSON，才需要把对象序列化，并声明相应的内容类型。<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch">MDN 的 Fetch 用法</a></p>
+</section>
+<section id="origins">
+<h2>同一次点击，谁在发请求？</h2>
+<ol><li><strong>HTML 表单。</strong>默认提交可以触发页面导航。在 Network 里只看 Fetch/XHR，可能把这次文档请求藏掉了。</li>
+<li><strong>XMLHttpRequest。</strong>脚本在后台发请求，收到数据后局部更新页面。这是常说的 AJAX 的一种实现。</li>
+<li><strong>fetch。</strong>同样能在原页面更新数据。Network 的 Initiator 可以帮你找到触发请求的脚本。</li>
+<li><strong>服务端渲染。</strong>浏览器请求一个页面，应用服务器可能再向上游读取文档。Network 能记录浏览器发出的页面请求；服务端到上游的那段耗时要到服务端日志或追踪记录里看。</li></ol>
+</section>
+<section id="devtools">
+<h2>回到 DevTools，看一次上传卡在哪儿</h2>
+<p>在 Network 选中上传请求，读一遍 Payload 和 Response，已经能分清文件有没有发出、服务端有没有返回编号。如果症状是“上传很慢”，再打开 Timing。Request sent 很长，可以继续看上传大小与上行带宽；Waiting for server response 很长，则要把往返延迟和服务端准备响应的时间都考虑进去。即使响应只有几十字节，等第一个字节也可能花去大半秒。</p>
+<p>要是响应早就结束了，列表仍然不更新，换个方向。点 Initiator 回到提交函数，在 <code>await uploadDocument(file)</code> 的下一行下断点，再用测试文件复现一次。暂停后看返回对象里的 <code>name</code>，接着看传给渲染函数的是哪个字段。这两眼就能把“上传成功了但看不到文件”缩小到一小段代码。<a href="https://developer.chrome.com/docs/devtools/network/reference/#timing-explanation">Chrome 的 Timing 说明</a></p>
+</section>
+</article></body></html>
