@@ -31,6 +31,8 @@ export default defineConfig({
   mdx(),
   sitemap(),
   compress({
+    // Readers set breakpoints and inspect local variables in the DevTools exercise.
+    Exclude: ["/labs/reading-shelf/shelf[.]js$"],
     HTML: true,
     CSS: true,
     JS: true,

@@ -1,126 +1,104 @@
 ---
-title: "Chrome DevTools 入门与 Web 应用问题排查"
-description: "从一次可复现的页面异常出发，用 Console、Network、Performance 和 Application 收集证据，再把浏览器线索连接到代码与服务端日志。"
+title: "书架上明明有两本在读，怎么一筛就没了？用 Chrome DevTools 查一遍"
+description: "打开书架练习页，亲手追一条返回三本书的请求，在断点里找回消失的两本。再看看小响应为什么也会慢、聊天窗口的文字究竟从哪条连接回来。"
 pubDate: 2026-11-18
 category: "学习笔记"
 draft: false
 ---
 
-页面一直转圈，接口返回了数据却没有显示，点击按钮后偶尔卡住。这些问题看起来都发生在浏览器里，原因却可能来自参数、权限、缓存、网络或渲染。
+书架上有三本书。点「全部书目」，《岛上的邮局》和《厨房里的小实验》旁边都写着「在读」。再点「只看在读」，书架却变成了 **0 本**。如果现在有人问你“接口把书弄丢了吗”，你会拿什么回答？
 
-我使用 DevTools 时，最有帮助的习惯是把“页面有问题”拆成可以验证的观察。先记录操作和现象，再找到对应请求与代码，最后用同一组步骤确认修复。下面的例子均为构造的教学场景。
+我做了个可以点的书架，把这个小毛病留在了里面。用桌面 Chrome 打开练习页，右键选「检查」，切到 **Network（网络）**。先别展开页面底部的「验证修复」。这三本书和后面的请求示意都是为练习编的。[打开书架练习页](/labs/reading-shelf/)
 
-## 从现象选择面板
+## 点两次按钮，留下两条能比较的请求
 
-在 Chrome 中按 `⌘ Option I`，Windows 或 Linux 按 `Ctrl Shift I`，可以打开开发者工具。界面名称可能随浏览器版本和语言变化。
+看一眼 Network 左上角的录制按钮，开启时是红色。点旁边的清除按钮，回到书架，依次点「全部书目」和「只看在读」。在 Network 的筛选框输入 `books.json`。现在应该有两行同名记录。第一行对应看得见书的那次点击，第二行对应书消失的那次。
 
-| 观察到的现象 | 优先查看 | 要回答的问题 |
-| --- | --- | --- |
-| 点击后报错、页面状态异常 | Console | 哪段代码抛错，经过了哪些函数？ |
-| 数据缺失、请求失败、接口慢 | Network | 实际发出了什么，收到了什么？ |
-| 滚动或点击卡顿 | Performance | 哪项工作占用了主线程？ |
-| 登录失效、刷新后状态异常 | Application | Cookie、存储和 Service Worker 怎样参与？ |
-| 需要跟踪执行过程 | Sources | 断点处的变量和调用路径是什么？ |
+点第二行，先看 **Response（响应）**。如果你原先猜接口返回了空书单，这里会遇到第一个意外。
 
-这些面板会相互补充。例如，Console 出现读取字段失败，Network 可能显示接口返回的是一段错误消息。
-
-## 先抓住一次完整操作
-
-打开 Network，确认录制开启，清空旧记录，然后只复现一次问题。需要跨刷新或跳转观察时，勾选 Preserve log。记录太多时，用 Fetch/XHR 类型按钮和筛选框缩小范围。[Network 入门教程](https://developer.chrome.com/docs/devtools/network/)
-
-常见筛选可以这样写。`example.com` 是示例域名，使用时换成自己的测试站点。
-
-```text
-domain:example.com
-domain:example.com method:POST
+```json
+[
+  { "title": "岛上的邮局", "state": "reading" },
+  { "title": "雨天的散步路线", "state": "finished" },
+  { "title": "厨房里的小实验", "state": "reading" }
+]
 ```
 
-找不到请求时，先检查是否打开了录制、是否复现了操作，以及筛选条件是否把目标隐藏了。清空筛选后再看一次，往往比继续猜测更有效。
+再点第一行。两次返回的书名、状态和条数都一样。这里比「两次都是 200」多给出了一条线索。**两本在读的书已经到了浏览器。** 此时去后台搜书名，能回答的问题很有限。更值得看的是，页面拿到三条记录后，对它们做了什么。
 
-打开目标请求后，按下面的顺序阅读。
+这也是我喜欢在排查开始时保留一次正常操作的原因。只盯着失败的那一行，`books.json` 这个名字没多少信息；放到两次点击中间，它就把问题缩小到了响应之后。如果表里一行都没有，先清掉文字筛选，点回 All，打开录制再点一次按钮。DevTools 只记录它在录制期间看到的请求。[Chrome 的 Network 操作说明](https://developer.chrome.com/docs/devtools/network/)
 
-| 位置 | 重点核对 |
-| --- | --- |
-| Headers | URL、方法、HTTP 状态、请求头和响应头 |
-| Payload | 查询参数、表单和 JSON 请求体 |
-| Preview / Response | 返回结构、数据内容、错误信息 |
-| Initiator | 发起请求的脚本及调用线索 |
-| Timing | 排队、连接、等待首字节和下载的分布 |
+## 一个按钮写着「在读」，HTTP 收到了什么？
 
-HTTP 200 只说明这次响应的 HTTP 状态成功。参数错误仍可能得到合法的空数组，页面还需要正确解释返回数据。排查时要同时写下“应该得到什么”和“实际得到了什么”。
+在第二条请求的 **Headers → General** 里看 Request URL 和 Request Method。地址以 `/labs/reading-shelf/books.json` 结尾，方法是 GET。里面连 `reading` 这个词都没有。这个练习每次取回同一份静态书单，按钮选中的状态只传给浏览器里的筛选函数。
 
-## 一个可以本地复现的例子
+换成由服务端筛选的书架，同样一次点击，HTTP/1.1 请求的开头可能长这样。这段是另一个接口的示意。
 
-下面故意把列表查询条件写成了 `closed`，而示例数据只有 `open` 状态。它用于练习定位“请求成功但列表为空”。
+```http
+GET /books?state=reading HTTP/1.1
+Host: example.com
+Accept: application/json
+```
 
-需要 Node.js 18 或更新版本，无需安装依赖。将代码保存为 `devtools-demo.mjs`，运行 `node devtools-demo.mjs`，在 Chrome 打开 `http://127.0.0.1:4300`。
+`/books` 指向书目资源，问号后面的 `state=reading` 才把筛选条件交给服务器。浏览器通常也能在 **Payload → Query String Parameters** 里展开它。如果给地址末尾加上 `#notes`，浏览器可以用它定位页面里的笔记段落，发往服务器的请求目标仍然是 `/books?state=reading`。
+
+还有一种容易看错的位置。假如按钮改成「保存读书笔记」，请求使用 POST，Headers 中写着 `Content-Type: application/json`，那段笔记可能放在 Payload 的 **Request Payload** 里。想知道保存了什么，要读这次发出去的正文。点 Response 看到的则是服务端的回信。一行 Network 记录同时收着这两份东西，方向相反。
+
+回来看书架。**Initiator（发起程序）** 能带你回到触发请求的脚本。在 `shelf.js` 里，`await fetch(...)` 拿到响应后先检查 `response.ok`，下一句 `await response.json()` 才读取正文并解析出那三本书。假如服务器回了 404，`fetch` 仍可能正常交回一个 Response；页面得自己检查状态。假如服务端回了 200 和一页 HTML，状态检查会通过，解析 JSON 时才会报错。遇到后一种情况，在 Response 看一眼开头的 `<!doctype html>`，比对着解析错误猜半天快得多。[MDN 的 Fetch 用法](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch)
+
+## 让筛选函数停下来，看它读了哪个字段
+
+进入 **Sources（源代码）**，按 `⌘ P`（Windows 或 Linux 用 `Ctrl P`），输入 `shelf.js`。在这一行的行号上点一下，留一个断点。
 
 ```js
-import { createServer } from "node:http";
-
-const items = [{ id: "demo-1", title: "示例任务", status: "open" }];
-const page = `<!doctype html><meta charset="utf-8">
-<title>请求排查练习</title>
-<button id="load">加载待处理任务</button><pre id="result"></pre>
-<script>
-document.querySelector('#load').onclick = async () => {
-  const output = document.querySelector('#result');
-  try {
-    const response = await fetch('/api/items?status=closed');
-    if (!response.ok) throw new Error('HTTP ' + response.status);
-    output.textContent = JSON.stringify(await response.json(), null, 2);
-  } catch (error) {
-    output.textContent = String(error);
-    console.error(error);
-  }
-};
-</script>`;
-
-createServer((req, res) => {
-  const url = new URL(req.url, "http://127.0.0.1:4300");
-  res.setHeader("Cache-Control", "no-store");
-  if (url.pathname === "/api/items") {
-    res.setHeader("Content-Type", "application/json; charset=utf-8");
-    setTimeout(() => {
-      res.end(JSON.stringify(items.filter(
-        item => item.status === url.searchParams.get("status")
-      )));
-    }, 350);
-    return;
-  }
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.end(page);
-}).listen(4300, "127.0.0.1");
+return books.filter(book => book.status === view);
 ```
 
-打开 Network，点击按钮，找到 `/api/items`。响应是 200，Response 是 `[]`。再看 Payload 中的查询参数，可以发现页面请求了 `status=closed`。
+再点「只看在读」。页面暂停后，点一下 DevTools 区域，按 `Esc` 打开底部的 Console。在 Call Stack（调用堆栈）里选中 `selectBooks` 那一帧，分别输入下面三个表达式。
 
-把代码里的请求改为 `status=open`，重启服务并刷新页面，再点击按钮。响应应该包含一条任务。这样就验证了请求参数与页面意图之间的偏差，也留下了一组可重复检查的步骤。
+| 输入 | 此刻看到的值 |
+| --- | --- |
+| `view` | `"reading"` |
+| `books[0].state` | `"reading"` |
+| `books[0].status` | `undefined` |
 
-## 接口慢，先拆开时间
+现在可以逐字读出这次比较了。按钮传进来的是 `"reading"`。书的状态在 `state`，筛选函数取的却是 `status`。三本书都没有这个属性，三次比较都为假，结果自然为空。全部书目之所以一直正常，是因为 `view === "all"` 时函数直接返回原数组，根本没走到这一行。
 
-示例接口人为增加了 350 毫秒等待。查看 Timing，可以观察时间主要花在哪一段。
+点掉行号上的断点，按 `F8` 或点击继续执行。回到书架，展开「验证修复」，勾上修订版，再点一次「只看在读」。这一版读取 `book.state`。书架上应该能重新看到那两本书。**此时再看第三条请求**，响应里仍然有三本。修正只动了筛选函数，同一份输入这次留下了两本在读。
 
-等待首字节包含网络往返以及服务器准备响应的时间。生产环境里，仅凭这一段偏长，无法确定是数据库查询慢还是某个上游服务慢。继续关联服务端日志、请求编号，或者服务端提供的 `Server-Timing`，才能进一步细分。下载时间较长则需要结合传输量、带宽和压缩情况分析。[Timing 各阶段说明](https://developer.chrome.com/docs/devtools/network/reference/#timing-explanation)
+实际项目里，往往只知道请求的名字，连脚本在哪儿都不清楚。可以在 Sources 的 **XHR/fetch Breakpoints** 添加 URL 片段（练习里用 `books.json`），再点按钮。浏览器会在代码发出匹配请求的地方暂停。从这里找到请求函数，等读完响应后再下一个行断点，比在打包脚本里搜「在读」更直接。[Chrome 的断点指南](https://developer.chrome.com/docs/devtools/javascript/breakpoints)
 
-流式响应可能长时间处于 Pending。要结合预期生命周期、已收到的数据和页面进度判断，不能仅用请求持续时间认定超时。
+## 同一条请求只有几百字节，为什么等了大半秒？
 
-## 从报错、卡顿追到代码
+回到书架任意一条 `books.json`，打开 **Timing**。这里的数字会受你所在的位置和网络影响。假设另一次录制得到下面的读数，把 JSON 再压小一半，体感会好多少？
 
-Console 中先展开错误，阅读来源文件、行号和调用栈，再去 Sources 设置断点。调用栈能帮助还原错误经过的函数，断点则能检查当时的变量。[Console 调用栈说明](https://developer.chrome.com/docs/devtools/console/reference/#view-stack-traces)
+| 耗时阶段（构造读数） | 时间 |
+| --- | ---: |
+| 排队、连接、发送等 | 24 ms |
+| Waiting for server response，等响应的第一个字节 | 510 ms |
+| Content Download，读取响应内容 | 6 ms |
 
-如果来源是 `chrome-extension://`，说明这条线索属于扩展。可以在扩展停用的测试环境复现，比较结果。第三方脚本和站点代码也可能相互影响，需要继续核对调用过程。
+即使最后这 6 毫秒全省下来，请求仍要花约 534 毫秒。值得追的是中间那半秒。它包含网络往返，也包含服务器准备响应的时间。浏览器可以指出时间花在哪一段，但看不到其中哪条 SQL 执行了多久。如果应用把请求编号同时写入响应头和服务端日志，拿**这一次请求**的编号去对日志，才有机会把那 510 毫秒再拆开。
 
-当请求很快完成，页面却迟迟不更新，可以录制一次 Performance。只覆盖关键操作，选中卡顿时间段，检查主线程中的 JavaScript、样式计算、布局和绘制。结合 Bottom-up 或 Call tree 找到值得继续追踪的调用，再用相同操作比较修改前后的记录。[运行时性能分析教程](https://developer.chrome.com/docs/devtools/performance/)
+还有另一种“慢”。书单已经收完，按钮却过了半秒才动。此时可以在 **Performance** 点录制，只做一次点击，等书架更新就停止。沿时间轴找到这次交互，看看请求结束和下一次画面更新之间，主线程（Main）在忙什么。若 **Bottom-up** 里某个函数的 **Self time** 很高，时间主要花在它自身；若 **Total time** 高而 Self time 很低，应展开它调用的子函数。这样才知道是继续查网络，还是回去看一段循环或一次布局。[Network 耗时阶段](https://developer.chrome.com/docs/devtools/network/reference/#timing-explanation) · [Performance 录制解读](https://developer.chrome.com/docs/devtools/performance/reference)
 
-Application 则适合核对 Cookie、Local Storage、Session Storage，以及 Service Worker 和缓存。清理站点数据会改变登录与本地状态，应先记录原状，在测试环境中有目的地验证。[Application 面板概览](https://developer.chrome.com/docs/devtools/application/)
+## 聊天框一直转圈，回复可能在另一行
 
-## 把证据交给 Agent 或其他开发者
+把书架练习换成一个聊天页面，会遇到更容易误判的情况。假设点「发送」后，Network 里一条 POST 很快回了 `202 Accepted`，正文只有 `{"accepted":true}`。你把 Response 翻到底也找不到回复。这个页面把提交问题和接收文字分成了两次通信，POST 的回信只够确认问题已被接收。
 
-我倾向于整理一份短记录，包含复现步骤、预期结果、实际结果、相关请求、错误堆栈和已经验证的判断。这样 Agent 查代码时，有具体条件和可检验的目标。
+把 Network 切回 **All**，清掉 `method:POST` 之类的筛选。有些页面在打开聊天框时就连好了事件流，那一行会比刚刚的 POST 更早出现。若之前没录到，开启 Preserve log，刷新并重新操作。找到响应类型为 `text/event-stream` 的请求，打开 **EventStream** 看时间和数据。一个虚构的读书助手可能依次发来下面三个事件。
 
-例如本地练习可以记录为“点击加载待处理任务，实际请求 `status=closed`，HTTP 200 返回空数组。改为 `open` 后返回一条任务”。这段描述把现象、证据和验证连在了一起。
+```text
+event: fragment
+data: {"text":"建议先读"}
 
-分享截图、Copy as fetch 或 HAR 前，要检查账号、Cookie、Authorization、URL 参数及请求和响应正文。Chrome 的 sanitized HAR 默认省略部分敏感标头，业务内容和自定义字段仍需自己核对。公开复盘可以换成构造数据与示意图。[HAR 导出说明](https://developer.chrome.com/docs/devtools/network/reference/#save-as-har)
+event: fragment
+data: {"text":"短篇集。"}
 
-一次排查最终应回到原来的复现步骤。参数正确、响应符合约定、页面正常展示，相关操作也没有出现新的异常，才形成了从观察到验证的完整过程。
+event: complete
+data: {}
+```
+
+这里的事件名由示例应用约定。如果两个片段已经到了，屏幕还空着，就去看前端有没有监听 `fragment`、怎样把第二段接到第一段后面。如果连接一直 Pending，同时事件行不断增加，那恰是长连接在工作。如果直到最后才一下子冒出所有片段，下一步应对照服务端逐段写出的时间和浏览器收到的时间，再定位是哪一段在积攒数据。[Chrome 查看事件流](https://developer.chrome.com/docs/devtools/network/reference/#event-stream) · [SSE 事件格式](https://html.spec.whatwg.org/multipage/server-sent-events.html)
+
+下次把问题交给同事或 Agent，我会留这样一句话：“点‘只看在读’显示 0 本。响应里有三本，其中两本的 `state` 是 `reading`。断点停在 `selectBooks`，它读到的 `status` 是 `undefined`。”对方可以直接去看那个函数。共享真实请求时，留下能复现差异的字段和值就够了。即便导出的是已清理的 HAR，URL 参数和正文里的个人数据仍要自己检查。[Chrome 的 HAR 导出说明](https://developer.chrome.com/docs/devtools/network/reference/#save-as-har)
